@@ -1,0 +1,34 @@
+% =============================================================================
+% SECTION 4: DATA SOURCES, CURATION, AND GROUND TRUTH
+% =============================================================================
+
+\section{Data: Sources, Curation, and Ground Truth}
+
+\subsection{Input Types}
+
+\begin{itemize}
+  \item \textbf{Vector CAD}: DXF/DWG files with layer-organized geometry
+  \item \textbf{PDF Plans}: Both vector PDFs and scanned raster images
+  \item \textbf{Schedules}: Door/window schedules, material legends
+  \item \textbf{Specifications}: Project specs with material requirements
+  \item \textbf{As-built data}: Jobsite photos, marked-up drawings
+\end{itemize}
+
+\subsection{Ground Truth Strategy}
+
+\begin{enumerate}
+  \item Start with completed projects where final lumber orders and framing decisions are known
+  \item Align plan-derived assemblies with actual purchase orders and observed waste
+  \item Create manually labeled subset (50--100 residential sheets) verified by estimators
+  \item Capture human overrides as new precedents in the KG
+\end{enumerate}
+
+\subsection{Curation Loop}
+
+When the system encounters ambiguous cases (e.g., missing header callout, unclear wall type):
+\begin{enumerate}
+  \item Propose options with confidence scores and citations
+  \item Record human selections back into the KG as new precedent
+  \item Track which rules produced correct vs. incorrect inferences
+  \item Continuously improve confidence calibration
+\end{enumerate}

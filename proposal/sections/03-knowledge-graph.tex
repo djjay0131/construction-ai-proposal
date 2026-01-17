@@ -1,0 +1,56 @@
+% =============================================================================
+% SECTION 3: KNOWLEDGE GRAPH DESIGN
+% =============================================================================
+
+\section{Knowledge Graph Design}
+\label{sec:kg}
+
+The KG is the backbone for \emph{grounded, repeatable decisions}~\cite{hogan2021kg_survey, zheng2022kg_construction}.
+Recent work on unifying LLMs with knowledge graphs~\cite{pan2024unifying_kg_llm} demonstrates the synergy between
+structured knowledge and neural reasoning. Unlike rule-based systems that embed logic in code,
+the KG externalizes knowledge so it can be inspected, updated, and audited.
+
+\subsection{Knowledge Categories}
+
+\begin{itemize}
+  \item \textbf{Component definitions}: stud, king stud pack, header assembly, sill plate, cripple studs, blocking, sheathing panels
+  \item \textbf{Material catalog}: dimensions, grades, treatments, manufacturer SKUs, stock lengths, lead times
+  \item \textbf{Fasteners and connectors}: nails/screws, straps, hangers, anchors with application rules
+  \item \textbf{Building rules}: framing conventions, span tables, loading assumptions, nailing schedules
+  \item \textbf{Codes and regulations}: jurisdiction, version/date, citations, applicability conditions
+  \item \textbf{Past projects}: as-built decisions, substitutions, waste rates, supplier mappings, outcomes
+\end{itemize}
+
+\subsection{Core Entities and Relationships}
+
+A pragmatic starting schema (expandable over time):
+
+\begin{itemize}
+  \item \textbf{Project} $\xrightarrow{\textit{hasSheet}}$ \textbf{PlanSheet}
+  \item \textbf{PlanSheet} $\xrightarrow{\textit{mentions}}$ \textbf{PlanFact} (with provenance + confidence)
+  \item \textbf{PlanFact} $\xrightarrow{\textit{instantiates}}$ \textbf{AssemblyIntent} (e.g., ``(2)2x10 + 1/2'' ply header'')
+  \item \textbf{AssemblyIntent} $\xrightarrow{\textit{composedOf}}$ \textbf{Component}
+  \item \textbf{Component} $\xrightarrow{\textit{builtFrom}}$ \textbf{StockItem}
+  \item \textbf{StockItem} $\xrightarrow{\textit{cutInto}}$ \textbf{CutPiece}
+  \item \textbf{Component} $\xrightarrow{\textit{requiresFastener}}$ \textbf{FastenerRule}
+  \item \textbf{Component} $\xrightarrow{\textit{constrainedBy}}$ \textbf{CodeRule} / \textbf{Regulation}
+  \item \textbf{Project} $\xrightarrow{\textit{usesSupplierMapping}}$ \textbf{SupplierCatalogItem}
+\end{itemize}
+
+\subsection{Versioning and Provenance}
+
+Codes change. Suppliers change SKUs. Practices evolve.
+The KG stores \textbf{temporal validity} (effective dates, region) and \textbf{provenance} (source document, section, URL/file hash).
+Every generated BOM line item links back to:
+(1) which plan facts triggered it, (2) which rules were applied, and (3) which code references constrained it.
+
+\subsection{Technology Choice: Neo4j}
+
+We recommend Neo4j as the graph database~\cite{neo4j2023construction} for several reasons:
+\begin{itemize}
+  \item Native graph storage with efficient traversal
+  \item Cypher query language for complex relationship queries
+  \item APOC procedures for advanced graph algorithms
+  \item Vector index support for semantic similarity search~\cite{lewis2020rag, edge2024graphrag}
+  \item Python driver with async support (compatible with FastAPI)
+\end{itemize}

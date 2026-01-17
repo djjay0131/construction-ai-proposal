@@ -1,0 +1,49 @@
+% =============================================================================
+% SECTION 7: OUTPUTS AND SUPPLIER INTEGRATION
+% =============================================================================
+
+\section{Outputs and Supplier Integration}
+
+\subsection{Output Types}
+
+\begin{enumerate}
+  \item \textbf{Bill of Materials (BOM)}: Multi-level hierarchy (project $\rightarrow$ wall $\rightarrow$ assembly $\rightarrow$ stock items)
+  \item \textbf{Cut Lists}: Grouped by stock length and material type, with labeled cut pieces
+  \item \textbf{Fastener List}: Nails, screws, anchors, straps, hangers with quantities
+  \item \textbf{Build Instructions}: Step-by-step with plan sheet references and code notes
+  \item \textbf{Compliance Report}: Code citations, validation status, items requiring review
+\end{enumerate}
+
+\subsection{Export Formats}
+
+\begin{itemize}
+  \item \textbf{CSV}: Lumber yard import (SKU, qty, length, treatment, notes)
+  \item \textbf{JSON}: Structured assemblies + cuts + provenance
+  \item \textbf{PDF/HTML}: Human-readable reports with diagrams
+  \item \textbf{EDI}: Optional mapping layer for specific suppliers
+\end{itemize}
+
+\subsection{Sample JSON Structure}
+
+\begin{lstlisting}[language=json]
+{
+  "project": "9557 Barnes Road",
+  "assemblies": [{
+    "type": "header_assembly",
+    "opening": "Front Door",
+    "components": [{
+      "type": "header",
+      "spec": "(2) 2x10",
+      "length_in": 42,
+      "stock_length": 144,
+      "waste_in": 102
+    }],
+    "fasteners": [{
+      "type": "16d common",
+      "qty": 24,
+      "pattern": "3\" O.C."
+    }],
+    "code_ref": "IRC R602.7"
+  }]
+}
+\end{lstlisting}

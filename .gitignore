@@ -1,0 +1,22 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.nav
+*.snm
+*.toc
+*.vrb
+
+# Keep PDF outputs
+!proposal/main.pdf
+!proposal/presentation.pdf
+
+# macOS
+.DS_Store
+
+# Build directories
+build/

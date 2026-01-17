@@ -1,0 +1,34 @@
+% =============================================================================
+% SECTION 1: MOTIVATION AND PROBLEM STATEMENT
+% =============================================================================
+
+\section{Motivation and Problem Statement}
+
+Material takeoff from plans is time-consuming and error-prone, especially when the intent of assemblies (e.g., headers,
+king studs, jamb packs, blocking patterns) must be inferred from conventions and code.
+Even when a BOM is available, waste can remain high without stock-aware cut optimization and component-level reasoning.
+Finally, many downstream stakeholders (builders, subs, suppliers) need machine-readable outputs and practical build steps,
+not just a list of quantities.
+
+\subsection{Industry Challenges}
+
+The construction industry faces well-documented productivity challenges~\cite{mckinsey2017construction, deloitte2023outlook}:
+
+\begin{itemize}
+  \item \textbf{Time burden}: Estimators spend 50--80\% of their time on quantity takeoffs, limiting bid capacity~\cite{rics2019takeoff}.
+  \item \textbf{Error rates}: Manual counting and measuring leads to costly mistakes and change orders.
+  \item \textbf{Inconsistency}: Different estimators produce varying results for the same project.
+  \item \textbf{Knowledge gaps}: Junior estimators lack experience for methodology and code compliance.
+  \item \textbf{Waste}: Without optimization, lumber waste rates of 15--20\% are common; optimized systems achieve under 5\%~\cite{manrique2007framex}.
+\end{itemize}
+
+\subsection{Goals}
+
+\textbf{Goal:} Create an end-to-end workflow that:
+\begin{enumerate}
+  \item[(a)] Interprets plans into \emph{component assemblies} (walls, headers, openings)
+  \item[(b)] Selects \emph{real-world purchasable stock} (lengths, grades, treatments)
+  \item[(c)] Computes \emph{cuts with waste minimization} using optimization algorithms
+  \item[(d)] Exports data in \emph{supplier-friendly formats} (CSV, JSON, EDI)
+  \item[(e)] Generates \emph{build instructions} with code compliance citations
+\end{enumerate}

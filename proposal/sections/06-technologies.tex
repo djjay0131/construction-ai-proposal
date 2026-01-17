@@ -1,0 +1,62 @@
+% =============================================================================
+% SECTION 6: KEY TECHNOLOGIES
+% =============================================================================
+
+\section{Key Technologies}
+
+\subsection{Parsing Stack}
+
+\begin{table}[ht]
+\centering
+\caption{Parsing Technologies}
+\label{tab:parsing}
+\begin{tabular}{ll}
+\toprule
+\textbf{Format} & \textbf{Technology} \\
+\midrule
+PDF (vector) & PyMuPDF (fitz) \\
+PDF (raster) & pdf2image + OpenCV \\
+DXF & ezdxf \\
+DWG & LibreDWG $\rightarrow$ DXF \\
+OCR & EasyOCR, Tesseract \\
+Object Detection & YOLOv8~\cite{rezvanifar2020yolo_symbols, kalervo2019cubicasa5k} \\
+Scale Detection & Google Gemini Vision API \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Cut Optimization}
+
+The cutting stock problem is NP-hard but well-studied~\cite{gilmore1961cutting, wascher2007csp_survey}. We employ:
+\begin{itemize}
+  \item \textbf{Heuristics}: First-Fit Decreasing (FFD) for fast, decent solutions
+  \item \textbf{Exact methods}: Integer Linear Programming via OR-Tools~\cite{ortools2024} or PuLP
+  \item \textbf{Kerf handling}: Each cut consumes blade width (0.125''); $n$ pieces require $(n-1) \times \text{kerf}$~\cite{cui2017lumber_optimization}
+  \item \textbf{Multi-stock}: Optimize across available stock lengths simultaneously
+\end{itemize}
+
+Objective function:
+\begin{equation}
+\min \sum_{s \in S} c_s \cdot x_s + \lambda \cdot \text{waste}
+\end{equation}
+where $x_s$ is the count of stock length $s$, $c_s$ is cost, and $\lambda$ weights waste penalty.
+
+\subsection{Knowledge Graph Stack}
+
+Recent advances in LLM-KG integration~\cite{zhu2024llm_kg_construction} inform our technology choices:
+\begin{itemize}
+  \item \textbf{Graph Database}: Neo4j Community/Enterprise
+  \item \textbf{Query Language}: Cypher
+  \item \textbf{Python Driver}: neo4j (async compatible)
+  \item \textbf{Embeddings}: OpenAI/Anthropic for semantic search
+  \item \textbf{Vector Index}: Neo4j vector index with GraphRAG patterns~\cite{edge2024graphrag}
+\end{itemize}
+
+\subsection{Agent Framework}
+
+\begin{itemize}
+  \item \textbf{LLM}: Claude~\cite{anthropic2024claude} or GPT-4~\cite{openai2024gpt4}
+  \item \textbf{Orchestration}: LangChain~\cite{chase2022langchain} or custom agent loop following ReAct patterns~\cite{yao2023react}
+  \item \textbf{Tool Calling}: Structured function calls to KG, optimizer, exporters~\cite{schick2023toolformer}
+  \item \textbf{Memory}: Conversation context + KG query results
+\end{itemize}

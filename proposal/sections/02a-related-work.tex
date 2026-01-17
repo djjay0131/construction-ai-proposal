@@ -1,0 +1,69 @@
+% =============================================================================
+% SECTION 2A: RELATED WORK AND NOVELTY
+% =============================================================================
+
+\section{Related Work and Contributions}
+
+\subsection{Existing Approaches}
+
+Current construction takeoff solutions fall into three categories:
+
+\textbf{Manual/Semi-Automated Tools.}
+Traditional tools like PlanSwift~\cite{planswift2024} and Bluebeam require human operators to trace elements and apply counts.
+While accurate, they scale poorly and depend on operator expertise.
+
+\textbf{Rule-Based Estimation.}
+Commercial systems (e.g., STACK~\cite{stack2024}) embed framing rules in code, limiting adaptability across jurisdictions and practices.
+Rule updates require software modifications, and decisions lack auditability.
+
+\textbf{AI-Powered Takeoff.}
+Recent AI tools (e.g., Togal.AI~\cite{togalai2024}) use computer vision to detect areas and count symbols~\cite{pizarro2022floorplan_survey, jamieson2025symbol_detection},
+but typically output quantities without assembly reasoning, cut optimization, or code compliance verification.
+
+\subsection{Limitations of Prior Work}
+
+\begin{enumerate}
+  \item \textbf{Embedded knowledge}: Rules and practices are hard-coded, not inspectable or versionable
+  \item \textbf{Missing provenance}: BOM line items cannot be traced to plan facts and applied rules
+  \item \textbf{No optimization}: Stock selection and cutting are left to downstream processes
+  \item \textbf{Limited compliance}: Code citations require manual verification
+  \item \textbf{No learning}: Systems do not improve from project outcomes
+\end{enumerate}
+
+\subsection{Key Contributions}
+
+This proposal presents the following novel contributions:
+
+\begin{enumerate}
+  \item \textbf{KG-Centered Architecture}: A knowledge graph backbone that externalizes construction rules, material catalogs, and historical precedents---enabling inspection, versioning, and auditing~\cite{pan2024unifying_kg_llm}.
+
+  \item \textbf{Provenance-First Design}: Every BOM line item links to (a) plan facts, (b) applied inference rules, and (c) code references, supporting explainability and regulatory compliance.
+
+  \item \textbf{Multi-Agent Reasoning}: Specialized agents for extraction QA, component inference, compliance checking, and instruction generation~\cite{li2025agentic_survey, zhang2025tool_learning}, with clear separation from deterministic optimization.
+
+  \item \textbf{Integrated Cut Optimization}: Stock selection and cutting as a first-class concern, using ILP solvers~\cite{ortools2024} with kerf handling and multi-stock support~\cite{gilmore1961cutting}.
+
+  \item \textbf{Continuous Improvement Loop}: Human corrections and project outcomes feed back into the KG as new precedents, enabling system-wide learning.
+\end{enumerate}
+
+\subsection{Differentiation Summary}
+
+Table~\ref{tab:differentiation} compares our approach to existing solutions.
+
+\begin{table}[ht]
+\centering
+\caption{Comparison with Existing Approaches}
+\label{tab:differentiation}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Capability} & \textbf{Existing} & \textbf{Ours} \\
+\midrule
+Knowledge storage & Code-embedded & KG-externalized \\
+Rule versioning & Manual updates & Temporal validity \\
+Provenance & None/limited & Full chain \\
+Cut optimization & Separate/none & Integrated \\
+Compliance & Manual check & Auto w/ citations \\
+Learning & Static & Continuous \\
+\bottomrule
+\end{tabular}
+\end{table}

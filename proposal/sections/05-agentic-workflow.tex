@@ -1,0 +1,85 @@
+% =============================================================================
+% SECTION 5: AGENTIC WORKFLOW
+% =============================================================================
+
+\section{Agentic Workflow}
+
+Agents are responsible for \emph{turning facts into decisions}, while deterministic tools handle optimization and exporting~\cite{wang2024agents_survey, xi2023agents_rise, li2025agentic_survey}.
+Recent surveys on tool-augmented LLMs~\cite{zhang2025tool_learning} demonstrate the effectiveness of separating reasoning from tool invocation.
+This separation ensures that reasoning is auditable and optimization is provably correct.
+
+\subsection{Agent Architecture}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=5mm and 12mm,
+  agent/.style={draw, rounded corners, align=center, inner sep=3pt, font=\scriptsize, fill=blue!10, minimum width=22mm},
+  tool/.style={draw, align=center, inner sep=3pt, font=\scriptsize, fill=green!10, minimum width=18mm},
+  arrow/.style={-Latex}
+]
+\node[agent] (qa) {Extraction QA\\Agent};
+\node[agent, right=of qa] (infer) {Component\\Inference Agent};
+\node[agent, right=of infer] (code) {Code \&\\Compliance Agent};
+\node[agent, below=8mm of qa] (procure) {Procurement \&\\Cut Agent};
+\node[agent, right=of procure] (instruct) {Instruction\\Generation Agent};
+\node[tool, right=of instruct] (optimizer) {Cut-Stock\\Optimizer};
+
+\draw[arrow] (qa) -- (infer);
+\draw[arrow] (infer) -- (code);
+\draw[arrow] (code.south) -- ++(0,-4mm) -| (procure.north);
+\draw[arrow] (procure) -- (instruct);
+\draw[arrow] (procure) -- (optimizer);
+\end{tikzpicture}
+\caption{Agent workflow: specialized agents handle extraction QA, component inference, compliance checking, procurement, and instruction generation.}
+\label{fig:agents}
+\end{figure}
+
+\subsection{Extraction QA Agent}
+
+Validates extracted geometry/text, flags low-confidence dimensions, and requests targeted reprocessing:
+\begin{itemize}
+  \item Dimension consistency checks (wall lengths match floor plan scale)
+  \item Missing element detection (walls without openings noted)
+  \item OCR confidence thresholds (request higher DPI on region if below threshold)
+\end{itemize}
+
+\subsection{Component Inference Agent}
+
+Maps plan facts to assemblies using KG rules:
+\begin{itemize}
+  \item Wall type $\rightarrow$ stud size/spacing, plates, sheathing type
+  \item Opening size $\rightarrow$ header assembly, jack/king studs, cripples
+  \item Notes/schedules $\rightarrow$ material upgrades, fastener patterns
+  \item Bearing vs. non-bearing $\rightarrow$ header sizing, stud requirements
+\end{itemize}
+
+\subsection{Code \& Compliance Agent}
+
+Checks assemblies against code rules stored in the KG (jurisdiction/version)~\cite{zhang2023kg_codes, beach2020irc_automation}:
+\begin{itemize}
+  \item Validates header sizing for span/load per IRC~\cite{irc2021}
+  \item Checks stud spacing for load-bearing walls
+  \item Verifies fastener patterns (nailing schedules)
+  \item Produces ``compliant'' or ``requires review'' with citations
+\end{itemize}
+
+\subsection{Procurement \& Cut Optimization Agent}
+
+Selects purchasable stock and calls the cut-stock optimizer:
+\begin{itemize}
+  \item Allowed stock lengths (8/10/12/14/16/20 ft, LVL lengths, panel sizes)
+  \item Kerf allowance (0.125'') and defect waste factor
+  \item Bundling rules (keep identical cuts together for crew efficiency)
+  \item Substitution rules (use 12ft if it avoids waste; prefer in-stock SKUs)
+\end{itemize}
+
+\subsection{Instruction Generation Agent}
+
+Generates build instructions that reference assemblies, cut pieces, and fastening rules:
+\begin{itemize}
+  \item Organized by wall line, room, or framing phase
+  \item ``What to build'' with component references
+  \item ``How to fasten'' with fastener specs and patterns
+  \item ``Inspection callouts'' with code citations
+\end{itemize}

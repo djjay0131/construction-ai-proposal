@@ -1,14 +1,109 @@
 # Progress Tracking
 
-**Last Updated:** 2026-01-16
+**Last Updated:** 2026-01-16 (Night)
 
-## Project Status: Initialization Complete
+## Project Status: Polishing Infrastructure Ready
 
-Project structure, documentation framework, and agent infrastructure established. Ready for research and content development.
+KG-centered proposal document complete. Construction folder updated with polishing workflow. Sprint 01 ready to begin.
 
 ---
 
 ## Completed Work
+
+### Construction Folder Setup (2026-01-16 Night)
+
+**What:**
+- Copied construction folder from agentic-kg project
+- Updated all documentation for proposal polishing context
+- Created proposal-specific design documents
+- Established sprint structure for polishing workflow
+
+**Key Deliverables:**
+- `construction/README.md` - Updated for proposal project
+- `construction/design/proposal-structure.md` - Document organization analysis
+- `construction/design/novelty-analysis.md` - Contribution documentation
+- `construction/design/literature-review.md` - Bibliography tracking
+- `construction/requirements/submission-checklist.md` - Pre-submission requirements
+- `construction/requirements/section-requirements.md` - Per-section quality standards
+- `construction/sprints/sprint-01-core-polish.md` - Current sprint tasks
+
+**Impact:**
+Systematic polishing workflow established with clear tasks, requirements, and tracking.
+
+---
+
+### Proposal Polishing (2026-01-16 Late Evening)
+
+**What:**
+- Split main.tex into 13 modular section files for easier editing
+- Added 5 new recent references (2024-2025 papers on KG+LLM integration)
+- Created comprehensive Related Work & Contributions section
+- Updated existing sections with new citations
+- Created polishing plan document
+
+**Key Deliverables:**
+- `proposal/sections/` - 13 modular LaTeX section files
+- `proposal/references.bib` - Now 38 IEEE-style references
+- `proposal/sections/02a-related-work.tex` - New novelty analysis section
+- `proposal/POLISHING_PLAN.md` - Comprehensive polishing roadmap
+- `proposal/main.pdf` - Updated proposal (now 6 pages)
+
+**New References Added:**
+- Pan et al. (2024) - Unifying LLMs and Knowledge Graphs
+- Edge et al. (2024) - GraphRAG
+- Li et al. (2025) - Agentic LLM Survey
+- Zhang et al. (2025) - Tool Learning Survey
+- Zhu et al. (2024) - LLMs for KG Construction
+
+**Novelty Claims Documented:**
+1. KG-Centered Architecture for construction takeoff
+2. Provenance-First Design linking BOM to plan facts
+3. Multi-Agent Reasoning with separation from optimization
+4. Integrated Cut Optimization with kerf handling
+5. Continuous Improvement Loop from project outcomes
+
+**Verification:**
+Document compiles successfully to 6 pages with all new references.
+
+---
+
+### Proposal Document & Presentation (2026-01-16 Evening)
+
+**What:**
+- Redesigned proposal with KG-centered architecture
+- Created IEEE-format LaTeX document with 11 sections
+- Built comprehensive bibliography (33 references)
+- Created Beamer presentation deck (21 slides)
+
+**Key Deliverables:**
+- `proposal/main.tex` - Complete IEEE conference paper
+- `proposal/presentation.tex` - Beamer slides (21 slides)
+- `proposal/references.bib` - IEEE-style references
+- `proposal/main.pdf` - Compiled proposal document
+- `proposal/presentation.pdf` - Compiled presentation
+
+**Sections Completed:**
+1. Motivation & Problem Statement (with industry stats)
+2. Related Work & Contributions (NEW - novelty analysis)
+3. System Architecture (TikZ diagram)
+4. Knowledge Graph Design (entities, relationships, Neo4j)
+5. Data Sources & Ground Truth
+6. Agentic Workflow (5 agents with TikZ diagram)
+7. Key Technologies (parsing, optimization, KG, agents)
+8. Outputs & Supplier Integration (JSON examples)
+9. Phased Development Plan (4 phases)
+10. Current Implementation Status (mapping to existing code)
+11. Scalability & Future Enhancements
+12. Business Case & ROI
+13. Conclusion
+
+**Impact:**
+Complete proposal ready for final review. Ahead of weekend schedule.
+
+**Verification:**
+Both LaTeX documents compile successfully without errors.
+
+---
 
 ### Agent Infrastructure Addition (2026-01-16)
 
@@ -154,24 +249,24 @@ None at this time.
 - **Status:** Complete
 
 ### M1: Research Complete
-- **Target:** TBD
-- **Description:** All research gathered and organized
-- **Status:** Not Started
+- **Target:** 2026-01-17 (Friday)
+- **Description:** All research gathered, competitive analysis done, outline created
+- **Status:** **Complete** (ahead of schedule)
 
 ### M2: First Draft
-- **Target:** TBD
-- **Description:** Complete first draft of proposal
-- **Status:** Not Started
+- **Target:** 2026-01-18 (Saturday)
+- **Description:** Complete first draft of all proposal sections
+- **Status:** **Complete** (ahead of schedule)
 
 ### M3: Review Complete
-- **Target:** TBD
+- **Target:** 2026-01-18 (Saturday evening)
 - **Description:** All reviews and revisions complete
-- **Status:** Not Started
+- **Status:** In Progress
 
 ### M4: Final Delivery
-- **Target:** TBD
-- **Description:** Proposal delivered to stakeholders
-- **Status:** Not Started
+- **Target:** 2026-01-19 (Sunday)
+- **Description:** Proposal document + presentation deck delivered
+- **Status:** Pending final review
 
 ---
 

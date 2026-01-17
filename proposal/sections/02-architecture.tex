@@ -1,0 +1,58 @@
+% =============================================================================
+% SECTION 2: SYSTEM ARCHITECTURE OVERVIEW
+% =============================================================================
+
+\section{System Architecture Overview}
+
+Figure~\ref{fig:arch} summarizes the proposed architecture. The core design principle is that
+the system is \emph{KG-centered}: extracted plan facts and inferred construction intent are continuously grounded
+against a structured graph of rules, components, and historical builds.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=6mm and 8mm,
+  box/.style={draw, rounded corners, align=center, inner sep=4pt, font=\scriptsize, minimum width=18mm},
+  arrow/.style={-Latex, thick}
+]
+\node[box] (ingest) {Plan Ingest\\(PDF/CAD/Images)};
+\node[box, right=of ingest] (extract) {Geometry + Text\\Extraction};
+\node[box, right=of extract] (facts) {Plan Facts\\(walls, dims)};
+\node[box, below=8mm of facts] (kg) {\textbf{Knowledge Graph}\\Rules \& History};
+\node[box, right=of facts] (agents) {Agent\\Orchestrator};
+\node[box, right=of agents] (outputs) {Outputs\\BOM, Cuts,\\Instructions};
+
+\draw[arrow] (ingest) -- (extract);
+\draw[arrow] (extract) -- (facts);
+\draw[arrow] (facts) -- (agents);
+\draw[arrow] (kg) -- (agents);
+\draw[arrow] (facts) -- (kg);
+\draw[arrow] (agents) -- (outputs);
+\end{tikzpicture}
+\caption{KG-centered architecture: plan facts are extracted, normalized, stored with provenance, and used by agents to generate compliant, optimized outputs.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{Key Modules}
+
+\textbf{(1) Plan Ingest + Extraction.}
+Convert drawings into machine-usable primitives:
+vector geometry (lines, polylines), detected room/wall boundaries, and text tokens (dimensions, callouts, schedules)~\cite{pizarro2022floorplan_survey}.
+The current implementation supports PDF (via PyMuPDF~\cite{pymupdf2024}), DXF (via ezdxf~\cite{ezdxf2024}), and DWG (via LibreDWG conversion).
+For raster images, YOLOv8 object detection~\cite{jocher2023yolov8} and EasyOCR~\cite{easyocr2024} provide robust extraction.
+
+\textbf{(2) Plan Facts Model.}
+Normalize extraction into a consistent intermediate representation:
+\emph{WallSegments}, \emph{Openings}, \emph{Headers}, \emph{Notes}, \emph{Schedules}, and \emph{Constraints}
+with explicit provenance back to the sheet, region, and confidence score.
+
+\textbf{(3) Knowledge Graph.}
+Store rules, materials, codes, and historical knowledge (Section~\ref{sec:kg}).
+
+\textbf{(4) Agent Orchestrator.}
+A multi-agent workflow that queries the KG, performs reasoning and validation,
+and calls deterministic optimization routines for cutting and procurement.
+
+\textbf{(5) Export + Integration.}
+Produce both human-usable artifacts (PDF/HTML summaries, build steps)
+and machine-readable exports (CSV/JSON/EDI-style mappings) suitable for lumber yard systems.

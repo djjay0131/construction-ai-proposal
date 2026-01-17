@@ -1,0 +1,32 @@
+% =============================================================================
+% SECTION 10: SCALABILITY AND FUTURE ENHANCEMENTS
+% =============================================================================
+
+\section{Scalability and Future Enhancements}
+
+\subsection{Performance Targets}
+
+\begin{itemize}
+  \item Multi-plan uploads with concurrent processing
+  \item Large residential/commercial plan sets (100+ sheets)
+  \item Sub-minute takeoff for typical residential plans
+\end{itemize}
+
+\subsection{Architecture for Scale}
+
+\begin{itemize}
+  \item Neo4j cluster for KG (read replicas for query load)
+  \item Celery + Redis for async task processing
+  \item Object storage (S3) for plan files and artifacts
+  \item Kubernetes for horizontal scaling
+\end{itemize}
+
+\subsection{Future Enhancements}
+
+\begin{itemize}
+  \item \textbf{Multi-trade expansion}: Drywall, flooring, roofing, MEP with trade-specific ontologies~\cite{pauwels2017kg_ifc}
+  \item \textbf{Crew-centric packaging}: Bundles per wall/area, labeled kits
+  \item \textbf{Supplier pricing}: Order suggestions under cost/availability constraints
+  \item \textbf{Automated RFI}: Generate requests for information when plans are inconsistent~\cite{zhang2015code_nlp}
+  \item \textbf{3D visualization}: Three.js framing model from takeoff data
+\end{itemize}

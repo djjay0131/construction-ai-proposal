@@ -1,5 +1,49 @@
 # Technical Context: Construction AI Proposal
 
+## System Architecture (KG-Centered)
+
+The proposal uses a **Knowledge Graph-centered architecture** where:
+1. Plan facts are extracted from drawings (PDF/CAD/images)
+2. Facts are stored in Neo4j with provenance and confidence
+3. LLM-driven agents query the KG to infer assemblies and validate compliance
+4. Deterministic optimizers compute cut lists with waste minimization
+5. Outputs include BOM, cut lists, fastener lists, and build instructions
+
+### Core Components
+
+| Component | Technology | Status |
+|-----------|------------|--------|
+| Plan Parsing | PyMuPDF, ezdxf, LibreDWG | Complete |
+| Object Detection | YOLOv8 (ultralytics) | Partial |
+| Scale Detection | Google Gemini Vision | Complete |
+| Knowledge Graph | Neo4j | **New** |
+| Agent Orchestration | LangChain + Claude/GPT-4 | **New** |
+| Cut Optimization | OR-Tools / PuLP | **New** |
+| Web Interface | React + FastAPI | Complete |
+| Database | PostgreSQL | Complete |
+
+### Knowledge Graph Schema
+
+```
+Project ─hasSheet─► PlanSheet
+PlanSheet ─mentions─► PlanFact (with provenance)
+PlanFact ─instantiates─► AssemblyIntent
+AssemblyIntent ─composedOf─► Component
+Component ─builtFrom─► StockItem
+StockItem ─cutInto─► CutPiece
+Component ─requiresFastener─► FastenerRule
+Component ─constrainedBy─► CodeRule
+Project ─usesSupplierMapping─► SupplierCatalogItem
+```
+
+### Agent Workflow
+
+1. **Extraction QA Agent** - Validates geometry/text, flags low-confidence items
+2. **Component Inference Agent** - Maps plan facts to assemblies using KG rules
+3. **Code & Compliance Agent** - Checks against IRC/IBC codes with citations
+4. **Procurement & Cut Agent** - Selects stock and calls optimizer
+5. **Instruction Generation Agent** - Generates build instructions with code refs
+
 ## Technologies and Frameworks
 
 ### AI/ML Technologies

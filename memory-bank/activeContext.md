@@ -1,12 +1,17 @@
 # Active Context
 
-**Last Updated:** 2026-01-16
+**Last Updated:** 2026-01-16 (Evening)
 
 ## Current Work Phase
 
-**Phase 0: Project Initialization - COMPLETE**
+**Phase 1: Research & Foundation - COMPLETE**
+**Phase 2: Content Development - COMPLETE**
 
-Project structure, documentation framework, and agent infrastructure established.
+Proposal redesigned with Knowledge Graph-centered architecture. LaTeX document and presentation deck completed.
+
+## Major Design Decision
+
+**KG-Centered Architecture**: The proposal has been redesigned to use a Knowledge Graph (Neo4j) as the backbone for grounded, repeatable decisions. This replaces the previous rule-embedded approach with externalized, auditable knowledge.
 
 ## Immediate Next Steps
 
@@ -15,28 +20,52 @@ Project structure, documentation framework, and agent infrastructure established
 - Memory-bank structure created
 - Core documentation files established
 - **Agent infrastructure added** (13 specialized agents)
+- **PR #1 merged** - All setup changes committed
+- **Weekend work plan created** - See `proposal/WORK_PLAN.md`
 
-**Priority Tasks:**
+**Deliverables Completed (2026-01-16):**
 
-1. **Define Proposal Scope** (COMPLETE)
-   - [x] Identify target audience: General construction industry
-   - [x] Determine specific AI use cases: **Material Takeoff & Construction Recommendations**
-   - [ ] Research industry pain points and statistics
+### Proposal Document (`proposal/main.tex`)
+- [x] IEEE conference format
+- [x] 11 sections with full content
+- [x] TikZ architecture diagrams
+- [x] 33 IEEE-style bibliography references
+- [x] Implementation status table
+- [x] Business case with ROI analysis
+- [x] Compiles successfully to 5-page PDF
 
-2. **Research Phase** (IN PROGRESS - Weekend deadline)
-   - [ ] Material takeoff automation research
-   - [ ] Construction recommendation AI capabilities
-   - [ ] Competitive solutions in this space
-   - [ ] Technical feasibility assessment
+### Presentation Deck (`proposal/presentation.tex`)
+- [x] Beamer format (16:9 aspect ratio)
+- [x] 21 slides covering all key points
+- [x] TikZ diagrams for architecture and agent workflow
+- [x] ROI and business case slides
+- [x] Backup slides with KG schema and JSON example
+- [x] Compiles successfully to PDF
 
-3. **Content Development** (This weekend)
-   - [ ] Draft executive summary
-   - [ ] Develop problem analysis section
-   - [ ] Create solution architecture overview
-   - [ ] Build business case with ROI analysis
-   - [ ] Create presentation deck
+### Weekend Sprint Status
+- ~~Friday: Research & Foundation~~ **DONE** (ahead of schedule)
+- ~~Saturday: Content Development~~ **DONE** (ahead of schedule)
+- Sunday: Final review and polish (remaining)
 
 ## Recent Decisions
+
+### Decision 3: KG-Centered Architecture Redesign
+- **Date:** 2026-01-16
+- **Decision:** Redesign proposal around Knowledge Graph + Agentic System
+- **Rationale:**
+  - Externalized knowledge enables inspection, updates, and auditing
+  - Historical project data can improve future predictions
+  - Code compliance requires versioned, jurisdiction-specific rules
+  - Provenance tracking enables traceable BOM generation
+- **Impact:**
+  - New Neo4j knowledge graph layer
+  - 5 specialized agents (Extraction QA, Component Inference, Code Compliance, Procurement, Instruction Generation)
+  - Cut optimization with OR-Tools
+  - Build instructions with code citations
+- **Key Changes from Original Proposal:**
+  - KG stores: components, materials, fasteners, building rules, codes, past projects
+  - Agents query KG for grounded reasoning
+  - Deterministic optimization separate from LLM reasoning
 
 ### Decision 2: Agent Infrastructure Addition
 - **Date:** 2026-01-16

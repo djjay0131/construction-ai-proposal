@@ -1,0 +1,43 @@
+% =============================================================================
+% SECTION 8: PHASED DEVELOPMENT PLAN
+% =============================================================================
+
+\section{Phased Development Plan}
+
+\subsection{Phase 1: KG Foundation + Enhanced Takeoff (4--6 weeks)}
+
+\begin{itemize}
+  \item Define initial ontology in Neo4j
+  \item Migrate existing lumber calculations to KG-backed rules
+  \item Load baseline component definitions and framing rules
+  \item Parse 2--3 plan sets with provenance tracking
+  \item Generate BOM with rule citations
+\end{itemize}
+
+\subsection{Phase 2: Assembly Reasoning + Cut Optimization (6--10 weeks)}
+
+\begin{itemize}
+  \item Expand component library (headers, stud packs, plates, sheathing)
+  \item Implement Component Inference Agent with KG queries
+  \item Integrate OR-Tools cut-stock optimizer
+  \item Produce supplier-ready cut list exports
+  \item Validate against ground truth projects
+\end{itemize}
+
+\subsection{Phase 3: Code/Regulation Layer (6--10 weeks)}
+
+\begin{itemize}
+  \item Model IRC/IBC code rules with jurisdiction and version
+  \item Implement Code \& Compliance Agent
+  \item Add compliance citations to outputs
+  \item Build code rule editor for jurisdiction customization
+\end{itemize}
+
+\subsection{Phase 4: Feedback Loop + Learning (Ongoing)}
+
+\begin{itemize}
+  \item Capture user overrides and corrections
+  \item Store outcomes (actual waste, substitutions made)
+  \item Continuously improve confidence calibration
+  \item Expand KG with new precedents
+\end{itemize}
