@@ -122,6 +122,42 @@ Design all AI systems with human-in-the-loop as a core principle:
 
 ---
 
+## ADR-005: Sprint 01 Academic Polish Strategy
+
+**Date:** 2026-01-18
+**Status:** Accepted
+
+**Context:**
+Initial 6-page proposal document lacked academic rigor and comprehensive literature review. Needed to establish research contributions and theoretical grounding for conference paper submission.
+
+**Decision:**
+Execute comprehensive polishing sprint with focus on:
+1. Expanding Related Work with 5 literature survey categories
+2. Adding theoretical foundations to all technical sections
+3. Articulating Research Questions (RQ1-RQ4) derived from literature gaps
+4. Adding success criteria and risk mitigation to implementation plan
+5. Honestly documenting implementation gaps
+
+**Consequences:**
+- Pros: Strong academic foundation, clear research contributions, 34 citations, competitive with conference standards
+- Cons: Document grew from 6 to 9 pages (within IEEE conference limits)
+- Impact: Proposal ready for academic submission, research questions clearly articulated
+
+**Results:**
+- 5 commits over 2 days (dd9bf69, 46cc380, fd7bb96, 342152e)
+- Document grew from 6 to 9 pages
+- Citations increased from ~8 to 34 in Related Work
+- All technical sections now theoretically grounded
+- Research questions RQ1-RQ4 clearly stated
+- Success criteria defined for all 4 implementation phases
+
+**Alternatives Considered:**
+- Minimal polish: Rejected, insufficient for academic submission
+- Complete rewrite: Rejected, existing content was strong foundation
+- Incremental sprint approach: Chosen, allows systematic improvement
+
+---
+
 ## Template for Future Decisions
 
 ```markdown
