@@ -4,34 +4,46 @@
 
 \section{Phased Development Plan}
 
+Development follows an iterative, test-driven approach common in AI system engineering~\cite{chase2022langchain}.
+Each phase delivers a working system with measurable improvements over the baseline.
+
 \subsection{Phase 1: KG Foundation + Enhanced Takeoff (4--6 weeks)}
 
 \begin{itemize}
-  \item Define initial ontology in Neo4j
+  \item Define initial ontology in Neo4j (entities, relationships)
   \item Migrate existing lumber calculations to KG-backed rules
   \item Load baseline component definitions and framing rules
   \item Parse 2--3 plan sets with provenance tracking
   \item Generate BOM with rule citations
 \end{itemize}
 
+\textbf{Success Criteria:}
+BOM accuracy $>$90\% on validation set; all BOM items link to plan facts and rules; KG query latency $<$100ms.
+
 \subsection{Phase 2: Assembly Reasoning + Cut Optimization (6--10 weeks)}
 
 \begin{itemize}
   \item Expand component library (headers, stud packs, plates, sheathing)
   \item Implement Component Inference Agent with KG queries
-  \item Integrate OR-Tools cut-stock optimizer
+  \item Integrate OR-Tools cut-stock optimizer~\cite{ortools2024}
   \item Produce supplier-ready cut list exports
   \item Validate against ground truth projects
 \end{itemize}
 
+\textbf{Success Criteria:}
+Waste reduction to $<$8\% (baseline: 15--20\%); agent inference accuracy $>$85\%; cut optimization runtime $<$30s per project.
+
 \subsection{Phase 3: Code/Regulation Layer (6--10 weeks)}
 
 \begin{itemize}
-  \item Model IRC/IBC code rules with jurisdiction and version
-  \item Implement Code \& Compliance Agent
+  \item Model IRC/IBC code rules with jurisdiction and version~\cite{irc2021}
+  \item Implement Code \& Compliance Agent following NLP extraction methods~\cite{zhang2023kg_codes}
   \item Add compliance citations to outputs
   \item Build code rule editor for jurisdiction customization
 \end{itemize}
+
+\textbf{Success Criteria:}
+Code compliance validation accuracy $>$90\%; all non-compliant assemblies flagged with specific IRC citations; support for 3+ jurisdictions.
 
 \subsection{Phase 4: Feedback Loop + Learning (Ongoing)}
 
@@ -39,5 +51,14 @@
   \item Capture user overrides and corrections
   \item Store outcomes (actual waste, substitutions made)
   \item Continuously improve confidence calibration
-  \item Expand KG with new precedents
+  \item Expand KG with new precedents using continuous learning approaches~\cite{zhu2024llm_kg_construction}
 \end{itemize}
+
+\textbf{Success Criteria:}
+System accuracy improves $>$2\% per 100 projects processed; user override rate decreases over time; KG grows with validated domain knowledge.
+
+\subsection{Risk Mitigation}
+
+\textbf{Data quality:} Start with high-quality architectural plans; flag low-confidence extractions for human review.
+\textbf{Code complexity:} Begin with core IRC framing rules; expand incrementally to specialty cases.
+\textbf{Integration:} Design JSON/CSV exports to match common supplier formats; iterate based on partner feedback.
