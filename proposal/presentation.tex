@@ -68,45 +68,46 @@
 % =============================================================================
 \section{The Problem}
 
-\begin{frame}{The Material Takeoff Challenge}
-\begin{columns}
-\column{0.5\textwidth}
-\textbf{Current State:}
-\begin{itemize}
-    \item Estimators spend \textbf{50--80\%} of time on quantity takeoffs
-    \item Manual counting leads to costly errors
-    \item Inconsistent results across estimators
-    \item Junior staff lack code/methodology knowledge
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{The Cost:}
-\begin{itemize}
-    \item Lumber waste: \textbf{15--20\%} typical
-    \item Change orders from takeoff errors
-    \item Limited bid capacity
-    \item Lost institutional knowledge
-\end{itemize}
-\end{columns}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\Huge \textbf{50--80\%}}
 
 \vspace{1em}
-\centering
-\textit{``The construction industry has 0\% productivity growth over 20 years''} -- McKinsey
+{\large of estimator time spent on takeoffs}
+
+\vspace{3em}
+{\Huge \textbf{15--20\%}}
+
+\vspace{1em}
+{\large lumber waste}
+
+\vspace{3em}
+\textit{``0\% productivity growth over 20 years''}
+
+\vspace{0.5em}
+\small -- McKinsey
 \end{frame}
 
-\begin{frame}{What Estimators Need}
-\begin{enumerate}
-    \item \textbf{Accurate Bill of Materials (BOM)} from plans
-    \item \textbf{Optimized cut lists} that minimize waste
-    \item \textbf{Build instructions} aligned with codes
-    \item \textbf{Machine-readable exports} for suppliers
-    \item \textbf{Audit trail} for every decision
-\end{enumerate}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\Large Plans}
 
 \vspace{1em}
-\begin{block}{Goal}
-Transform plans into actionable, compliant, waste-minimized outputs---automatically.
-\end{block}
+\Huge $\downarrow$
+
+\vspace{1em}
+{\Large \textcolor{vtorange}{\textbf{?}}}
+
+\vspace{1em}
+\Huge $\downarrow$
+
+\vspace{1em}
+{\Large BOM · Cuts · Instructions}
+
+\vspace{2em}
+{\large \textit{automatically, accurately, auditably}}
 \end{frame}
 
 % =============================================================================
@@ -141,27 +142,26 @@ Transform plans into actionable, compliant, waste-minimized outputs---automatica
 \textbf{Key Insight:} Ground every decision in structured knowledge
 \end{frame}
 
-\begin{frame}{Why a Knowledge Graph?}
-\begin{columns}
-\column{0.55\textwidth}
-\textbf{What the KG stores:}
-\begin{itemize}
-    \item Component definitions (studs, headers, assemblies)
-    \item Material catalog (SKUs, stock lengths, grades)
-    \item Fasteners \& connectors with rules
-    \item Building codes (IRC/IBC by jurisdiction)
-    \item Historical project outcomes
-\end{itemize}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\Huge \textbf{Knowledge Graph}}
 
-\column{0.45\textwidth}
-\textbf{Benefits:}
-\begin{itemize}
-    \item \textbf{Auditable}: Every output traceable to rules
-    \item \textbf{Updatable}: Change codes without code changes
-    \item \textbf{Learning}: Improve from real outcomes
-    \item \textbf{Reusable}: Apply learnings across projects
-\end{itemize}
-\end{columns}
+\vspace{2em}
+\begin{tikzpicture}[scale=0.9]
+\node[circle, draw=vtmaroon, thick, minimum size=2cm, fill=vtmaroon!10] at (0,0) {Rules};
+\node[circle, draw=vtorange, thick, minimum size=2cm, fill=vtorange!10] at (3,1) {Materials};
+\node[circle, draw=vtmaroon, thick, minimum size=2cm, fill=vtmaroon!10] at (3,-1) {Codes};
+\node[circle, draw=vtorange, thick, minimum size=2cm, fill=vtorange!10] at (6,0) {History};
+\draw[thick, vtgray] (0,0) -- (3,1);
+\draw[thick, vtgray] (0,0) -- (3,-1);
+\draw[thick, vtgray] (3,1) -- (6,0);
+\draw[thick, vtgray] (3,-1) -- (6,0);
+\draw[thick, vtgray] (3,1) -- (3,-1);
+\end{tikzpicture}
+
+\vspace{2em}
+{\large Structured · Queryable · Evolving}
 \end{frame}
 
 % =============================================================================
@@ -195,14 +195,24 @@ Transform plans into actionable, compliant, waste-minimized outputs---automatica
 \textbf{Agents reason; Tools optimize}
 \end{frame}
 
-\begin{frame}{Agent Responsibilities}
-\begin{description}
-    \item[Extraction QA] Validates geometry, flags low-confidence dimensions, requests reprocessing
-    \item[Component Inference] Maps plan facts to assemblies (wall $\rightarrow$ studs, opening $\rightarrow$ header)
-    \item[Code \& Compliance] Checks against IRC/IBC rules, produces citations
-    \item[Procurement \& Cut] Selects stock lengths, calls optimizer, minimizes waste
-    \item[Instruction Generation] Produces step-by-step build guides with code callouts
-\end{description}
+\begin{frame}{}
+\centering
+\vspace{1em}
+{\Large \textbf{5 Specialized Agents}}
+
+\vspace{2em}
+\begin{tikzpicture}[scale=0.8]
+\foreach \i/\name/\color in {0/QA/vtmaroon, 72/Inference/vtorange, 144/Code/vtmaroon, 216/Procure/vtorange, 288/Instruct/vtmaroon} {
+  \node[circle, draw=\color, thick, minimum size=1.8cm, fill=\color!10, font=\small] at (\i:3cm) {\name};
+}
+\node[circle, draw=vtgray, thick, minimum size=1.5cm, fill=vtgray!10, font=\small\bfseries] at (0,0) {KG};
+\foreach \i in {0,72,144,216,288} {
+  \draw[thick, vtgray, ->] (\i:1cm) -- (\i:2.1cm);
+}
+\end{tikzpicture}
+
+\vspace{2em}
+{\large All agents read/write to shared Knowledge Graph}
 \end{frame}
 
 % =============================================================================
@@ -231,31 +241,25 @@ Scale Detection & Gemini Vision API \\
 \textbf{Already implemented} in current codebase
 \end{frame}
 
-\begin{frame}{Cut Optimization}
-\begin{columns}
-\column{0.5\textwidth}
-\textbf{The Problem:}
-\begin{itemize}
-    \item NP-hard cutting stock problem
-    \item Multiple stock lengths available
-    \item Kerf (blade width) matters
-    \item Bundling for crew efficiency
-\end{itemize}
-
-\column{0.5\textwidth}
-\textbf{Our Approach:}
-\begin{itemize}
-    \item First-Fit Decreasing heuristic
-    \item Integer Linear Programming (OR-Tools)
-    \item Multi-stock optimization
-    \item Substitution rules from KG
-\end{itemize}
-\end{columns}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\Huge \textbf{15--20\%}}
 
 \vspace{1em}
-\begin{block}{Objective}
-$\min \sum_{s \in S} c_s \cdot x_s + \lambda \cdot \text{waste}$
-\end{block}
+{\large typical waste}
+
+\vspace{2em}
+\Huge $\downarrow$
+
+\vspace{2em}
+{\Huge \textcolor{vtorange}{\textbf{<5\%}}}
+
+\vspace{1em}
+{\large optimized waste}
+
+\vspace{2em}
+\small $\min \sum_{s \in S} c_s \cdot x_s + \lambda \cdot \text{waste}$
 \end{frame}
 
 \begin{frame}{Knowledge Graph \& Agents}
@@ -285,47 +289,44 @@ $\min \sum_{s \in S} c_s \cdot x_s + \lambda \cdot \text{waste}$
 % =============================================================================
 \section{Outputs \& Integration}
 
-\begin{frame}{What We Deliver}
-\begin{enumerate}
-    \item \textbf{Bill of Materials (BOM)}
-    \begin{itemize}
-        \item Multi-level: Project $\rightarrow$ Wall $\rightarrow$ Assembly $\rightarrow$ Stock
-    \end{itemize}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\LARGE \textbf{Outputs}}
 
-    \item \textbf{Optimized Cut Lists}
-    \begin{itemize}
-        \item Grouped by stock length, labeled pieces
-    \end{itemize}
+\vspace{2em}
+\begin{tikzpicture}[scale=0.9]
+\node[draw=vtmaroon, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtmaroon!10] at (0,2) {BOM};
+\node[draw=vtorange, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtorange!10] at (0,0.5) {Cut Lists};
+\node[draw=vtmaroon, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtmaroon!10] at (0,-1) {Instructions};
+\node[draw=vtorange, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtorange!10] at (5,2) {Fasteners};
+\node[draw=vtmaroon, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtmaroon!10] at (5,0.5) {Compliance};
+\node[draw=vtorange, thick, rounded corners, minimum width=3cm, minimum height=1cm, fill=vtorange!10] at (5,-1) {Exports};
+\end{tikzpicture}
 
-    \item \textbf{Fastener \& Connector Lists}
-    \begin{itemize}
-        \item Nails, screws, straps, hangers with quantities
-    \end{itemize}
-
-    \item \textbf{Build Instructions}
-    \begin{itemize}
-        \item Step-by-step with code citations
-    \end{itemize}
-
-    \item \textbf{Compliance Reports}
-    \begin{itemize}
-        \item IRC/IBC validation status
-    \end{itemize}
-\end{enumerate}
+\vspace{2em}
+{\large Every line item fully traceable}
 \end{frame}
 
-\begin{frame}{Export Formats}
-\begin{itemize}
-    \item \textbf{CSV}: Direct lumber yard import
-    \item \textbf{JSON}: Structured data with full provenance
-    \item \textbf{PDF/HTML}: Human-readable reports
-    \item \textbf{EDI}: Supplier-specific mappings
-\end{itemize}
+\begin{frame}{}
+\centering
+\vspace{3em}
+{\LARGE \textbf{Provenance}}
 
-\vspace{1em}
-\begin{block}{Key Feature}
-Every line item links back to: plan facts, rules applied, code references
-\end{block}
+\vspace{2em}
+\begin{tikzpicture}[scale=1.1]
+\node[circle, draw=vtmaroon, thick, minimum size=1.2cm, fill=vtmaroon!20, font=\tiny] at (0,0) {BOM Line};
+\draw[->, thick, vtmaroon] (0.8,0) -- (2,0.8);
+\node[circle, draw=vtorange, thick, minimum size=1cm, fill=vtorange!10, font=\tiny] at (2.5,1.2) {Assembly};
+\draw[->, thick, vtmaroon] (2.5,0.4) -- (2.5,-0.8);
+\node[circle, draw=vtorange, thick, minimum size=1cm, fill=vtorange!10, font=\tiny] at (2.5,-1.2) {Rule};
+\draw[->, thick, vtmaroon] (0.8,-0.3) -- (2,-1);
+\node[circle, draw=vtorange, thick, minimum size=1cm, fill=vtorange!10, font=\tiny] at (5,0) {Plan Fact};
+\draw[->, thick, vtmaroon] (0.8,0.2) -- (4.2,0.2);
+\end{tikzpicture}
+
+\vspace{3em}
+{\large Full audit trail from plan to procurement}
 \end{frame}
 
 % =============================================================================
@@ -385,49 +386,57 @@ Code Compliance & \textcolor{blue}{\textbf{New}} & 3 \\
 % =============================================================================
 \section{Business Case}
 
-\begin{frame}{Expected Outcomes}
-\begin{table}
+\begin{frame}{}
 \centering
-\large
-\begin{tabular}{lc}
-\toprule
-\textbf{Metric} & \textbf{Target} \\
-\midrule
-Takeoff time reduction & \textbf{70--80\%} \\
-Material waste reduction & 15\% $\rightarrow$ \textbf{$<$5\%} \\
-Extraction accuracy & \textbf{95\%+} \\
-Bid throughput increase & \textbf{3--5$\times$} \\
-Change order reduction & \textbf{90\%} \\
-\bottomrule
-\end{tabular}
-\end{table}
-\end{frame}
-
-\begin{frame}{ROI Analysis}
-\textbf{For a mid-size contractor (50 projects/year):}
-
 \vspace{1em}
+{\LARGE \textbf{Impact}}
+
+\vspace{2em}
 \begin{columns}
 \column{0.5\textwidth}
-\textbf{Time Savings:}
-\begin{itemize}
-    \item 40 hours/project saved
-    \item @ \$75/hour = \$3,000/project
-    \item \textbf{\$150,000/year}
-\end{itemize}
+\centering
+{\Huge \textcolor{vtorange}{\textbf{70--80\%}}}
+
+\vspace{0.5em}
+{\large time saved}
+
+\vspace{2em}
+{\Huge \textcolor{vtmaroon}{\textbf{95\%+}}}
+
+\vspace{0.5em}
+{\large accuracy}
 
 \column{0.5\textwidth}
-\textbf{Waste Savings:}
-\begin{itemize}
-    \item \$500--\$2,000/project
-    \item \textbf{\$25,000--\$100,000/year}
-\end{itemize}
+\centering
+{\Huge \textcolor{vtorange}{\textbf{<5\%}}}
+
+\vspace{0.5em}
+{\large waste}
+
+\vspace{2em}
+{\Huge \textcolor{vtmaroon}{\textbf{3--5×}}}
+
+\vspace{0.5em}
+{\large throughput}
 \end{columns}
+\end{frame}
+
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\LARGE \textbf{ROI}}
 
 \vspace{1em}
-\begin{block}{Total Annual Benefit: \$175,000--\$250,000}
-Payback period: \textbf{$<$6 months}
-\end{block}
+{\large Mid-size contractor (50 projects/year)}
+
+\vspace{2em}
+{\Huge \textcolor{vtorange}{\textbf{\$175K--\$250K}}}
+
+\vspace{1em}
+{\large annual benefit}
+
+\vspace{3em}
+{\Large Payback: \textcolor{vtmaroon}{\textbf{<6 months}}}
 \end{frame}
 
 % =============================================================================
@@ -435,43 +444,33 @@ Payback period: \textbf{$<$6 months}
 % =============================================================================
 \section{Conclusion}
 
-\begin{frame}{Why Construction.AI?}
-\begin{columns}
-\column{0.5\textwidth}
-\textbf{Differentiation:}
-\begin{itemize}
-    \item \textbf{KG-centered}: Auditable, updatable
-    \item \textbf{Agentic}: Reasoning + optimization
-    \item \textbf{Code-aware}: Built-in compliance
-    \item \textbf{Learning}: Improves from outcomes
-\end{itemize}
+\begin{frame}{}
+\centering
+\vspace{2em}
+{\LARGE \textbf{Why Construction.AI?}}
 
-\column{0.5\textwidth}
-\textbf{Vs. Competitors:}
-\begin{itemize}
-    \item STACK, PlanSwift: Manual digitization
-    \item Togal.AI: Quantities only
-    \item \textbf{We}: Full pipeline + instructions
-\end{itemize}
-\end{columns}
+\vspace{2em}
+\begin{tikzpicture}[scale=0.9]
+\node[draw=vtmaroon, thick, circle, minimum size=2cm, fill=vtmaroon!20, font=\small\bfseries, align=center] at (0,0) {KG\\Centered};
+\node[draw=vtorange, thick, circle, minimum size=2cm, fill=vtorange!20, font=\small\bfseries, align=center] at (3.5,0) {Agentic};
+\node[draw=vtmaroon, thick, circle, minimum size=2cm, fill=vtmaroon!20, font=\small\bfseries, align=center] at (7,0) {Code\\Aware};
+\node[draw=vtorange, thick, circle, minimum size=2cm, fill=vtorange!20, font=\small\bfseries, align=center] at (1.75,-2.5) {Learning};
+\node[draw=vtmaroon, thick, circle, minimum size=2cm, fill=vtmaroon!20, font=\small\bfseries, align=center] at (5.25,-2.5) {Traceable};
+\end{tikzpicture}
 
-\vspace{1em}
-\begin{block}{Vision}
-From plan to procurement in minutes---with full auditability and continuous improvement.
-\end{block}
+\vspace{2em}
+{\large Plan to procurement in \textcolor{vtorange}{\textbf{minutes}}}
 \end{frame}
 
-\begin{frame}{Next Steps}
-\begin{enumerate}
-    \item \textbf{Phase 1 Kickoff}: Define Neo4j ontology, migrate existing calculations
-    \item \textbf{Pilot Projects}: 2--3 residential plans with ground truth validation
-    \item \textbf{Feedback Integration}: Capture estimator corrections as KG precedents
-    \item \textbf{Scale}: Multi-trade expansion, supplier integrations
-\end{enumerate}
-
-\vspace{1em}
+\begin{frame}{}
 \centering
-\Large\textbf{Questions?}
+\vspace{4em}
+{\Huge \textbf{Questions?}}
+
+\vspace{4em}
+{\large Jason Cusati}
+
+{\small Virginia Tech}
 \end{frame}
 
 % =============================================================================
