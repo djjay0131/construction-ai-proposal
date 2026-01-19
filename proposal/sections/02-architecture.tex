@@ -19,16 +19,16 @@ The core design principle is that the system is \emph{KG-centered}: extracted pl
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}[
-  node distance=6mm and 8mm,
-  box/.style={draw, rounded corners, align=center, inner sep=4pt, font=\scriptsize, minimum width=18mm},
-  arrow/.style={-Latex, thick}
+  node distance=4mm and 6mm,
+  box/.style={draw, rounded corners, align=center, inner sep=3pt, font=\tiny, minimum width=15mm, minimum height=8mm},
+  arrow/.style={-Latex}
 ]
-\node[box] (ingest) {Plan Ingest\\(PDF/CAD/Images)};
-\node[box, right=of ingest] (extract) {Geometry + Text\\Extraction};
+\node[box] (ingest) {Plan Ingest\\(PDF/CAD)};
+\node[box, right=of ingest] (extract) {Geometry +\\Text Extract};
 \node[box, right=of extract] (facts) {Plan Facts\\(walls, dims)};
-\node[box, below=8mm of facts] (kg) {\textbf{Knowledge Graph}\\Rules \& History};
+\node[box, below=6mm of facts] (kg) {\textbf{Knowledge}\\textbf{Graph}};
 \node[box, right=of facts] (agents) {Agent\\Orchestrator};
-\node[box, right=of agents] (outputs) {Outputs\\BOM, Cuts,\\Instructions};
+\node[box, right=of agents] (outputs) {Outputs\\(BOM, Cuts)};
 
 \draw[arrow] (ingest) -- (extract);
 \draw[arrow] (extract) -- (facts);

@@ -47,7 +47,7 @@ Agents (blue) perform reasoning; tools (green) perform deterministic computation
 
 \draw[arrow] (qa) -- (infer);
 \draw[arrow] (infer) -- (code);
-\draw[arrow] (code.south) -- ++(0,-4mm) -| (procure.north);
+\draw[arrow] (code.south) -- ++(0,-4mm) -- ++(-24mm,0) -- ++(0,-8mm) -- (procure.north);
 \draw[arrow] (procure) -- (instruct);
 \draw[arrow] (procure) -- (optimizer);
 \end{tikzpicture}
