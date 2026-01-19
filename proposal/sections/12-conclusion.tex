@@ -4,10 +4,26 @@
 
 \section{Conclusion}
 
-A KG-centered design makes construction takeoff and cut optimization \emph{auditable, improvable, and reusable}.
-By combining structured rules and historical precedents with agentic reasoning and deterministic optimization,
-Construction.AI can generate practical BOMs, waste-minimizing cut lists, and build instructions that connect directly to
-supplier workflows.
+This proposal presents Construction.AI, a system that addresses the construction industry's material takeoff bottleneck through four key contributions:
 
-The system builds on a solid foundation of existing parsing and extraction capabilities,
-adding the knowledge graph layer that enables grounded reasoning and continuous improvement from real-world outcomes.
+\begin{enumerate}
+  \item \textbf{KG-Centered Architecture}: The first system to use a construction-domain knowledge graph as the central backbone for material takeoff, enabling auditable, versionable decision-making with full provenance from plan facts to BOM line items.
+
+  \item \textbf{Multi-Agent Reasoning}: Specialized LLM agents (Extraction QA, Component Inference, Code Compliance, Procurement, Instruction Generation) collaborate through the KG, separating reasoning from deterministic optimization for explainable outputs.
+
+  \item \textbf{Integrated Cut Optimization}: Waste-minimizing cut-stock optimization integrated with provenance tracking, linking each cut piece back to assembly intent, plan facts, and applicable code rules.
+
+  \item \textbf{Code-Aware Build Instructions}: Automated generation of step-by-step build instructions with jurisdiction-specific IRC/IBC citations, reducing code compliance errors and supporting continuous learning from field outcomes.
+\end{enumerate}
+
+These contributions address the research questions posed in Section~2a:
+\textbf{RQ1} (KG effectiveness) is demonstrated through the entity/relationship model and provenance chain;
+\textbf{RQ2} (agent collaboration) through the five-agent workflow with shared KG memory;
+\textbf{RQ3} (provenance trust) through full traceability from extraction to export;
+\textbf{RQ4} (optimization integration) through deterministic ILP solvers querying KG constraints.
+
+The system targets 95\%+ accuracy with 70--80\% time reduction compared to manual takeoff, reducing lumber waste from typical 15--20\% to under 5\%. Building on existing parsing capabilities (DXF/PDF extraction, YOLOv8 detection), the proposed KG layer and agent architecture enable grounded, repeatable decisions that improve continuously from real-world project outcomes.
+
+\subsection{Future Directions}
+
+Near-term enhancements include multi-trade expansion (drywall, flooring, MEP), supplier pricing integration, 3D visualization, and crew-centric packaging. Long-term, the system can support automated RFI generation, real-time plan clarification, and predictive analytics for project risk assessment. The KG foundation enables these extensions without architectural redesign.

@@ -23,6 +23,46 @@
   \item Capture human overrides as new precedents in the KG
 \end{enumerate}
 
+\subsection{Data Volume and Scale}
+
+Initial training corpus:
+\begin{itemize}
+  \item \textbf{Seed dataset}: 50--100 manually labeled residential plan sheets
+  \item \textbf{Target corpus}: 500+ completed projects with ground truth outcomes
+  \item \textbf{Typical project scale}: 5--20 sheets per residential plan, 200--1,000 wall segments
+  \item \textbf{Annotation effort}: Expert estimator review at $\sim$2 hours per plan set
+\end{itemize}
+
+Scaling to production:
+\begin{itemize}
+  \item Support plan sets up to 100+ sheets (commercial projects)
+  \item Process multiple concurrent uploads (20+ users)
+  \item Continuous KG growth from validated user corrections
+\end{itemize}
+
+\subsection{Data Quality Challenges}
+
+Real-world plan data presents significant quality challenges:
+\begin{itemize}
+  \item \textbf{OCR errors}: Scanned plans produce text recognition errors (5--15\% character-level accuracy loss)
+  \item \textbf{Inconsistent CAD layers}: No standardized layer naming; vendors use different conventions
+  \item \textbf{Dimension conflicts}: Contradictory dimensions between plan views and detail callouts
+  \item \textbf{Handwritten annotations}: Field markups and clarifications require manual interpretation
+  \item \textbf{Missing information}: Implicit assumptions (e.g., standard stud spacing, default header configurations)
+\end{itemize}
+
+Mitigation strategies include cross-validation across plan sheets, confidence scoring, and human-in-the-loop flagging for low-confidence extractions.
+
+\subsection{Privacy and IP Considerations}
+
+Plan data contains sensitive information:
+\begin{itemize}
+  \item \textbf{Anonymization}: Remove project addresses, client names, and identifying markers
+  \item \textbf{Access control}: Tenant-isolated KG namespaces per contractor
+  \item \textbf{Confidentiality}: Plans not shared across organizations
+  \item \textbf{Retention policy}: Configurable data retention aligned with contractor policies
+\end{itemize}
+
 \subsection{Curation Loop}
 
 When the system encounters ambiguous cases (e.g., missing header callout, unclear wall type):
