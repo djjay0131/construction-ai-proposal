@@ -1,30 +1,50 @@
-\documentclass[aspectratio=169]{beamer}
+\documentclass[11pt,aspectratio=169]{beamer}
 
-% Theme and colors
+% Theme and colors - Virginia Tech Style
 \usetheme{Madrid}
-\usecolortheme{default}
-\definecolor{constructionblue}{RGB}{0, 82, 147}
-\setbeamercolor{structure}{fg=constructionblue}
-\setbeamercolor{frametitle}{bg=constructionblue, fg=white}
+\useinnertheme{circles}
+
+% Virginia Tech Official Colors
+\definecolor{vtmaroon}{RGB}{134, 31, 65}      % Chicago Maroon (primary)
+\definecolor{vtorange}{RGB}{229, 117, 31}      % Burnt Orange (accent)
+\definecolor{vtgray}{RGB}{117, 120, 123}       % Limestone Gray
+
+% Apply VT colors to beamer elements
+\setbeamercolor{structure}{fg=vtmaroon}
+\setbeamercolor{frametitle}{bg=vtmaroon, fg=white}
+\setbeamercolor{palette primary}{bg=vtmaroon, fg=white}
+\setbeamercolor{palette secondary}{bg=vtorange, fg=white}
+\setbeamercolor{palette tertiary}{bg=vtgray, fg=white}
+\setbeamercolor{title}{fg=vtmaroon}
+\setbeamercolor{subtitle}{fg=vtgray}
+\setbeamercolor{author}{fg=vtmaroon}
+\setbeamercolor{institute}{fg=vtgray}
+\setbeamercolor{item}{fg=vtorange}
+\setbeamercolor{subitem}{fg=vtmaroon}
+\setbeamercolor{block title}{bg=vtmaroon, fg=white}
+\setbeamercolor{block body}{bg=vtmaroon!10}
+\setbeamercolor{block title example}{bg=vtorange, fg=white}
+\setbeamercolor{block body example}{bg=vtorange!10}
 
 % Packages
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage{palatino}  % VT recommended font
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric}
 
 % Remove navigation symbols
 \setbeamertemplate{navigation symbols}{}
 
-% Add slide numbers
+% Add slide numbers with VT style
 \setbeamertemplate{footline}[frame number]
 
 % Title info
 \title{Construction.AI}
 \subtitle{Knowledge-Graph + Agentic System for\\Material Takeoff, Cut Optimization, and Build Instructions}
 \author{Jason Cusati}
-\institute{Construction.AI Project}
+\institute{Virginia Tech}
 \date{January 2026}
 
 \begin{document}
@@ -99,7 +119,7 @@ Transform plans into actionable, compliant, waste-minimized outputs---automatica
 \begin{tikzpicture}[
   node distance=8mm and 12mm,
   box/.style={draw, rounded corners, align=center, inner sep=6pt, font=\small, minimum width=22mm, minimum height=12mm},
-  kgbox/.style={draw, rounded corners, align=center, inner sep=6pt, font=\small\bfseries, minimum width=28mm, minimum height=14mm, fill=constructionblue!20},
+  kgbox/.style={draw, rounded corners, align=center, inner sep=6pt, font=\small\bfseries, minimum width=28mm, minimum height=14mm, fill=vtmaroon!20},
   arrow/.style={-Latex, thick}
 ]
 \node[box] (ingest) {Plan Ingest\\(PDF/CAD)};
@@ -112,7 +132,7 @@ Transform plans into actionable, compliant, waste-minimized outputs---automatica
 \draw[arrow] (ingest) -- (extract);
 \draw[arrow] (extract) -- (facts);
 \draw[arrow] (facts) -- (agents);
-\draw[arrow, constructionblue, line width=1.5pt] (kg) -- (agents);
+\draw[arrow, vtmaroon, line width=1.5pt] (kg) -- (agents);
 \draw[arrow] (facts) -- (kg);
 \draw[arrow] (agents) -- (outputs);
 \end{tikzpicture}
