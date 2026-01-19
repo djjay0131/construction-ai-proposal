@@ -6,6 +6,8 @@
 
 \subsection{Parsing Stack}
 
+Plan parsing combines multiple technologies for robust multi-format support~\cite{pizarro2022floorplan_survey}:
+
 \begin{table}[ht]
 \centering
 \caption{Parsing Technologies}
@@ -14,16 +16,18 @@
 \toprule
 \textbf{Format} & \textbf{Technology} \\
 \midrule
-PDF (vector) & PyMuPDF (fitz) \\
+PDF (vector) & PyMuPDF (fitz)~\cite{pymupdf2024} \\
 PDF (raster) & pdf2image + OpenCV \\
-DXF & ezdxf \\
+DXF & ezdxf~\cite{ezdxf2024} \\
 DWG & LibreDWG $\rightarrow$ DXF \\
-OCR & EasyOCR, Tesseract \\
-Object Detection & YOLOv8~\cite{rezvanifar2020yolo_symbols, kalervo2019cubicasa5k} \\
-Scale Detection & Google Gemini Vision API \\
+OCR & EasyOCR~\cite{easyocr2024}, Tesseract \\
+Object Detection & YOLOv8~\cite{jocher2023yolov8} \\
+Scale Detection & LLM vision (Claude/GPT-4) \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Technology selection prioritizes open-source tools (PyMuPDF, ezdxf) where feasible, with commercial LLM APIs for tasks requiring reasoning.
 
 \subsection{Cut Optimization}
 

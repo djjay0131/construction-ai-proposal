@@ -32,3 +32,15 @@ Build Instructions & \textbf{New} & 3 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Implementation Gaps and Next Steps}
+
+The existing codebase provides a strong foundation for plan parsing and basic takeoff, but lacks:
+(1) externalized knowledge representation via KG,
+(2) multi-agent reasoning with provenance,
+(3) integrated cut optimization, and
+(4) code compliance verification.
+
+The proposed phased approach (Section~8) builds on the working parser and web interface while adding the KG backbone and agent architecture that enable the key contributions outlined in Section~2a.
+
+Immediate next steps focus on Phase 1: designing the initial KG schema, migrating existing lumber rules to graph representation, and establishing provenance tracking for all inferences.
