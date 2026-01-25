@@ -1,0 +1,146 @@
+% =============================================================================
+% SECTION 3: KNOWLEDGE GRAPH DESIGN
+% =============================================================================
+
+\section{Knowledge Graph Design}
+\label{sec:kg}
+
+The knowledge graph (KG) serves as the backbone for \emph{grounded, repeatable decisions}~\cite{hogan2021kg_survey, zheng2022kg_construction}.
+Unlike rule-based systems that embed logic in code, the KG externalizes knowledge so it can be inspected, updated, and audited independently of the reasoning engine.
+
+\subsection{Theoretical Foundation}
+
+Knowledge graphs represent information as a labeled, directed multi-graph $G = (V, E, L)$ where vertices $V$ represent entities, edges $E \subseteq V \times V$ represent relationships, and $L$ provides type labels~\cite{hogan2021kg_survey}.
+This formalism supports:
+
+\begin{itemize}
+  \item \textbf{Explicit semantics}: Relationships are first-class citizens with types and properties
+  \item \textbf{Schema flexibility}: New entity and relationship types can be added without migration
+  \item \textbf{Path queries}: Multi-hop reasoning (e.g., ``which code rules constrain this header?'')
+  \item \textbf{Provenance tracking}: Every fact can carry source attribution
+\end{itemize}
+
+Pan et al.~\cite{pan2024unifying_kg_llm} identify three paradigms for KG-LLM integration: KG-enhanced LLMs, LLM-augmented KGs, and synergized systems.
+Our architecture follows the synergized approach, where agents query the KG for grounded facts and update it with validated inferences.
+
+\subsection{Why Not Alternatives?}
+
+We considered three alternative knowledge representations:
+
+\textbf{Rule engines} (e.g., Drools, CLIPS) excel at forward/backward chaining but embed rules in code or DSL files.
+Rules are difficult to inspect, version, and explain to end users.
+When rules conflict, debugging requires developer intervention.
+
+\textbf{Ontologies} (e.g., OWL/RDF) provide formal semantics and reasoning via description logics~\cite{pauwels2017kg_ifc}.
+However, OWL reasoners struggle with scale, closed-world assumptions conflict with construction's open-world nature, and the formalism is inaccessible to domain experts.
+
+\textbf{Relational databases} handle structured data well but require JOIN-heavy queries for relationship traversal.
+A query like ``find all components constrained by IRC R602.3'' requires multiple joins across normalized tables; in a graph, it is a single-hop traversal.
+
+The KG approach balances expressiveness, scalability, and maintainability for construction domain knowledge.
+
+\subsection{Knowledge Categories}
+
+The KG organizes construction knowledge into six categories:
+
+\begin{itemize}
+  \item \textbf{Component definitions}: studs, headers, plates, cripples, blocking, sheathing---with parameterized assemblies
+  \item \textbf{Material catalog}: dimensions, grades, treatments, SKUs, stock lengths, pricing, lead times
+  \item \textbf{Fasteners and connectors}: nails, screws, straps, hangers, anchors---with application rules and schedules
+  \item \textbf{Building rules}: framing conventions, span tables, loading assumptions, nailing patterns
+  \item \textbf{Codes and regulations}: jurisdiction, version, section citations, applicability conditions
+  \item \textbf{Historical precedents}: past project decisions, substitutions, waste rates, outcome feedback
+\end{itemize}
+
+\subsection{Core Entities and Relationships}
+
+Table~\ref{tab:kg_entities} summarizes the core entity types, and Table~\ref{tab:kg_relationships} shows key relationships.
+
+\begin{table}[ht]
+\centering
+\caption{Core KG Entity Types}
+\label{tab:kg_entities}
+\begin{tabular}{ll}
+\toprule
+\textbf{Entity Type} & \textbf{Description} \\
+\midrule
+Project & Building project with metadata \\
+PlanSheet & Individual plan page with scale \\
+PlanFact & Extracted fact with confidence \\
+AssemblyIntent & Inferred assembly (e.g., header) \\
+Component & Physical component instance \\
+StockItem & Purchasable material \\
+CutPiece & Result of cutting operation \\
+CodeRule & Building code requirement \\
+FastenerRule & Fastening specification \\
+Supplier & Material supplier \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Core KG Relationship Types}
+\label{tab:kg_relationships}
+\begin{tabular}{lll}
+\toprule
+\textbf{Relationship} & \textbf{From} & \textbf{To} \\
+\midrule
+hasSheet & Project & PlanSheet \\
+mentions & PlanSheet & PlanFact \\
+instantiates & PlanFact & AssemblyIntent \\
+composedOf & AssemblyIntent & Component \\
+builtFrom & Component & StockItem \\
+cutInto & StockItem & CutPiece \\
+constrainedBy & Component & CodeRule \\
+requiresFastener & Component & FastenerRule \\
+suppliedBy & StockItem & Supplier \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Example Query: Provenance Chain}
+
+The following Cypher query retrieves the full provenance chain for a BOM line item, demonstrating the KG's traceability:
+
+\begin{lstlisting}[language=json, basicstyle=\ttfamily\scriptsize]
+MATCH (bom:BOMItem {id: $itemId})
+      -[:derivedFrom]->(cut:CutPiece)
+      -[:cutFrom]->(stock:StockItem)
+      <-[:builtFrom]-(comp:Component)
+      <-[:composedOf]-(asm:AssemblyIntent)
+      <-[:instantiates]-(fact:PlanFact)
+      -[:extractedFrom]->(sheet:PlanSheet)
+OPTIONAL MATCH (comp)-[:constrainedBy]->(code:CodeRule)
+RETURN bom, cut, stock, comp, asm, fact,
+       sheet, collect(code) as codeRules
+\end{lstlisting}
+
+This single query traverses the entire chain from BOM output back to plan source, collecting all applicable code rules---a query that would require 6+ JOINs in a relational model.
+
+\subsection{Versioning and Provenance}
+
+Construction knowledge evolves: codes are updated, suppliers change SKUs, practices differ by region.
+The KG supports this through:
+
+\begin{itemize}
+  \item \textbf{Temporal validity}: Effective dates and regions on CodeRule and MaterialSpec nodes
+  \item \textbf{Source provenance}: Document reference, section number, URL/file hash on every fact
+  \item \textbf{Decision audit}: Agent decisions are logged with reasoning traces linked to KG facts
+\end{itemize}
+
+Every generated BOM line item links back to: (1) which plan facts triggered it, (2) which inference rules were applied, and (3) which code references constrained it.
+
+\subsection{Technology Choice: Neo4j}
+
+We select Neo4j as the graph database platform based on:
+
+\begin{itemize}
+  \item \textbf{Native graph storage}: Index-free adjacency enables O(1) relationship traversal regardless of graph size~\cite{neo4j2023construction}
+  \item \textbf{Cypher query language}: Declarative pattern matching for complex multi-hop queries
+  \item \textbf{Vector index support}: Native vector similarity search enables GraphRAG patterns~\cite{edge2024graphrag, lewis2020rag}
+  \item \textbf{APOC procedures}: Graph algorithms (centrality, community detection) for analytics
+  \item \textbf{Python ecosystem}: Async driver compatible with FastAPI; LangChain integration available
+\end{itemize}
+
+Alternative graph databases (Amazon Neptune, TigerGraph) were considered but Neo4j's developer tooling, community support, and vector search capabilities made it the pragmatic choice for this domain.

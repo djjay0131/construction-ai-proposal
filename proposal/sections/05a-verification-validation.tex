@@ -1,0 +1,111 @@
+% =============================================================================
+% SECTION 5A: VERIFICATION, VALIDATION, AND UNCERTAINTY QUANTIFICATION
+% =============================================================================
+
+\section{Verification, Validation, and Uncertainty Quantification}
+\label{sec:vvuq}
+
+The structural mechanics layer introduces continuum-based models and probabilistic reasoning that require rigorous verification and validation to ensure correctness and physical fidelity.
+
+\subsection{Verification: Numerical Correctness}
+
+Verification ensures that the implemented algorithms correctly solve the mathematical models.
+
+\textbf{Beam Solver Convergence.}
+The Euler--Bernoulli beam solver is verified against closed-form analytical solutions for canonical loading cases.
+For a simply-supported beam with uniform load $w$, the maximum deflection is:
+\[
+\delta_{\max} = \frac{5wL^4}{384EI}
+\]
+The numerical solver (finite-difference or finite-element discretization) must achieve relative error $< 0.1\%$ compared to this closed form.
+Convergence tests with mesh refinement ensure spatial discretization errors decay at expected rates.
+
+\textbf{Load Conservation.}
+Tributary area assignments must conserve total roof and floor area:
+\[
+\sum_{i=1}^{N} A_{\text{trib},i} = A_{\text{total}}
+\]
+where $A_{\text{trib},i}$ is the tributary area assigned to header/beam $i$.
+This conservation law is verified programmatically for every generated hypothesis.
+
+\textbf{Uncertainty Propagation Convergence.}
+Monte Carlo sampling converges as $N \to \infty$.
+For probability-of-failure estimates, convergence is tested by comparing $N = 1000$ vs.\ $N = 10000$ samples.
+Relative error in $P(\text{failure})$ must be $< 5\%$ to ensure statistical stability.
+
+\subsection{Validation: Physical Correctness}
+
+Validation ensures that the models and inferences correspond to real-world structural behavior.
+
+\textbf{IRC Span Table Comparison.}
+Generated header assemblies are compared against prescriptive IRC span tables~\cite{irc2021}.
+For standard load scenarios (40 psf roof + 10 psf dead load), the system must select headers that match or exceed IRC prescriptions for at least 90\% of cases.
+Discrepancies are flagged for manual review or hypothesis rejection.
+
+\textbf{Engineered Design Comparison.}
+A validation dataset of 20--30 residential plan sets with stamped structural designs is used to test hypothesis generation.
+Success criterion: the true engineered design (or a mechanically equivalent alternative) appears in the top 3 ranked hypotheses for at least 80\% of cases.
+This metric validates both the hypothesis generation strategy and the ranking heuristics.
+
+\textbf{Ground Truth Annotations.}
+For each validation plan, expert estimators provide:
+(1) identified load-bearing walls,
+(2) header sizing rationale,
+(3) tributary area sketches.
+These annotations serve as oracle data for evaluating inference accuracy.
+
+\subsection{Uncertainty Quantification Framework}
+
+Structural loads and material properties are inherently uncertain. The system models these uncertainties explicitly.
+
+\textbf{Random Variable Specification.}
+\begin{itemize}
+  \item \textbf{Tributary width:} $W \sim \text{Uniform}(W_{\min}, W_{\max})$, where bounds reflect geometric ambiguity.
+  \item \textbf{Roof load:} $q_{\text{roof}} \sim \mathcal{N}(\mu_{\text{roof}}, \sigma_{\text{roof}})$, with $\mu$ from code snow/wind requirements and $\sigma$ reflecting uncertainty.
+  \item \textbf{Floor load:} $q_{\text{floor}} \sim \mathcal{N}(\mu_{\text{floor}}, \sigma_{\text{floor}})$.
+  \item \textbf{Material stiffness:} $E \sim \mathcal{N}(\mu_E, \sigma_E)$, accounting for wood grade variability.
+\end{itemize}
+
+\textbf{Monte Carlo Propagation.}
+For each structural hypothesis $h$ and candidate header assembly $a$:
+\begin{enumerate}
+  \item Sample $N = 1000$ realizations: $(W^{(j)}, q_{\text{roof}}^{(j)}, q_{\text{floor}}^{(j)}, E^{(j)})$ for $j = 1, \ldots, N$.
+  \item For each realization, solve the beam PDE to compute $(\sigma^{(j)}, \tau^{(j)}, \delta^{(j)})$.
+  \item Estimate probability of failure:
+  \[
+  P_{\text{fail}}(a, h) \approx \frac{1}{N} \sum_{j=1}^{N} \mathbb{1}\left(\sigma^{(j)} > F_b \cup \tau^{(j)} > F_v \cup \delta^{(j)} > L/240\right)
+  \]
+  where $\mathbb{1}(\cdot)$ is the indicator function.
+\end{enumerate}
+
+\textbf{Robust Feasibility.}
+Assemblies are accepted only if $P_{\text{fail}} < 0.01$ (1\% failure probability threshold).
+This ensures that structural decisions remain feasible under realistic load and material variability.
+
+\subsection{Hypothesis Scoring and Selection}
+
+Multiple structural hypotheses are ranked using a multi-criteria score:
+\[
+S(h) = w_1 \cdot (1 - C_{\text{norm}}(h)) + w_2 \cdot (1 - P_{\text{fail,max}}(h)) + w_3 \cdot F(h)
+\]
+where:
+\begin{itemize}
+  \item $C_{\text{norm}}(h)$ is normalized material cost proxy (lumber volume + engineered member usage),
+  \item $P_{\text{fail,max}}(h) = \max_{a \in h} P_{\text{fail}}(a, h)$ is the worst-case failure probability across all members,
+  \item $F(h)$ is design flexibility score (fraction of interior walls that remain non-bearing),
+  \item $w_1, w_2, w_3$ are user-tunable weights (default: $0.4, 0.4, 0.2$).
+\end{itemize}
+
+The top 2--3 Pareto-optimal hypotheses are presented to the user, along with tradeoff explanations (e.g., ``Hypothesis 1: lowest cost but requires interior post; Hypothesis 2: no interior posts but 15\% higher material cost'').
+
+\subsection{Scientific Computing Contribution}
+
+This work contributes to scientific computing in construction by:
+\begin{itemize}
+  \item \textbf{Automatic PDE generation:} Translating discrete geometric plans into continuous beam boundary value problems.
+  \item \textbf{Reduced-order continuum models:} Using Euler--Bernoulli beam theory (a reduced-order PDE derived from 3D elasticity) for real-time structural feasibility.
+  \item \textbf{Hybrid discrete-continuous optimization:} Combining graph-based load path inference with PDE-constrained optimization.
+  \item \textbf{Uncertainty-aware decision-making:} Integrating Monte Carlo UQ with construction workflows for robust material selection.
+\end{itemize}
+
+These contributions bridge the gap between theoretical structural mechanics and practical construction planning, enabling physics-informed automation without requiring full structural engineering analysis.

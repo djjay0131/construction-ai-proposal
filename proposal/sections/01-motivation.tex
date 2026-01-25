@@ -1,0 +1,39 @@
+% =============================================================================
+% SECTION 1: MOTIVATION AND PROBLEM STATEMENT
+% =============================================================================
+
+\section{Motivation and Problem Statement}
+
+Material takeoff---the process of extracting quantities from architectural plans---remains a critical bottleneck in construction estimation.
+Estimators must infer assembly intent (e.g., header configurations, king stud packs, blocking patterns) from plan conventions and building codes.
+Even with accurate BOMs, material waste remains high without stock-aware cut optimization.
+Downstream stakeholders (framers, suppliers, project managers) require machine-readable outputs and detailed build instructions, not just raw quantities.
+
+\subsection{Industry Challenges}
+
+The construction industry faces persistent productivity gaps~\cite{mckinsey2017construction}:
+
+\begin{itemize}
+  \item \textbf{Time burden}: Professional estimators spend 50--80\% of their time on quantity takeoffs, limiting the number of bids they can process~\cite{rics2019takeoff}.
+  A typical 2,000 sq.ft. residential frame takeoff requires 8--12 hours of manual work.
+
+  \item \textbf{Error rates}: Manual measuring and counting leads to 10--15\% error rates in material estimates~\cite{deloitte2023outlook}, resulting in costly change orders, project delays, and strained supplier relationships.
+  Common errors include miscounting studs for wall intersections, incorrect header sizing, and missing blocking requirements.
+
+  \item \textbf{Inconsistency}: Two estimators working from the same plans often produce BOMs differing by 5--10\% in key materials like lumber and fasteners, undermining cost predictability.
+
+  \item \textbf{Knowledge gaps}: Junior estimators lack deep knowledge of framing methodology and jurisdiction-specific code requirements (IRC~\cite{irc2021}, local amendments), leading to non-compliant or over-conservative designs.
+
+  \item \textbf{Material waste}: Without cut optimization, lumber waste rates of 15--20\% are typical; optimized systems demonstrate waste reduction to under 5\%~\cite{manrique2007framex}, representing significant cost savings on large projects.
+\end{itemize}
+
+\subsection{Goals}
+
+\textbf{Goal:} Create an end-to-end workflow that:
+\begin{enumerate}
+  \item[(a)] Interprets plans into \emph{component assemblies} (walls, headers, openings)
+  \item[(b)] Selects \emph{real-world purchasable stock} (lengths, grades, treatments)
+  \item[(c)] Computes \emph{cuts with waste minimization} using optimization algorithms
+  \item[(d)] Exports data in \emph{supplier-friendly formats} (CSV, JSON, EDI)
+  \item[(e)] Generates \emph{build instructions} with code compliance citations
+\end{enumerate}

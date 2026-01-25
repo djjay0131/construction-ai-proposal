@@ -1,0 +1,114 @@
+% =============================================================================
+% SECTION 2: SYSTEM ARCHITECTURE OVERVIEW
+% =============================================================================
+
+\section{System Architecture Overview}
+\label{sec:arch}
+
+Figure~\ref{fig:arch} summarizes the proposed architecture.
+The design follows three architectural patterns common in modern AI systems~\cite{lewis2020rag}:
+
+\textbf{(1) Retrieval-Augmented Generation (RAG)}---agents retrieve relevant facts from the KG before generating outputs, grounding decisions in structured knowledge rather than parametric memory alone.
+
+\textbf{(2) Tool-Augmented Agents}---LLM agents invoke deterministic tools (optimizer, exporter) for tasks requiring provable correctness~\cite{schick2023toolformer}.
+
+\textbf{(3) Blackboard Architecture}---the KG serves as a shared workspace where specialized agents read inputs, write inferences, and coordinate asynchronously.
+
+The core design principle is that the system is \emph{KG-centered}: extracted plan facts and inferred construction intent are continuously grounded against a structured graph of rules, components, and historical builds.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=4mm and 6mm,
+  box/.style={draw, rounded corners, align=center, inner sep=3pt, font=\tiny, minimum width=15mm, minimum height=8mm},
+  pde/.style={draw, rounded corners, align=center, inner sep=3pt, font=\tiny, minimum width=15mm, minimum height=8mm, fill=blue!10},
+  arrow/.style={-Latex}
+]
+\node[box] (ingest) {Plan Ingest\\(PDF/CAD)};
+\node[box, right=of ingest] (extract) {Geometry +\\Text Extract};
+\node[box, right=of extract] (facts) {Plan Facts\\(walls, dims)};
+\node[box, below=6mm of facts] (kg) {\textbf{Knowledge}\\textbf{Graph}};
+\node[pde, below=6mm of kg] (pde) {Structural\\Solver (PDE)};
+\node[box, right=of facts] (agents) {Agent\\Orchestrator};
+\node[box, right=of agents] (outputs) {Outputs\\(BOM, Cuts)};
+
+\draw[arrow] (ingest) -- (extract);
+\draw[arrow] (extract) -- (facts);
+\draw[arrow] (facts) -- (agents);
+\draw[arrow] (kg) -- (agents);
+\draw[arrow] (kg) -- (pde);
+\draw[arrow] (pde) -- (agents);
+\draw[arrow] (facts) -- (kg);
+\draw[arrow] (agents) -- (outputs);
+\end{tikzpicture}
+\caption{KG-centered architecture with physics-based structural evaluation: plan facts are extracted, normalized, evaluated using continuum mechanics (PDE solver), and used by agents to generate compliant, optimized outputs.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{Key Modules}
+
+\textbf{(1) Plan Ingest + Extraction.}
+Convert drawings into machine-usable primitives:
+vector geometry (lines, polylines), detected room/wall boundaries, and text tokens (dimensions, callouts, schedules)~\cite{pizarro2022floorplan_survey}.
+The current implementation supports PDF (via PyMuPDF~\cite{pymupdf2024}), DXF (via ezdxf~\cite{ezdxf2024}), and DWG (via LibreDWG conversion).
+For raster images, YOLOv8 object detection~\cite{jocher2023yolov8} and EasyOCR~\cite{easyocr2024} provide robust extraction.
+
+\textbf{(2) Plan Facts Model.}
+Normalize extraction into a consistent intermediate representation:
+\emph{WallSegments}, \emph{Openings}, \emph{Headers}, \emph{Notes}, \emph{Schedules}, and \emph{Constraints}
+with explicit provenance back to the sheet, region, and confidence score.
+
+\textbf{(3) Knowledge Graph.}
+Store rules, materials, codes, and historical knowledge (Section~\ref{sec:kg}).
+The KG also stores structural hypotheses, beam evaluations, and uncertainty quantification results.
+
+\textbf{(4) Structural Mechanics Solver.}
+A continuum-based beam solver that evaluates headers and beams using fourth-order PDEs.
+The solver accepts tributary load assignments and material properties from the KG, computes stress and deflection fields, and propagates uncertainty via Monte Carlo sampling.
+Results (bending stress, deflection, probability of failure) are written back to the KG with full provenance.
+
+\textbf{(5) Agent Orchestrator.}
+A multi-agent workflow that queries the KG, performs reasoning and validation,
+invokes the structural solver for physics-based evaluation,
+and calls deterministic optimization routines for cutting and procurement.
+
+\textbf{(6) Export + Integration.}
+Produce both human-usable artifacts (PDF/HTML summaries, build steps)
+and machine-readable exports (CSV/JSON/EDI-style mappings) suitable for lumber yard systems.
+Exported structural hypotheses include ranked load path alternatives with tradeoff explanations.
+
+\subsection{Data Flow}
+
+The system operates in five sequential phases:
+
+\textbf{Phase 1: Extraction.}
+Plan documents are parsed into vector geometry, raster images, and text.
+YOLOv8 detects symbols; PyMuPDF extracts text and vectors from PDFs; ezdxf handles CAD formats.
+Output: raw geometry primitives and text tokens with bounding boxes.
+
+\textbf{Phase 2: Normalization.}
+Raw extraction is normalized into \texttt{PlanFact} nodes in the KG, each with source provenance (sheet, region, confidence).
+Cross-validation checks dimension consistency and flags ambiguities.
+
+\textbf{Phase 3: Inference.}
+Agents query the KG for plan facts and rules, then write inferred assemblies (\texttt{AssemblyIntent}, \texttt{Component}) back to the KG.
+Each inference links to triggering facts and applied rules.
+
+\textbf{Phase 3.5: Structural Hypothesis Evaluation.}
+The Structural Hypothesis Agent generates multiple plausible vertical load path configurations (typically 3--5 hypotheses), each specifying which walls are load-bearing, where beams or posts are required, and how tributary loads are distributed.
+For each hypothesis, headers and beams are evaluated using Euler--Bernoulli beam theory:
+\[
+EI \frac{d^4 w(x)}{dx^4} = q(x)
+\]
+where $w(x)$ is deflection, $E$ is modulus of elasticity, $I$ is second moment of area, and $q(x)$ is the distributed load derived from tributary areas.
+The solver computes maximum bending stress, shear stress, and deflection, rejecting assemblies that violate mechanical limits.
+Uncertainty in tributary widths and material properties is propagated via Monte Carlo sampling, yielding probability-of-failure estimates for each member.
+Hypotheses are ranked by cost proxy, structural robustness (1 -- $P_{\text{failure}}$), and design flexibility, with the top 2--3 Pareto-optimal solutions stored in the KG.
+
+\textbf{Phase 4: Optimization.}
+The Procurement Agent selects stock items and invokes the cut-stock optimizer (ILP solver) for waste minimization.
+Results are written as \texttt{CutPiece} nodes linked to source components.
+
+\textbf{Phase 5: Export.}
+Final outputs (BOM, cut lists, instructions) are generated by querying the KG and formatting results.
+Every output line item carries provenance links back through phases 4→3→2→1.

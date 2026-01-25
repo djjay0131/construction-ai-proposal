@@ -1,0 +1,117 @@
+% =============================================================================
+% SECTION 5: AGENTIC WORKFLOW
+% =============================================================================
+
+\section{Agentic Workflow}
+\label{sec:agents}
+
+Agents are responsible for \emph{turning facts into decisions}, while deterministic tools handle optimization and exporting~\cite{wang2024agents_survey, xi2023agents_rise, li2025agentic_survey}.
+This separation ensures that reasoning is auditable and optimization is provably correct.
+
+\subsection{Design Principles}
+
+Our agent architecture follows three key principles from recent surveys on tool-augmented LLMs~\cite{zhang2025tool_learning, schick2023toolformer}:
+
+\textbf{Reasoning-Action Separation.}
+Following the ReAct pattern~\cite{yao2023react}, each agent interleaves reasoning traces with tool invocations.
+Reasoning steps query the KG for facts and rules; actions invoke deterministic tools (optimizer, exporter) or update the KG with validated inferences.
+This enables auditability (decisions trace to KG facts), correctness (optimization uses proven algorithms), and debuggability (failed inferences can be replayed).
+
+\textbf{Specialization over Generalization.}
+Rather than a single general-purpose agent, we deploy five specialized agents, each with domain-specific prompts, KG query templates, and tool access.
+Specialization improves accuracy by constraining the reasoning space.
+
+\textbf{Shared Memory via KG.}
+Agents communicate through the knowledge graph rather than direct message passing.
+Each agent reads from and writes to the KG, creating a persistent, queryable record of all inferences.
+
+\subsection{Agent Architecture}
+
+Figure~\ref{fig:agents} shows the five agents and their workflow.
+Agents (blue) perform reasoning; tools (green) perform deterministic computation.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=5mm and 12mm,
+  agent/.style={draw, rounded corners, align=center, inner sep=3pt, font=\scriptsize, fill=blue!10, minimum width=22mm},
+  tool/.style={draw, align=center, inner sep=3pt, font=\scriptsize, fill=green!10, minimum width=18mm},
+  arrow/.style={-Latex}
+]
+\node[agent] (qa) {Extraction QA\\Agent};
+\node[agent, right=of qa] (infer) {Component\\Inference Agent};
+\node[agent, right=of infer] (code) {Code \&\\Compliance Agent};
+\node[agent, below=8mm of qa] (procure) {Procurement \&\\Cut Agent};
+\node[agent, right=of procure] (instruct) {Instruction\\Generation Agent};
+\node[tool, right=of instruct] (optimizer) {Cut-Stock\\Optimizer};
+
+\draw[arrow] (qa) -- (infer);
+\draw[arrow] (infer) -- (code);
+\draw[arrow] (code) |- (procure);
+\draw[arrow] (procure) -- (instruct);
+\draw[arrow] (instruct) -- (optimizer);
+\end{tikzpicture}
+\caption{Agent workflow: specialized agents (blue) handle reasoning; deterministic tools (green) handle optimization. All agents read/write to the shared KG.}
+\label{fig:agents}
+\end{figure}
+
+\subsection{Inter-Agent Communication}
+
+Agents communicate via the KG using a publish-subscribe pattern:
+(1) upstream agent writes inference results as new KG nodes;
+(2) downstream agent queries for nodes matching its input criteria;
+(3) status tracking via \texttt{pending}/\texttt{validated}/\texttt{flagged} properties;
+(4) provenance links to creating agent and reasoning trace.
+This decouples agents temporally and logically, enabling parallel execution and full audit trails.
+
+\subsection{Error Handling}
+
+Agents handle uncertainty through tiered strategies:
+\textbf{Confidence thresholds}---low-confidence results are flagged for human review rather than propagated.
+\textbf{Validation gates}---outputs are checked against schema constraints before KG writes.
+\textbf{Graceful degradation}---failed agents mark assemblies as ``requires review'' and continue processing unaffected portions.
+
+\subsection{Extraction QA Agent}
+
+Validates extracted geometry/text, flags low-confidence dimensions:
+\begin{itemize}
+  \item Dimension consistency checks (wall lengths match scale)
+  \item Missing element detection (walls without openings)
+  \item OCR confidence thresholds (request higher DPI if $<$0.85)
+\end{itemize}
+
+\subsection{Component Inference Agent}
+
+Maps validated plan facts to assemblies using KG rules:
+\begin{itemize}
+  \item Wall type $\rightarrow$ stud size/spacing, plates, sheathing
+  \item Opening size $\rightarrow$ header assembly, jack/king studs
+  \item Bearing vs. non-bearing $\rightarrow$ header sizing requirements
+\end{itemize}
+
+\subsection{Code \& Compliance Agent}
+
+Checks assemblies against KG code rules~\cite{zhang2023kg_codes, beach2020irc_automation}:
+\begin{itemize}
+  \item Header sizing for span/load per IRC~\cite{irc2021}
+  \item Stud spacing for load-bearing walls
+  \item Fastener patterns; produces ``compliant'' or ``requires review'' with citations
+\end{itemize}
+
+\subsection{Procurement \& Cut Agent}
+
+Selects stock and invokes the cut optimizer:
+\begin{itemize}
+  \item Stock lengths (8/10/12/14/16/20 ft, LVL, panels)
+  \item Kerf allowance (0.125'') and waste factors
+  \item Substitution rules (prefer in-stock; longer stock if less waste)
+\end{itemize}
+
+\subsection{Instruction Generation Agent}
+
+Produces build instructions with full traceability:
+\begin{itemize}
+  \item Organized by wall line, room, or phase
+  \item Component references with KG node IDs
+  \item Fastener specs and inspection callouts with code citations
+\end{itemize}

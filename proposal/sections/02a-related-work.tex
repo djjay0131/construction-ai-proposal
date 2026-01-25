@@ -1,0 +1,131 @@
+% =============================================================================
+% SECTION 2A: RELATED WORK AND CONTRIBUTIONS
+% =============================================================================
+
+\section{Related Work and Contributions}
+
+This section surveys the relevant literature across five domains---knowledge graphs, LLM-based agents, cut-stock optimization, building code automation, and construction document parsing---before presenting our key contributions.
+
+\subsection{Knowledge Graphs in Construction}
+
+Knowledge graphs (KGs) have emerged as a powerful paradigm for representing complex domain knowledge with explicit relationships~\cite{hogan2021kg_survey}.
+In the Architecture, Engineering, and Construction (AEC) sector, Zheng et al.~\cite{zheng2022kg_construction} provide a comprehensive review of KG applications, identifying use cases in project management, safety monitoring, and facility operations.
+
+Several works have explored linking BIM data with semantic technologies.
+Pauwels and Terkaj~\cite{pauwels2017kg_ifc} developed ifcOWL to convert IFC building models to OWL ontologies, enabling SPARQL-based queries.
+Wu et al.~\cite{wu2022kg_bim} demonstrated natural-language retrieval over BIM object databases using KG embeddings.
+For construction safety, Fang et al.~\cite{fang2020kg_safety} combined computer vision with ontologies to identify site hazards.
+
+More recently, Pan et al.~\cite{pan2024unifying_kg_llm} presented a roadmap for integrating KGs with large language models, identifying three paradigms: KG-enhanced LLMs, LLM-augmented KGs, and synergized approaches.
+Edge et al.~\cite{edge2024graphrag} introduced GraphRAG, demonstrating that graph-structured retrieval outperforms naive RAG for complex reasoning tasks.
+
+\textbf{Gap:} While KGs have been applied to BIM retrieval and safety monitoring, no prior work uses a KG as the central backbone for material takeoff, cut optimization, and compliance checking in an integrated system.
+
+\subsection{LLM-Based Autonomous Agents}
+
+The emergence of capable LLMs has enabled a new paradigm of autonomous agents that reason, plan, and use tools~\cite{wang2024agents_survey, xi2023agents_rise}.
+Li et al.~\cite{li2025agentic_survey} survey agentic LLM systems, categorizing architectures by memory, planning, and tool-use capabilities.
+
+A key enabling pattern is ReAct~\cite{yao2023react}, which interleaves reasoning traces with action execution, improving both performance and interpretability.
+Schick et al.~\cite{schick2023toolformer} demonstrated that LLMs can learn to invoke external tools (calculators, search engines, APIs) to augment their capabilities.
+Zhang et al.~\cite{zhang2025tool_learning} provide a comprehensive survey of tool-learning approaches, including structured function calling now standard in Claude~\cite{anthropic2024claude} and GPT-4~\cite{openai2024gpt4}.
+
+Orchestration frameworks like LangChain~\cite{chase2022langchain} provide abstractions for building multi-step agent workflows with memory and tool integration.
+Zhu et al.~\cite{zhu2024llm_kg_construction} specifically examine LLMs for KG construction and reasoning, showing promise for automated knowledge extraction.
+
+\textbf{Gap:} While multi-agent systems have been applied to general reasoning tasks, no prior work deploys specialized agent architectures for construction domain tasks like component inference, code compliance, and procurement optimization.
+
+\subsection{Cut-Stock Optimization}
+
+The cutting stock problem (CSP), introduced by Gilmore and Gomory~\cite{gilmore1961cutting}, seeks to minimize waste when cutting stock material into required pieces.
+Wäscher et al.~\cite{wascher2007csp_survey} provide a comprehensive typology of cutting and packing problems, distinguishing one-dimensional (lumber), two-dimensional (panels), and three-dimensional variants.
+
+For lumber optimization specifically, Cui et al.~\cite{cui2017lumber_optimization} developed heuristics for multiple stock lengths, a common scenario in construction where 8ft, 10ft, 12ft, and 16ft boards are standard.
+Modern solvers like Google OR-Tools~\cite{ortools2024} provide integer linear programming (ILP) capabilities suitable for exact solutions on moderately-sized problems.
+
+In construction automation, Manrique et al.~\cite{manrique2007framex} developed FRAMEX/CUTEX for CAD-based wood framing and cut optimization, demonstrating waste reduction of 15--20\% compared to manual methods.
+
+\textbf{Gap:} Existing optimizers operate in isolation from the takeoff process. Decisions about which stock to cut are disconnected from the plan facts and code rules that generated the requirements, preventing root-cause analysis of waste.
+
+\subsection{Building Code Compliance Automation}
+
+Automated compliance checking has been a long-standing goal in construction informatics.
+Solihin and Eastman~\cite{solihin2017bim_compliance} classified compliance rules by complexity, from simple attribute checks to complex spatial reasoning.
+Dimyadi and Amor~\cite{dimyadi2016automated_compliance} surveyed the state of automated code checking, identifying challenges in rule formalization and model quality.
+
+NLP-based approaches have shown promise for extracting requirements from regulatory text.
+Zhang and El-Gohary~\cite{zhang2023kg_codes, zhang2015code_nlp} developed semantic NLP pipelines to extract compliance rules from building codes like the IRC~\cite{irc2021}.
+Beach et al.~\cite{beach2020irc_automation} demonstrated rule-based semantic approaches for automated regulatory compliance in construction.
+
+\textbf{Gap:} Prior compliance systems either require manual rule encoding or focus on BIM model checking. None integrate compliance verification with material takeoff and provide citations traceable to specific code sections.
+
+\subsection{Construction Document Parsing}
+
+Automatic analysis of architectural floor plans has received significant attention.
+Pizarro et al.~\cite{pizarro2022floorplan_survey} survey methods ranging from traditional image processing to deep learning approaches.
+Benchmark datasets like CubiCasa5K~\cite{kalervo2019cubicasa5k} have enabled systematic evaluation of room segmentation and wall detection.
+
+For symbol detection, Rezvanifar et al.~\cite{rezvanifar2020yolo_symbols} applied YOLO-based object detection to identify doors, windows, and fixtures in floor plans.
+Jamieson et al.~\cite{jamieson2025symbol_detection} extended this work with construction-specific symbol vocabularies.
+Tools like PyMuPDF~\cite{pymupdf2024} enable extraction of vector graphics from PDF plans, while EasyOCR~\cite{easyocr2024} handles dimension text recognition.
+
+\textbf{Gap:} Existing parsers focus on room layout and basic elements. None extract the full information needed for material takeoff: wall types, opening schedules, structural annotations, and dimension chains.
+
+\subsection{Commercial Solutions}
+
+Current commercial tools fall into three categories:
+
+\textbf{Manual takeoff tools} (PlanSwift~\cite{planswift2024}, Bluebeam) require human operators to trace elements and apply counts. While accurate, they scale poorly and depend entirely on operator expertise.
+
+\textbf{Rule-based estimation} systems (STACK~\cite{stack2024}) embed framing rules in software code. Rule updates require vendor modifications, and the reasoning behind outputs is not auditable.
+
+\textbf{AI-powered takeoff} tools (Togal.AI~\cite{togalai2024}) use computer vision to detect areas and count symbols, but typically output raw quantities without assembly reasoning, cut optimization, or compliance verification.
+
+\subsection{Research Questions}
+
+Based on the gaps identified above, this work addresses the following research questions:
+
+\begin{enumerate}
+  \item \textbf{RQ1:} Can a domain-specific knowledge graph effectively capture the relationships between architectural plans, building codes, material specifications, and construction practices?
+  \item \textbf{RQ2:} How can specialized LLM agents collaborate to produce accurate, code-compliant material takeoffs while maintaining explainability?
+  \item \textbf{RQ3:} Can full provenance tracking from plan facts to BOM outputs improve trust and enable continuous improvement?
+  \item \textbf{RQ4:} How can cut-stock optimization be integrated with knowledge-based reasoning to minimize waste while respecting construction constraints?
+\end{enumerate}
+
+\subsection{Key Contributions}
+
+This proposal presents the following novel contributions:
+
+\begin{enumerate}
+  \item \textbf{KG-Centered Architecture}: A knowledge graph backbone that externalizes construction rules, material catalogs, code requirements, and historical precedents---enabling inspection, versioning, and auditing of all system knowledge~\cite{pan2024unifying_kg_llm}.
+
+  \item \textbf{Provenance-First Design}: Every BOM line item links to (a) plan facts, (b) applied inference rules, and (c) code references, supporting explainability and regulatory compliance.
+
+  \item \textbf{Multi-Agent Reasoning}: Specialized agents for extraction QA, component inference, compliance checking, and instruction generation~\cite{li2025agentic_survey, zhang2025tool_learning}, with clear separation from deterministic optimization tools.
+
+  \item \textbf{Integrated Cut Optimization}: Stock selection and cutting as a first-class concern, using ILP solvers~\cite{ortools2024} with kerf handling and multi-stock support~\cite{gilmore1961cutting}, with full traceability to source requirements.
+
+  \item \textbf{Continuous Improvement Loop}: Human corrections and project outcomes feed back into the KG as new precedents, enabling system-wide learning without retraining.
+\end{enumerate}
+
+\subsection{Differentiation Summary}
+
+Table~\ref{tab:differentiation} compares our approach to existing solutions across key capabilities.
+
+\begin{table}[ht]
+\centering
+\caption{Comparison with Existing Approaches}
+\label{tab:differentiation}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Capability} & \textbf{Existing} & \textbf{Ours} \\
+\midrule
+Knowledge storage & Code-embedded & KG-externalized \\
+Rule versioning & Manual updates & Temporal validity \\
+Provenance & None/limited & Full chain \\
+Cut optimization & Separate/none & Integrated \\
+Compliance & Manual check & Auto w/ citations \\
+Learning & Static & Continuous \\
+\bottomrule
+\end{tabular}
+\end{table}

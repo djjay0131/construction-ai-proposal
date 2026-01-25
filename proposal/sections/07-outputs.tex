@@ -1,0 +1,72 @@
+% =============================================================================
+% SECTION 7: OUTPUTS AND SUPPLIER INTEGRATION
+% =============================================================================
+
+\section{Outputs and Supplier Integration}
+
+\subsection{Output Types}
+
+\begin{enumerate}
+  \item \textbf{Bill of Materials (BOM)}: Multi-level hierarchy (project $\rightarrow$ wall $\rightarrow$ assembly $\rightarrow$ stock items)
+  \item \textbf{Cut Lists}: Grouped by stock length and material type, with labeled cut pieces
+  \item \textbf{Fastener List}: Nails, screws, anchors, straps, hangers with quantities
+  \item \textbf{Build Instructions}: Step-by-step with plan sheet references and code notes
+  \item \textbf{Compliance Report}: Code citations, validation status, items requiring review
+\end{enumerate}
+
+\subsection{Export Formats}
+
+\begin{itemize}
+  \item \textbf{CSV}: Lumber yard import (SKU, qty, length, treatment, notes)
+  \item \textbf{JSON}: Structured assemblies + cuts + provenance
+  \item \textbf{PDF/HTML}: Human-readable reports with diagrams
+  \item \textbf{EDI}: Optional mapping layer for specific suppliers
+\end{itemize}
+
+\subsection{Sample JSON Structure}
+
+The following example shows a BOM entry with full provenance tracking:
+
+\begin{lstlisting}[language=json, basicstyle=\ttfamily\scriptsize]
+{
+  "project_id": "9557-Barnes-Road",
+  "bom_items": [{
+    "item_id": "BOM-142",
+    "description": "2x10x12 DF-L #2",
+    "qty": 2,
+    "unit_cost": 18.75,
+    "supplier_sku": "L2X10-12-DFL2",
+    "cuts": [{
+      "cut_id": "C-142-1",
+      "length_in": 42,
+      "label": "Front Door Header (1 of 2)",
+      "kerf_in": 0.125
+    }],
+    "assembly": {
+      "type": "header_assembly",
+      "opening_id": "OP-003",
+      "opening_label": "Front Door 3068",
+      "span_in": 40,
+      "load": "bearing",
+      "components": ["(2) 2x10", "1/2\" ply spacer"],
+      "code_rule": "IRC R602.7.2"
+    },
+    "provenance": {
+      "plan_fact_id": "PF-203",
+      "sheet": "A-101 Floor Plan",
+      "region": [120, 450, 180, 480],
+      "confidence": 0.94,
+      "inferred_by": "ComponentInferenceAgent",
+      "validated_by": "CodeComplianceAgent",
+      "timestamp": "2024-01-15T14:32:18Z"
+    }
+  }],
+  "waste_summary": {
+    "total_stock_lineal_ft": 1248,
+    "total_cut_lineal_ft": 1186,
+    "waste_pct": 4.97
+  }
+}
+\end{lstlisting}
+
+This structure enables suppliers to import orders directly, framers to locate components on plans, and project managers to audit decisions back to source facts.

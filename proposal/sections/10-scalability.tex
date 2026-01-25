@@ -1,0 +1,89 @@
+% =============================================================================
+% SECTION 10: SCALABILITY AND FUTURE ENHANCEMENTS
+% =============================================================================
+
+\section{Scalability and Future Enhancements}
+
+\subsection{Performance Targets}
+
+The system targets production-grade performance for concurrent multi-user scenarios:
+
+\begin{table}[ht]
+\centering
+\caption{Performance Targets}
+\label{tab:perf_targets}
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Target} \\
+\midrule
+Plan processing time & <2 min (20-sheet residential) \\
+Concurrent users & 100+ simultaneous \\
+KG query latency & <100ms (95th percentile) \\
+Cut optimization & <30s (500-piece list) \\
+BOM generation & <10s per project \\
+System availability & 99.5\% uptime \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Architecture for Scale}
+
+\textbf{Database Layer:}
+\begin{itemize}
+  \item Neo4j cluster (3+ nodes) with read replicas for query load distribution
+  \item Sharding strategy: Tenant-isolated namespaces for multi-contractor deployments
+  \item In-memory caching (Redis) for frequently-accessed rules and component definitions
+\end{itemize}
+
+\textbf{Compute Layer:}
+\begin{itemize}
+  \item Celery + Redis for async task processing (plan parsing, agent workflows)
+  \item Kubernetes for horizontal pod autoscaling based on queue depth
+  \item Dedicated worker pools: parsing (CPU-heavy), agent reasoning (LLM API-bound), optimization (compute-intensive)
+\end{itemize}
+
+\textbf{Storage Layer:}
+\begin{itemize}
+  \item Object storage (S3/GCS) for plan files, generated PDFs, and cut diagrams
+  \item CDN (CloudFront/Cloud CDN) for static asset delivery
+  \item Versioned artifacts with immutable references
+\end{itemize}
+
+\subsection{Cost Projections}
+
+Infrastructure costs scale with usage volume:
+
+\begin{itemize}
+  \item \textbf{Base infrastructure}: \$500--\$1,000/month (Neo4j cluster, Kubernetes nodes, storage)
+  \item \textbf{LLM API costs}: \$0.50--\$2.00 per project (Claude/GPT-4 inference for agents)
+  \item \textbf{Compute scaling}: \$0.10--\$0.30 per project (parsing + optimization)
+  \item \textbf{Total per-project cost}: \$0.60--\$2.30 at scale (>100 projects/month)
+\end{itemize}
+
+Cost optimization strategies:
+\begin{itemize}
+  \item Cache LLM responses for repeated assembly patterns
+  \item Use smaller models (Haiku, GPT-3.5) for routine validation tasks
+  \item Batch processing for non-urgent projects
+  \item Reserved instance pricing for baseline load
+\end{itemize}
+
+\subsection{Multi-Tenant Architecture}
+
+Support multiple contractors with isolated data:
+\begin{itemize}
+  \item \textbf{Namespace isolation}: Each contractor gets dedicated KG namespace
+  \item \textbf{Custom rule sets}: Contractor-specific framing methodologies and preferences
+  \item \textbf{Jurisdiction libraries}: Maintain multiple IRC/IBC versions by region
+  \item \textbf{Access control}: Role-based permissions (admin, estimator, viewer)
+\end{itemize}
+
+\subsection{Future Enhancements}
+
+\begin{itemize}
+  \item \textbf{Multi-trade expansion}: Drywall, flooring, roofing, MEP with trade-specific ontologies~\cite{pauwels2017kg_ifc}
+  \item \textbf{Crew-centric packaging}: Bundles per wall/area, labeled kits
+  \item \textbf{Supplier pricing}: Order suggestions under cost/availability constraints
+  \item \textbf{Automated RFI}: Generate requests for information when plans are inconsistent~\cite{zhang2015code_nlp}
+  \item \textbf{3D visualization}: Three.js framing model from takeoff data
+\end{itemize}
