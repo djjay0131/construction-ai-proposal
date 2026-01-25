@@ -8,6 +8,12 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -16,6 +22,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set version info
+        id: version
+        run: |
+          VERSION=$(date -u +"%Y.%m.%d")-$(echo ${{ github.sha }} | cut -c1-7)
+          BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M UTC")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "date=$BUILD_DATE" >> $GITHUB_OUTPUT
 
       - name: Compile LaTeX documents
         uses: xu-cheng/latex-action@v3
@@ -26,19 +40,91 @@ jobs:
             presentation.tex
           latexmk_use_xelatex: false
 
-      - name: Create Release
+      - name: Rename and prepare PDFs
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+
+          # Create versioned copies for release
+          cp proposal/main.pdf "proposal/ConstructionAI-Proposal-${VERSION}.pdf"
+          cp proposal/presentation.pdf "proposal/ConstructionAI-Presentation-${VERSION}.pdf"
+
+          # Prepare GitHub Pages content with friendly names
+          mkdir -p public
+          cp proposal/main.pdf public/ConstructionAI-Proposal.pdf
+          cp proposal/presentation.pdf public/ConstructionAI-Presentation.pdf
+
+          # Create index page
+          cat > public/index.html << EOF
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Construction.AI Proposal</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+              h1 { color: #861F41; }
+              a { color: #E5751F; text-decoration: none; font-size: 1.2em; }
+              a:hover { text-decoration: underline; }
+              .doc { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+              .version { color: #666; font-size: 0.9em; }
+            </style>
+          </head>
+          <body>
+            <h1>Construction.AI Proposal</h1>
+            <p>AI-Driven Material Takeoff and Construction Recommendations</p>
+            <p class="version">Version: ${VERSION}</p>
+            <div class="doc">
+              <a href="ConstructionAI-Proposal.pdf">📄 IEEE Conference Paper</a>
+              <p>12-page proposal document with full technical details</p>
+            </div>
+            <div class="doc">
+              <a href="ConstructionAI-Presentation.pdf">📊 Presentation Slides</a>
+              <p>21-slide Beamer presentation deck</p>
+            </div>
+            <hr>
+            <p><small>Last updated: ${{ steps.version.outputs.date }}</small></p>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Update latest release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: build-${{ github.run_number }}
-          name: PDF Build ${{ github.run_number }}
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Construction.AI Proposal v${{ steps.version.outputs.version }}
           body: |
-            Automated PDF build from commit ${{ github.sha }}
+            ## Construction.AI Proposal
+
+            **Version:** ${{ steps.version.outputs.version }}
+            **Built:** ${{ steps.version.outputs.date }}
+            **Commit:** ${{ github.sha }}
 
             ## Documents
-            - **main.pdf** - IEEE Conference Paper (Construction.AI Proposal)
-            - **presentation.pdf** - Beamer Presentation Slides
+            - **ConstructionAI-Proposal** - IEEE Conference Paper (12 pages)
+            - **ConstructionAI-Presentation** - Beamer Slides (21 slides)
+
+            ## Quick Access
+            📎 GitHub Pages: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
           files: |
-            proposal/main.pdf
-            proposal/presentation.pdf
+            proposal/ConstructionAI-Proposal-${{ steps.version.outputs.version }}.pdf
+            proposal/ConstructionAI-Presentation-${{ steps.version.outputs.version }}.pdf
           draft: false
           prerelease: false
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
