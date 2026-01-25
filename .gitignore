@@ -10,13 +10,15 @@
 *.snm
 *.toc
 *.vrb
-
-# Keep PDF outputs
-!proposal/main.pdf
-!proposal/presentation.pdf
+*.synctex.gz
+*.pdf
 
 # macOS
 .DS_Store
 
 # Build directories
 build/
+
+# Editor backups
+*~
+*.swp

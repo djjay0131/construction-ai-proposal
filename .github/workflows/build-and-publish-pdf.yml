@@ -1,0 +1,44 @@
+name: Build and Publish PDF
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX documents
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: proposal
+          root_file: |
+            main.tex
+            presentation.tex
+          latexmk_use_xelatex: false
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: PDF Build ${{ github.run_number }}
+          body: |
+            Automated PDF build from commit ${{ github.sha }}
+
+            ## Documents
+            - **main.pdf** - IEEE Conference Paper (Construction.AI Proposal)
+            - **presentation.pdf** - Beamer Presentation Slides
+          files: |
+            proposal/main.pdf
+            proposal/presentation.pdf
+          draft: false
+          prerelease: false
