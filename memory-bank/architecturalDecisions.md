@@ -201,6 +201,87 @@ Execute targeted sprint focusing on 5 specific sections with emphasis on:
 
 ---
 
+## ADR-007: VVUQ Integration Strategy
+
+**Date:** 2026-01-24
+**Status:** Accepted
+
+**Context:**
+The original proposal lacked physics-based validation for structural decisions. Architectural plans often don't include structural framing details, requiring builders to infer load-bearing walls and header sizes. Adding structural mechanics and uncertainty quantification would differentiate the proposal and add scientific rigor.
+
+**Decision:**
+Integrate Verification, Validation, and Uncertainty Quantification (VVUQ) into the proposal through a phased approach:
+
+1. **Phase 1 (Complete):** Architecture updates with Phase 3.5 (Structural Hypothesis Evaluation) and new V&V section
+2. **Phase 2:** Knowledge Graph entity updates, Agentic Workflow with Structural Hypothesis Agent
+3. **Phase 3:** Presentation slides and structural mechanics bibliography
+
+Key technical additions:
+- Euler-Bernoulli beam theory for header sizing
+- Monte Carlo uncertainty propagation for robustness analysis
+- Multi-hypothesis structural analysis with Pareto ranking
+- V&V framework with verification tests and validation against IRC span tables
+
+**Consequences:**
+
+- Pros: Scientific rigor, physics-based validation, differentiates from competitors, enables uncertainty-aware decisions
+- Cons: Adds complexity, requires additional citations, document grows by 2-3 pages
+- Impact: Proposal becomes more academically credible with continuum mechanics foundation
+
+**Results (Phase 1):**
+
+- Architecture section updated with Phase 3.5: Structural Hypothesis Evaluation
+- New V&V section created (05a-verification-validation.tex, ~100 lines)
+- TikZ diagram updated with Structural Solver (PDE) module
+- Document grew from 11 to 12 pages
+- Commit: d7e3f58
+
+**Alternatives Considered:**
+
+- Skip structural mechanics: Rejected, misses opportunity for scientific differentiation
+- Full FEA integration: Rejected, too complex for proposal scope
+- Reduced-order PDE models (chosen): Appropriate balance of rigor and simplicity
+
+**Reference:** construction/design/vvuq-integration-plan.md
+
+---
+
+## ADR-008: CI/CD Pipeline with GitHub Actions
+
+**Date:** 2026-01-24
+**Status:** Accepted
+
+**Context:**
+Manual PDF compilation required local LaTeX installation and made sharing deliverables difficult. Needed automated build pipeline and public URL for PDF access.
+
+**Decision:**
+Implement CI/CD pipeline using GitHub Actions and GitHub Pages:
+
+1. GitHub Actions workflow for automated LaTeX compilation on push to master
+2. GitHub Pages deployment for public PDF access
+3. Automatic updates when source files change
+
+**Consequences:**
+
+- Pros: No local compilation needed, easy sharing via URL, automated build verification
+- Cons: Requires GitHub repository, build time on push
+- Impact: Streamlined workflow, professional delivery mechanism
+
+**Results:**
+
+- GitHub Actions workflow created (.github/workflows/build-pdf.yml)
+- GitHub Pages enabled at djjay0131.github.io/construction-ai-proposal/
+- PDFs automatically updated on push
+- Commits: 7489dd0 (workflow), e95a9cf (Pages deployment)
+
+**Alternatives Considered:**
+
+- Manual compilation only: Rejected, cumbersome for sharing
+- Overleaf: Rejected, prefer Git-based workflow
+- GitHub Actions + Pages (chosen): Best integration with existing Git workflow
+
+---
+
 ## Template for Future Decisions
 
 ```markdown
