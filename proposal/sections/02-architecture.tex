@@ -62,10 +62,41 @@ with explicit provenance back to the sheet, region, and confidence score.
 Store rules, materials, codes, and historical knowledge (Section~\ref{sec:kg}).
 The KG also stores structural hypotheses, beam evaluations, and uncertainty quantification results.
 
-\textbf{(4) Structural Mechanics Solver.}
-A continuum-based beam solver that evaluates headers and beams using fourth-order PDEs.
-The solver accepts tributary load assignments and material properties from the KG, computes stress and deflection fields, and propagates uncertainty via Monte Carlo sampling.
-Results (bending stress, deflection, probability of failure) are written back to the KG with full provenance.
+\textbf{(4) Thermo-Hygro-Mechanical Solver (Coupled PDEs).}
+The solver evaluates headers, joists, and beams under both \emph{instantaneous} and \emph{long-term} climate exposure.
+It couples (i) heat diffusion, (ii) moisture diffusion, and (iii) time-dependent beam mechanics:
+\begin{align}
+\rho c \, \frac{\partial T}{\partial t} &= \nabla \cdot (k_T \nabla T), \label{eq:heat}\\
+\frac{\partial MC}{\partial t} &= \nabla \cdot (D_m \nabla MC), \label{eq:moisture}\\
+E_{\mathrm{eff}}(T,MC,t)\, I(t)\, \frac{\partial^4 w(x,t)}{\partial x^4} &= q(x,t). \label{eq:beam_time}
+\end{align}
+Here $T$ is temperature, $MC$ is moisture content, $w$ is deflection, and $q$ is the distributed load derived from tributary areas and environmental actions.
+Climate effects enter through (a) time-varying loads and (b) material evolution:
+\begin{align}
+q(x,t) &= q_G(x) + q_Q(x,t) + q_M(x,t), \label{eq:q_time}\\
+E_{\mathrm{eff}}(T,MC,t) &= \frac{E_0\, f_T(T)\, f_{MC}(MC)}{1+\phi(t,MC)}, \label{eq:Eeff}\\
+I(t) &= I_0 \big(1-d(t)\big). \label{eq:It}
+\end{align}
+$q_G$ is dead load, $q_Q$ includes live and environmental loads (e.g., rain, wind), and $q_M$ captures moisture-related mass (e.g., absorbed water, wet insulation).
+$E_{\mathrm{eff}}$ is an effective modulus incorporating temperature/moisture dependence and creep via $\phi(t,MC)$ (viscoelastic + mechano-sorptive),
+and $I(t)$ optionally accounts for section loss or degradation through a damage variable $d(t)$ under prolonged high moisture.
+
+The solver outputs time-indexed stress/deflection trajectories and a time-dependent serviceability failure probability:
+\begin{equation}
+P_{\mathrm{fail}}(t) = \mathbb{P}\!\left(w_{\max}(t) > w_{\mathrm{allow}}\right),
+\label{eq:Pfail_t}
+\end{equation}
+which supports climate-aware ranking of structural hypotheses.
+
+\textbf{(5) Agent Orchestrator.}
+A multi-agent workflow that queries the KG, performs reasoning and validation,
+invokes the thermo-hygro-mechanical solver for physics-based evaluation over time,
+and calls deterministic optimization routines for cutting and procurement.
+
+\textbf{(6) Export + Integration.}
+Produce both human-usable artifacts (PDF/HTML summaries, build steps)
+and machine-readable exports (CSV/JSON/EDI-style mappings) suitable for lumber yard systems.
+Exported structural hypotheses include ranked load path alternatives with tradeoff explanations, including long-term climate resilience.
 
 \textbf{(5) Agent Orchestrator.}
 A multi-agent workflow that queries the KG, performs reasoning and validation,
