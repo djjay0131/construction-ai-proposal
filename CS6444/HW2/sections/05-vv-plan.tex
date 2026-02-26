@@ -1,0 +1,91 @@
+% =============================================================================
+% SECTION 5: VERIFICATION, VALIDATION, AND SUMMARY
+% =============================================================================
+
+\section{Verification and Validation Plans}
+
+\subsection{Code Verification Plan}
+
+Code verification confirms that the numerical solver correctly solves the mathematical model.
+The primary approach is comparison against the analytical solution~\eqref{eq:exact-ss} for the simply-supported uniform-load case.
+
+\begin{enumerate}
+  \item \textbf{Point-wise comparison.}
+  Compute $w_h(x_i) - w_{\text{exact}}(x_i)$ at all grid points and plot the error field.
+
+  \item \textbf{Error norm calculation.}
+  Compute the $L_2$ and $L_\infty$ norms of the discretization error:
+  \[
+    \|e\|_2 = \sqrt{h \sum_{i=0}^{N} \bigl(w_h(x_i) - w_{\text{exact}}(x_i)\bigr)^2},
+    \qquad
+    \|e\|_\infty = \max_i \bigl|w_h(x_i) - w_{\text{exact}}(x_i)\bigr|
+  \]
+
+  \item \textbf{Systematic mesh refinement.}
+  Solve on a sequence of grids: $N = 10, 20, 40, 80, 160$ nodes.
+  Plot $\|e\|_\infty$ vs.\ $h$ on a log--log scale and compute the observed order of accuracy:
+  \[
+    \hat{p} = \frac{\log\!\bigl(\|e\|_\infty^{(h)} / \|e\|_\infty^{(h/2)}\bigr)}{\log 2}
+  \]
+  The expected value is $\hat{p} \approx 2$, consistent with the $\mathcal{O}(h^2)$ central difference stencil.
+
+  \item \textbf{Method of Manufactured Solutions (MMS).}
+  To verify the solver for non-uniform loads and more general boundary conditions, a manufactured solution $w_{\text{mfg}}(x)$ is chosen (e.g., a polynomial or trigonometric function), and a source term $q_{\text{mfg}}(x) = EI\,w_{\text{mfg}}^{(4)}(x)$ is derived analytically.
+  The solver is run with $q = q_{\text{mfg}}$ and the error against $w_{\text{mfg}}$ is computed and convergence verified.
+\end{enumerate}
+
+\subsection{Solution Verification Plan}
+
+Solution verification establishes numerical uncertainty in the converged solution for a specific set of input parameters.
+
+\begin{enumerate}
+  \item Select a representative beam configuration (span, load, cross-section) representative of a typical residential header (e.g., $L = 8$~ft, $q_0 = 500$~lb/ft, $3.5'' \times 11.25''$ LVL).
+  \item Compute solutions on three systematically refined grids ($h$, $h/2$, $h/4$).
+  \item Apply the Grid Convergence Index (GCI) method (Roache) to estimate the discretization error in $w_{\max}$ and $\sigma_{\max}$.
+  \item Establish a grid that achieves $< 0.1\%$ relative error in $w_{\max}$ while minimizing computational cost for subsequent MC runs.
+\end{enumerate}
+
+\subsection{Model Validation Plan}
+
+Model validation confirms that the mathematical model (Euler--Bernoulli beam theory) correctly represents the real physical system.
+
+\begin{enumerate}
+  \item \textbf{Prescriptive code comparison.}
+  For standard load scenarios (40~psf roof + 10~psf dead load), compare system-selected header sizes against IRC Table R602.7 span table prescriptions.
+  Acceptance criterion: system recommendations match or are more conservative than IRC for $\geq 90\%$ of cases.
+
+  \item \textbf{Serviceability limit validation.}
+  Verify that computed $w_{\max}/L$ ratios for code-compliant assemblies remain below the IRC $L/240$ serviceability limit under the nominal design load.
+
+  \item \textbf{Engineered design dataset.}
+  A set of residential plan sets with stamped structural designs will serve as validation data.
+  The true engineered header size should fall within the predicted feasible range for $\geq 80\%$ of cases.
+\end{enumerate}
+
+\subsection{Summary}
+
+Table~\ref{tab:project-summary} summarizes the complete project setup.
+
+\begin{table}[ht]
+\centering
+\caption{Semester project summary.}
+\label{tab:project-summary}
+\begin{tabular}{ll}
+\toprule
+\textbf{Item} & \textbf{Description} \\
+\midrule
+Application & Residential wood header/beam structural assessment \\
+Real system & Horizontal wood member spanning a door/window opening \\
+Model (PDE) & Euler--Bernoulli beam, 4th-order ODE, 1D steady BVP \\
+Independent variable & $x \in [0, L]$ (position along beam axis) \\
+State variable & $w(x)$ (transverse deflection) \\
+Boundary conditions & Simply-supported (primary); fixed-fixed (secondary) \\
+Numerical method & Finite differences, $\mathcal{O}(h^2)$ central stencil \\
+Analytical solution & Available (uniform load, simply-supported) \\
+UQ method & Monte Carlo ($N_{\text{MC}} = 10{,}000$ samples) \\
+Team & Jason Cusati, Cheng-Shun Chuang \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This project is well-suited to the full VV\&UQ sequence: the governing equation is simple and tractable, an analytical solution exists for code verification, real-world validation data is accessible through building codes and stamped plans, and the fast beam solve enables large Monte Carlo campaigns for uncertainty quantification.

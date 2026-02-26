@@ -1,0 +1,117 @@
+% =============================================================================
+% SECTION 3: MATHEMATICAL MODEL (PDEs)
+% =============================================================================
+
+\section{Mathematical Model}
+
+\subsection{Governing Equation}
+
+The transverse deflection $w(x)$ of a beam subject to a distributed load $q(x)$ is governed by the \textbf{Euler--Bernoulli beam equation}:
+
+\begin{equation}
+  \frac{d^2}{dx^2}\!\left[ EI(x)\,\frac{d^2 w}{dx^2} \right] = q(x), \quad x \in (0, L)
+  \label{eq:eb-general}
+\end{equation}
+
+For a prismatic member with uniform cross-section and homogeneous material, $EI$ is constant, and Eq.~\eqref{eq:eb-general} simplifies to:
+
+\begin{equation}
+  EI\,\frac{d^4 w}{dx^4} = q(x), \quad x \in (0, L)
+  \label{eq:eb-prismatic}
+\end{equation}
+
+This is a linear, fourth-order ordinary differential equation---a 1D steady BVP in the single spatial coordinate $x$.
+
+\subsection{Derived Quantities}
+
+From the deflection field $w(x)$, the following quantities of engineering interest are derived:
+
+\textbf{Bending moment:}
+\begin{equation}
+  M(x) = EI\,\frac{d^2 w}{dx^2}
+  \label{eq:moment}
+\end{equation}
+
+\textbf{Shear force:}
+\begin{equation}
+  V(x) = EI\,\frac{d^3 w}{dx^3}
+  \label{eq:shear}
+\end{equation}
+
+\textbf{Maximum bending stress} (at the extreme fiber, distance $c = d/2$ from neutral axis):
+\begin{equation}
+  \sigma_{\max} = \frac{M_{\max}\,c}{I} = \frac{M_{\max}}{S}
+  \label{eq:bending-stress}
+\end{equation}
+where $S = I/c$ is the section modulus.
+
+\textbf{Maximum shear stress} (rectangular cross-section):
+\begin{equation}
+  \tau_{\max} = \frac{3\,V_{\max}}{2\,A}
+  \label{eq:shear-stress}
+\end{equation}
+where $A = b \cdot d$ is the cross-sectional area.
+
+\subsection{Boundary Conditions}
+
+The beam BVP requires four boundary conditions (two at each end) to close the fourth-order system.
+
+\textbf{Simply-supported} (pin--pin), the standard IRC prescriptive assumption for headers:
+\begin{equation}
+  w(0) = 0, \quad \frac{d^2 w}{dx^2}\bigg|_{x=0} = 0, \qquad
+  w(L) = 0, \quad \frac{d^2 w}{dx^2}\bigg|_{x=L} = 0
+  \label{eq:bc-ss}
+\end{equation}
+
+\textbf{Fixed-fixed} (clamped--clamped), appropriate for engineered rim beams:
+\begin{equation}
+  w(0) = 0, \quad \frac{dw}{dx}\bigg|_{x=0} = 0, \qquad
+  w(L) = 0, \quad \frac{dw}{dx}\bigg|_{x=L} = 0
+  \label{eq:bc-ff}
+\end{equation}
+
+The simply-supported case~\eqref{eq:bc-ss} is used as the primary model for code verification because it admits a clean closed-form solution.
+
+\subsection{Load Model}
+
+For a uniform distributed load $q(x) = q_0$ (constant), the load is computed from the tributary area:
+\begin{equation}
+  q_0 = \bigl(q_{\text{roof}} + q_{\text{floor}}\bigr)\,T_w
+  \label{eq:load}
+\end{equation}
+where $q_{\text{roof}}$ and $q_{\text{floor}}$ are area loads [psf] and $T_w$ is the tributary width [ft].
+
+\subsection{Analytical Solution (Simply-Supported, Uniform Load)}
+
+For the simply-supported beam under uniform load $q(x) = q_0$, integrating Eq.~\eqref{eq:eb-prismatic} four times with BCs~\eqref{eq:bc-ss} yields the exact closed-form solution:
+
+\begin{equation}
+  w(x) = \frac{q_0}{24EI}\Bigl(x^4 - 2L\,x^3 + L^3\,x\Bigr)
+  \label{eq:exact-ss}
+\end{equation}
+
+The maximum deflection occurs at midspan $x = L/2$:
+\begin{equation}
+  w_{\max} = \frac{5\,q_0\,L^4}{384\,EI}
+  \label{eq:wmax}
+\end{equation}
+
+The maximum bending moment occurs at midspan:
+\begin{equation}
+  M_{\max} = \frac{q_0\,L^2}{8}
+  \label{eq:mmax}
+\end{equation}
+
+These exact solutions~\eqref{eq:exact-ss}--\eqref{eq:mmax} will serve as the benchmark for code verification in a future homework assignment.
+
+\subsection{Performance Criteria}
+
+The beam is considered \emph{structurally acceptable} if all three criteria are satisfied:
+
+\begin{enumerate}
+  \item \textbf{Bending stress:} $\sigma_{\max} \leq F_b$ (allowable bending stress for the lumber species/grade)
+  \item \textbf{Shear stress:} $\tau_{\max} \leq F_v$ (allowable shear stress)
+  \item \textbf{Deflection:} $w_{\max} \leq L/240$ (IRC serviceability limit)
+\end{enumerate}
+
+These criteria define the \emph{failure surface} in the uncertainty quantification framework.

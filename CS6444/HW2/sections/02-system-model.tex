@@ -1,0 +1,181 @@
+% =============================================================================
+% SECTION 2: SYSTEM, SURROUNDINGS, AND ENVIRONMENTS
+% =============================================================================
+
+\section{System, Surroundings, and Environments}
+
+Following the framework of Chapter 3, we define the system boundary, surroundings, and environments of interest.
+
+% ---------------------------------------------------------------------------
+\subsection{System Definition}
+
+The \textbf{system} is a single horizontal wood structural member---a header, beam, or girder---spanning between two support points.
+The system boundary is drawn at the end supports (jack studs or bearing walls) and at the top and bottom faces of the member.
+Figure~\ref{fig:beam-fbd} shows a free-body diagram of the system.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.0]
+
+  % Ground hatching at supports
+  \fill[pattern=north east lines] (-0.3,-0.4) rectangle (0.3,-0.15);
+  \fill[pattern=north east lines] (5.7,-0.4) rectangle (6.3,-0.15);
+
+  % Support triangles
+  \draw[thick] (0,0) -- (-0.25,-0.15) -- (0.25,-0.15) -- cycle;
+  \draw[thick] (6,0) -- (5.75,-0.15) -- (6.25,-0.15) -- cycle;
+
+  % Beam body
+  \draw[thick, fill=brown!30] (0,0) rectangle (6,0.5);
+  \node at (3,0.25) {\small wood beam, span $L$};
+
+  % Distributed load arrows (pointing down onto beam)
+  \foreach \x in {0.4, 0.9, 1.4, 1.9, 2.4, 2.9, 3.4, 3.9, 4.4, 4.9, 5.4} {
+    \draw[-Latex, blue!70!black] (\x, 1.3) -- (\x, 0.5);
+  }
+  % Load label
+  \draw[blue!70!black] (0.4,1.35) -- (5.4,1.35);
+  \node[blue!70!black] at (3, 1.6) {\small $q(x)$ [lb/ft or kN/m]};
+
+  % Dimension line
+  \draw[<->, gray] (0,-0.7) -- (6,-0.7) node[midway, below] {\small $L$};
+
+  % Reaction labels
+  \node[below left] at (0,-0.15) {\small $R_A$};
+  \node[below right] at (6,-0.15) {\small $R_B$};
+
+  % Coordinate axis
+  \draw[-Latex] (0,0.9) -- (1.2,0.9) node[right] {\small $x$};
+  \node at (0,0.9) [left] {\small $0$};
+
+\end{tikzpicture}
+\caption{Free-body diagram of the beam system. The system boundary encompasses the beam member between supports at $x=0$ and $x=L$. Distributed load $q(x)$ is applied externally from the surroundings. Reactions $R_A$ and $R_B$ represent the interaction with the supports.}
+\label{fig:beam-fbd}
+\end{figure}
+
+The primary state variable is the \textbf{transverse deflection} $w(x)$, from which bending stress, shear stress, and the deflection-to-span ratio ($\delta/L$) are derived.
+
+Key system parameters:
+\begin{itemize}
+  \item $E$ --- modulus of elasticity of the wood species/grade [psi or MPa]
+  \item $I$ --- second moment of area of the cross-section [in$^4$ or mm$^4$]
+  \item $L$ --- clear span of the member [ft or m]
+  \item Cross-section dimensions: width $b$, depth $d$
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\subsection{Surroundings}
+
+The surroundings are everything external to the system that acts on it across the system boundary.
+For a residential structural member, the surroundings consist of:
+
+\begin{enumerate}
+  \item \textbf{Applied distributed load $q(x)$} --- transferred from the floor or roof framing above through the wall plates and into the beam.
+  This load has contributions from:
+  \begin{itemize}
+    \item Roof dead load (roofing, sheathing, framing): typically 10--15~psf
+    \item Roof live load or snow load: 20--40~psf depending on climate zone
+    \item Floor dead load: 10--15~psf
+    \item Floor live load: 40~psf (residential occupancy per IRC)
+    \item Tributary width $T_w$ [ft]: the width of roof/floor area carried by this member
+  \end{itemize}
+  The resultant line load is $q = (q_{\text{roof}} + q_{\text{floor}}) \times T_w$ [lb/ft].
+
+  \item \textbf{Support reactions} --- the jack studs, posts, or bearing walls at $x = 0$ and $x = L$ provide the boundary conditions (pinned, fixed, or spring supports).
+
+  \item \textbf{Gravity field} --- the gravitational body force is implicitly included in the load model above; no explicit body force term appears in the beam equation for transverse bending.
+\end{enumerate}
+
+Figure~\ref{fig:system-context} shows the system in context of a typical residential wall cross-section.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.85]
+
+  % Roof triangle
+  \draw[thick] (1,4.5) -- (3.5,6.2) -- (6,4.5);
+  \fill[gray!20] (1,4.5) -- (3.5,6.2) -- (6,4.5) -- cycle;
+  \node at (3.5,5.5) {\small roof};
+
+  % Roof load arrow
+  \draw[-Latex, blue!70!black, thick] (3.5,6.5) -- (3.5,6.25);
+  \node[blue!70!black, right] at (3.6,6.55) {\small $q_{\text{roof}}$};
+
+  % Ceiling/attic floor
+  \draw[thick, fill=gray!30] (0.8,4.3) rectangle (6.2,4.5);
+  \node at (3.5,4.1) {\small ceiling joists};
+
+  % Left wall
+  \draw[thick, fill=gray!15] (0.8,2.0) rectangle (1.3,4.3);
+  \node[rotate=90] at (1.05, 3.15) {\tiny bearing wall};
+
+  % Right wall
+  \draw[thick, fill=gray!15] (5.7,2.0) rectangle (6.2,4.3);
+  \node[rotate=90] at (5.95, 3.15) {\tiny bearing wall};
+
+  % BEAM (system) highlighted
+  \draw[thick, fill=brown!40] (1.3,3.5) rectangle (5.7,3.85);
+  \node[font=\small\bfseries] at (3.5,3.675) {BEAM (system)};
+  \draw[dashed, red, thick] (1.1,3.3) rectangle (5.9,4.0);
+  \node[red, font=\tiny] at (3.5,3.1) {system boundary};
+
+  % Opening below beam
+  \draw[thick] (1.3,1.5) -- (1.3,3.5);
+  \draw[thick] (5.7,1.5) -- (5.7,3.5);
+  \node at (3.5,2.5) {\small opening (garage/window)};
+
+  % Foundation
+  \draw[thick, fill=gray!40] (0,1.4) rectangle (7,1.5);
+  \fill[pattern=north east lines] (0,1.0) rectangle (7,1.4);
+  \node at (3.5,1.2) {\small foundation};
+
+  % Span dimension
+  \draw[<->, gray] (1.3,1.6) -- (5.7,1.6) node[midway, below] {\small span $L$};
+
+  % Tributary width annotation
+  \draw[<->, orange!80!black] (1.3,4.55) -- (5.7,4.55) node[midway, above] {\small trib.\ width $T_w$};
+
+\end{tikzpicture}
+\caption{System in context. The beam (brown, highlighted by dashed red system boundary) spans an opening between bearing walls. Loads from the roof and ceiling framing above constitute the surroundings acting on the system. The tributary width $T_w$ determines how much roof area the beam carries.}
+\label{fig:system-context}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+\subsection{Environments}
+
+The \textbf{environment} defines the external conditions that determine parameter values and vary across use cases.
+Three primary environments are relevant:
+
+\begin{enumerate}
+  \item \textbf{Geographic/Climatic Environment.}
+  Snow and wind loads depend on location.
+  A beam designed for a Virginia mountain site ($p_s = 40$~psf ground snow) requires different sizing than one in coastal Florida ($p_s = 0$~psf).
+  The environment sets the load distribution parameters for uncertainty quantification.
+
+  \item \textbf{Structural Context Environment.}
+  Whether the member carries one-story, two-story, or roof-only loads changes the total tributary load.
+  A header in a single-story garage differs from a girder in a two-story bearing wall.
+  This determines whether $q_{\text{floor}}$ is zero or non-zero.
+
+  \item \textbf{Material/Grade Environment.}
+  Wood structural properties ($E$, $F_b$, $F_v$) vary by species and grade (e.g., Douglas Fir-Larch \#2 vs.\ Southern Yellow Pine \#1 vs.\ LVL engineered lumber).
+  This is modeled as a random variable in the uncertainty quantification framework.
+\end{enumerate}
+
+Table~\ref{tab:environments} summarizes the key environments and their effect on model parameters.
+
+\begin{table}[ht]
+\centering
+\caption{Environments and their effect on model parameters.}
+\label{tab:environments}
+\begin{tabular}{lll}
+\toprule
+\textbf{Environment} & \textbf{Variable affected} & \textbf{Range} \\
+\midrule
+Geographic (snow zone) & $q_{\text{snow}}$ & 0--60 psf \\
+Structural context (story count) & $q_{\text{floor}}$ & 0 or 50--55 psf \\
+Material grade & $E$, $F_b$, $F_v$ & see lumber tables \\
+Tributary geometry & $T_w$ & 4--20 ft (typical residential) \\
+\bottomrule
+\end{tabular}
+\end{table}

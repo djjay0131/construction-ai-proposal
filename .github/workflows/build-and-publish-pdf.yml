@@ -31,13 +31,20 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "date=$BUILD_DATE" >> $GITHUB_OUTPUT
 
-      - name: Compile LaTeX documents
+      - name: Compile proposal documents
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: proposal
           root_file: |
             main.tex
             presentation.tex
+          latexmk_use_xelatex: false
+
+      - name: Compile CS6444 HW2
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: CS6444/HW2
+          root_file: main.tex
           latexmk_use_xelatex: false
 
       - name: Rename and prepare PDFs
@@ -52,6 +59,7 @@ jobs:
           mkdir -p public
           cp proposal/main.pdf public/ConstructionAI-Proposal.pdf
           cp proposal/presentation.pdf public/ConstructionAI-Presentation.pdf
+          cp CS6444/HW2/main.pdf public/CS6444-HW2.pdf
 
           # Create index page
           cat > public/index.html << EOF
@@ -64,16 +72,19 @@ jobs:
             <style>
               body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
               h1 { color: #861F41; }
-              a { color: #E5751F; text-decoration: none; font-size: 1.2em; }
+              h2 { color: #861F41; font-size: 1.1em; margin-top: 30px; }
+              a { color: #E5751F; text-decoration: none; font-size: 1.1em; }
               a:hover { text-decoration: underline; }
-              .doc { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+              .doc { margin: 15px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
               .version { color: #666; font-size: 0.9em; }
             </style>
           </head>
           <body>
-            <h1>Construction.AI Proposal</h1>
+            <h1>Construction.AI</h1>
             <p>AI-Driven Material Takeoff and Construction Recommendations</p>
             <p class="version">Version: ${VERSION}</p>
+
+            <h2>Proposal Documents</h2>
             <div class="doc">
               <a href="ConstructionAI-Proposal.pdf">📄 IEEE Conference Paper</a>
               <p>12-page proposal document with full technical details</p>
@@ -82,6 +93,13 @@ jobs:
               <a href="ConstructionAI-Presentation.pdf">📊 Presentation Slides</a>
               <p>21-slide Beamer presentation deck</p>
             </div>
+
+            <h2>CS 6444 — VV&amp;UQ Coursework</h2>
+            <div class="doc">
+              <a href="CS6444-HW2.pdf">📝 Homework 2 — Project Application Definition</a>
+              <p>Euler–Bernoulli beam model for residential structural framing</p>
+            </div>
+
             <hr>
             <p><small>Last updated: ${{ steps.version.outputs.date }}</small></p>
           </body>

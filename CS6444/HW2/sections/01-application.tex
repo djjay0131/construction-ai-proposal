@@ -1,0 +1,39 @@
+% =============================================================================
+% SECTION 1: APPLICATION AREA
+% =============================================================================
+
+\section{Application Area}
+
+\subsection{Description}
+
+The application for this semester project is \textbf{structural feasibility assessment of wood-framed residential headers and beams} within a construction automation system called Construction.AI.
+
+In residential wood-frame construction, horizontal members---headers spanning door and window openings, ridge beams, and floor beams---must be sized to carry tributary loads from the roof and floors above without exceeding allowable stress or deflection limits prescribed by the International Residential Code (IRC).
+Structural engineers and experienced estimators perform this sizing manually using prescriptive span tables or first-principles calculations.
+The Construction.AI project seeks to automate this process: given a set of architectural floor plans, the system reads the geometry, identifies load-bearing walls and openings, generates plausible structural hypotheses, and evaluates each hypothesis by solving the governing structural mechanics equations numerically.
+
+The core physics model governing each header or beam is the \textbf{Euler--Bernoulli beam equation}, a fourth-order ordinary differential equation (ODE) relating beam deflection to the applied distributed load.
+This is a 1D steady boundary value problem (BVP) whose independent variable is position $x$ along the beam axis---a simple, analytically tractable PDE that satisfies the course project criteria.
+
+\subsection{Why This Application}
+
+This application satisfies all recommended project criteria:
+
+\begin{enumerate}
+  \item \textbf{Simple physics.} The Euler--Bernoulli beam model is a 1D linear fourth-order ODE, one of the most classical PDEs in structural mechanics.
+  \item \textbf{One independent variable.} The spatial coordinate $x \in [0, L]$ is the sole independent variable; the problem is steady-state.
+  \item \textbf{Analytical solution available.} Closed-form solutions exist for canonical loading cases (uniform load, point load, simply-supported and fixed-fixed boundary conditions), enabling rigorous code verification without manufactured solutions.
+  \item \textbf{No singularities.} Under smooth distributed loads the solution $w(x)$ is $C^4$ smooth, with no internal singularities.
+  \item \textbf{Software already written.} A finite-difference beam solver has been designed as part of the Construction.AI system; the source code is accessible and modifiable.
+  \item \textbf{Research relevance.} The project is directly tied to ongoing work automating construction plan analysis---a practical, industry-relevant application.
+  \item \textbf{Tractable for uncertainty propagation.} Each beam solve completes in milliseconds, making Monte Carlo runs of $10^3$--$10^4$ samples computationally cheap.
+\end{enumerate}
+
+\subsection{Team}
+
+This assignment is completed as a \textbf{2-person team}:
+\begin{itemize}
+  \item Jason Cusati (Virginia Tech)
+  \item Cheng-Shun Chuang (Virginia Tech)
+\end{itemize}
+The same team will be maintained for all subsequent homework assignments through the semester.

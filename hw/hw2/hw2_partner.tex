@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{AOE/CS/ME 6444 -- Verification and Validation in Scientific Computing \\
+Homework \#2 -- Semester Project Definition}
+\author{Cheng-Shun Chuang}
+\date{Spring 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{1. Application Area}
+
+\textbf{Application:} Structural deflection of a residential wood header beam under uniform load.
+
+The real system of interest is a wood header placed above a door opening in a residential building. The beam supports roof and floor loads and must satisfy serviceability limits on deflection.
+
+For the purposes of this VV\&UQ project, the physical system will be simplified to a one-dimensional, steady Euler--Bernoulli beam problem.
+
+\section*{2. Team Selection}
+
+This project will be completed by Jason and Cheng-Shun.
+
+\section*{3. System Description}
+
+\subsection*{3.1 Real System}
+
+The system consists of:
+
+\begin{itemize}
+\item A simply supported wood header beam
+\item Span length $L$
+\item Uniform distributed load $q$
+\item Constant elastic modulus $E$
+\item Second moment of area $I$
+\end{itemize}
+
+\subsection*{3.2 Surroundings and Environment}
+
+The beam is supported by wall studs at each end. In reality, it is exposed to varying environmental loads and moisture effects. However, in this simplified model:
+
+\begin{itemize}
+\item Load is constant
+\item Material properties are constant
+\item No temperature or moisture coupling
+\end{itemize}
+
+\section*{4. Mathematical Model}
+
+\subsection*{4.1 Governing Equation}
+
+The steady Euler--Bernoulli beam equation is:
+
+\begin{equation}
+E I \frac{d^4 w(x)}{dx^4} = q
+\end{equation}
+
+where:
+
+\begin{itemize}
+\item $w(x)$ = vertical deflection
+\item $x$ = spatial coordinate along the beam
+\item $E$ = Young's modulus
+\item $I$ = second moment of area
+\item $q$ = uniform distributed load
+\end{itemize}
+
+This is a fourth-order ordinary differential equation (ODE) with one independent variable $x$.
+
+\subsection*{4.2 Boundary Conditions}
+
+For a simply supported beam:
+
+\begin{align}
+w(0) &= 0 \\
+w(L) &= 0 \\
+\frac{d^2 w}{dx^2}(0) &= 0 \\
+\frac{d^2 w}{dx^2}(L) &= 0
+\end{align}
+
+These conditions enforce zero deflection and zero bending moment at the supports.
+
+\section*{5. Analytical Solution}
+
+For a simply supported beam under uniform load, the exact solution is:
+
+\begin{equation}
+w(x) = \frac{q}{24 E I}
+\left(x^4 - 2Lx^3 + L^3 x\right)
+\end{equation}
+
+The maximum deflection occurs at midspan $x = L/2$:
+
+\begin{equation}
+\delta_{\max} = \frac{5 q L^4}{384 E I}
+\end{equation}
+
+This closed-form solution enables direct code verification.
+
+\section*{6. Numerical Method}
+
+The governing equation will be discretized using:
+
+\begin{itemize}
+\item Finite Difference Method (central difference approximation for $d^4w/dx^4$)
+\item Uniform grid spacing $\Delta x$
+\end{itemize}
+
+Mesh refinement studies will be performed to determine:
+
+\begin{itemize}
+\item Observed order of accuracy
+\item Grid convergence
+\item Discretization error
+\end{itemize}
+
+\section*{7. Verification Plan}
+
+\subsection*{7.1 Code Verification}
+
+\begin{itemize}
+\item Compare numerical solution with analytical solution.
+\item Compute $L_2$ error norm.
+\item Perform systematic mesh refinement.
+\item Compute observed order of accuracy.
+\item Implement Method of Manufactured Solutions (MMS).
+\end{itemize}
+
+\section*{8. Validation Plan}
+
+Validation will compare numerical predictions against:
+
+\begin{itemize}
+\item Classical beam theory solutions
+\item Residential building code serviceability limits (e.g., $L/240$ deflection limit)
+\end{itemize}
+
+\section*{9. Uncertainty Quantification}
+
+Uncertainty will be introduced in:
+
+\begin{itemize}
+\item Load $q \sim \mathcal{N}(\mu_q, \sigma_q)$
+\item Modulus $E \sim \mathcal{N}(\mu_E, \sigma_E)$
+\end{itemize}
+
+Monte Carlo simulation (100--1000 samples) will be used to compute:
+
+\begin{equation}
+P(\delta_{\max} > L/240)
+\end{equation}
+
+\section*{10. Summary}
+
+This project focuses on verification, validation, and uncertainty quantification of a one-dimensional structural beam model representing residential header deflection. The governing equation is a fourth-order ODE with a known analytical solution, making it well-suited for rigorous VV\&UQ analysis.
+
+\end{document}
