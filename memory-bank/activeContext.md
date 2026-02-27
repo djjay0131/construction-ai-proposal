@@ -4,15 +4,15 @@
 
 ## Current Work Phase
 
-VVUQ Integration Phase 2 - Paper Updates (Sprint 05, Task 1 In Progress)
+VVUQ Integration Phase 2 - Paper Updates (Sprint 05, Task 2 In Progress)
 
-HW3 (Code Verification) is fully complete and merged to master. Sprint-05 is now active on branch `vvuq/phase2-paper-updates`. Task 1 (Knowledge Graph entity updates in 03-knowledge-graph.tex) has been claimed and is in progress.
+HW3 (Code Verification) is fully complete and merged to master. Sprint-05 Task 1 (Knowledge Graph entity updates in 03-knowledge-graph.tex) is complete and merged to master via PR #5 (commit 87e6631). Task 2 (Agentic Workflow updates in 05-agentic-workflow.tex) is now the active task, to be worked on branch vvuq/phase2-task2-agentic-workflow.
 
 ## Current State
 
 ### Proposal Document Status
 
-- 12-page IEEE conference paper (main.pdf) - increased from 11 after VVUQ Phase 1
+- 13-page IEEE conference paper (main.pdf) - increased from 12 after VVUQ Phase 2 Task 1
 - 21-slide Beamer presentation (presentation.pdf)
 - Comprehensive Related Work with 5 literature survey categories
 - 34+ citations with proper IEEE formatting
@@ -69,13 +69,16 @@ Phase 1 - Architecture & V&V (COMPLETE - 2026-01-24):
 
 Phase 2 - Remaining Paper Updates (IN PROGRESS - Sprint 05, branch: vvuq/phase2-paper-updates):
 
-- [~] Knowledge Graph entity updates (Section 3.5 in VVUQ plan) - TASK 1 IN PROGRESS
-  - Add StructuralHypothesis, LoadPath, BeamEvaluation entities
-  - Add new relationships (INCLUDES, EVALUATED_BY, BASED_ON)
+- [x] Knowledge Graph entity updates (Section 3.5 in VVUQ plan) - TASK 1 COMPLETE (PR #5, commit 87e6631)
+  - Added StructuralHypothesis, LoadPath, BeamEvaluation entities
+  - Added new relationships (INCLUDES, EVALUATED_BY, BASED_ON)
+  - New subsection with Cypher node property examples and feasibility-ranked retrieval query
+  - Document grew from 12 to 13 pages
   - File: proposal/sections/03-knowledge-graph.tex
-- [ ] Agentic Workflow updates (Section 3.6 in VVUQ plan)
+- [~] Agentic Workflow updates (Section 3.6 in VVUQ plan) - TASK 2 IN PROGRESS
   - Add Structural Hypothesis Agent (6th agent)
   - Update TikZ diagram (pentagon to hexagon)
+  - Branch: vvuq/phase2-task2-agentic-workflow (to be created)
 - [ ] Abstract updates with VVUQ language
 - [ ] Conclusion updates with revised contributions
 
@@ -106,8 +109,8 @@ Phase 3 - Presentation & Bibliography (NOT STARTED):
 
 VVUQ Phase 2 - Sprint 05 (branch: vvuq/phase2-paper-updates):
 
-1. **Task 1 (IN PROGRESS): Knowledge Graph Entity Updates** - Add StructuralHypothesis, LoadPath, BeamEvaluation entities to proposal/sections/03-knowledge-graph.tex
-2. **Task 2:** Agentic Workflow updates - Add 6th Structural Hypothesis Agent, update TikZ diagram (pentagon to hexagon) in proposal/sections/05-agentic-workflow.tex
+1. **Task 1 (DONE):** Knowledge Graph Entity Updates - merged to master via PR #5 (commit 87e6631); document now 13 pages
+2. **Task 2 (IN PROGRESS):** Agentic Workflow updates - Add 6th Structural Hypothesis Agent, update TikZ diagram (pentagon to hexagon) in proposal/sections/05-agentic-workflow.tex; branch vvuq/phase2-task2-agentic-workflow
 3. **Task 3:** Abstract updates with VVUQ language (~30 words) in proposal/main.tex
 4. **Task 4:** Conclusion updates with revised contributions in proposal/sections/12-conclusion.tex
 5. **Merge sprint-05** to master when all tasks complete
@@ -259,5 +262,5 @@ VVUQ Phase 2 - Sprint 05 (branch: vvuq/phase2-paper-updates):
 - Read ALL memory-bank files on context reset
 - Check phases.md for current phase status
 - HW3 is COMPLETE — do not start HW3 tasks again
-- Active sprint: sprint-05 on branch vvuq/phase2-paper-updates; Task 1 (Knowledge Graph entity updates) is in progress
+- Active sprint: sprint-05; Task 1 (Knowledge Graph entity updates) is DONE (PR #5, commit 87e6631); Task 2 (Agentic Workflow updates) is next on branch vvuq/phase2-task2-agentic-workflow
 - Reference vvuq-integration-plan.md for full VVUQ Phase 2 task details

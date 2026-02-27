@@ -2,7 +2,7 @@
 
 **Sprint Goal:** Complete the remaining VVUQ integration in the proposal paper — Knowledge Graph entity updates, Agentic Workflow updates, Abstract/Conclusion revisions.
 **Start Date:** 2026-02-27
-**Status:** Not Started
+**Status:** In Progress
 
 **Prerequisites:**
 
@@ -18,21 +18,22 @@
 
 **File:** `proposal/sections/03-knowledge-graph.tex`
 
-**Branch:** `vvuq/phase2-paper-updates` (IN PROGRESS — do not start in another branch)
+**Branch:** `vvuq/phase2-paper-updates` (MERGED to master — PR #5, commit 87e6631, 2026-02-27)
 
-- [ ] Add `StructuralHypothesis` entity with properties:
+- [x] Add `StructuralHypothesis` entity with properties:
   - `hypothesis_id`, `beam_span`, `load_path_type`, `load_kips`, `confidence_score`
-- [ ] Add `LoadPath` entity with properties:
+- [x] Add `LoadPath` entity with properties:
   - `path_id`, `path_type`, `tributary_area_sqft`, `live_load_psf`, `dead_load_psf`
-- [ ] Add `BeamEvaluation` entity with properties:
+- [x] Add `BeamEvaluation` entity with properties:
   - `eval_id`, `solver_n_elements`, `w_max_in`, `sigma_max_psi`, `feasible`
-- [ ] Add relationships:
+- [x] Add relationships:
   - `INCLUDES`: `(LoadPath)-[:INCLUDES]->(:StructuralHypothesis)`
   - `EVALUATED_BY`: `(StructuralHypothesis)-[:EVALUATED_BY]->(:BeamEvaluation)`
   - `BASED_ON`: `(BeamEvaluation)-[:BASED_ON]->(:StructuralHypothesis)`
-- [ ] Add example Cypher query showing structural hypothesis retrieval
+- [x] Add example Cypher query showing structural hypothesis retrieval
 
-**Status:** IN PROGRESS — being worked on in branch `vvuq/phase2-paper-updates`
+**Status:** COMPLETE — merged to master via PR #5, commit 87e6631, 2026-02-27
+**Notes:** Document grew from 12 to 13 pages; compiles cleanly. Added Table 1/Table 2 entries and new "Structural Hypothesis Entities" subsection with Cypher examples.
 
 **Acceptance Criteria:**
 
@@ -47,17 +48,19 @@
 
 **File:** `proposal/sections/05-agentic-workflow.tex`
 
-**Note:** Do not start until Task 1 is merged or until explicitly assigned.
+**Branch:** `vvuq/phase2-task2-agentic-workflow` (IN PROGRESS — DO NOT START IN ANOTHER BRANCH)
 
 - [ ] Add Structural Hypothesis Agent as the 6th agent in the workflow
 - [ ] Add agent description:
-  - Generates candidate load paths from inferred bearing wall configurations
-  - Calls the Euler-Bernoulli beam solver for each candidate header
-  - Ranks hypotheses by cost, robustness (1 - P(failure)), and design flexibility
-- [ ] Update TikZ diagram: adjust pentagon layout to hexagon (add 6th node for Structural Hypothesis Agent)
+  - Generates 3-5 candidate load path configurations from inferred bearing wall configurations
+  - Assigns tributary areas for each candidate header
+  - Invokes the Euler-Bernoulli beam solver for each candidate
+  - Propagates uncertainty via Monte Carlo simulation
+  - Ranks hypotheses by multi-criteria scoring (cost, robustness (1 - P(failure)), design flexibility)
+- [ ] Update TikZ diagram: adjust pentagon layout (5 nodes) to hexagon layout (6 nodes) for Structural Hypothesis Agent
 - [ ] Insert agent between Component Inference Agent and Code & Compliance Agent
 
-**Status:** Pending (start after Task 1 is merged)
+**Status:** IN PROGRESS — being worked on in branch `vvuq/phase2-task2-agentic-workflow`
 
 **Acceptance Criteria:**
 
@@ -136,6 +139,21 @@
 | TikZ hexagon layout breaks existing diagram | Test compile after pentagon-to-hexagon change; adjust node angles | Open |
 | Abstract exceeds 250-word limit | Draft additions first, trim existing sentences to compensate | Open |
 | Task 1 branch conflicts with master | Rebase on master before starting Task 2 | Open |
+
+---
+
+## Progress Tracking
+
+**Sprint Started:** 2026-02-27
+
+| Task | Status | Completed | Commit |
+| ---- | ------ | --------- | ------ |
+| Task 1: Knowledge Graph Entity Updates | COMPLETE | 2026-02-27 | 87e6631 |
+| Task 2: Agentic Workflow Updates | IN PROGRESS | — | — |
+| Task 3: Abstract Updates | Pending | — | — |
+| Task 4: Conclusion Updates | Pending | — | — |
+
+**Progress:** 1 / 4 tasks complete (25%)
 
 ---
 
