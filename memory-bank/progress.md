@@ -614,7 +614,7 @@ None at this time.
 
 - **Target:** TBD
 - **Description:** Physics-based structural mechanics, V&V framework, updated presentation
-- **Status:** Phase 1 Complete, Phases 2-3 Deferred (pending HW3)
+- **Status:** Phase 1 Complete; Phase 2 In Progress (sprint-05, branch vvuq/phase2-paper-updates); Phase 3 Not Started
 
 ### M6: CI/CD Pipeline
 
@@ -631,9 +631,10 @@ None at this time.
 
 ### M8: CS6444 HW3 - Code Verification
 
-- **Target:** TBD
-- **Description:** Grid convergence study, MMS, and GCI analysis of beam_solver.py; LaTeX report VVSC_Cusati_Chuang_HW3.pdf
-- **Status:** Not Started
+- **Target:** 2026-02-27
+- **Description:** Grid convergence study and code verification of beam_solver.py with exact solution for simply-supported uniform load; p=2 (O(h^2)) confirmed; LaTeX report VVSC_Cusati_Chuang_HW3.pdf
+- **Status:** Complete (2026-02-27)
+- **Deliverable:** <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW3.pdf>
 
 ---
 
