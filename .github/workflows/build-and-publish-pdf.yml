@@ -59,7 +59,7 @@ jobs:
           mkdir -p public
           cp proposal/main.pdf public/ConstructionAI-Proposal.pdf
           cp proposal/presentation.pdf public/ConstructionAI-Presentation.pdf
-          cp CS6444/HW2/main.pdf public/CS6444-HW2.pdf
+          cp CS6444/HW2/main.pdf public/VVSC_Cusati_Chuang_HW2.pdf
 
           # Create index page
           cat > public/index.html << EOF
@@ -96,7 +96,7 @@ jobs:
 
             <h2>CS 6444 — VV&amp;UQ Coursework</h2>
             <div class="doc">
-              <a href="CS6444-HW2.pdf">📝 Homework 2 — Project Application Definition</a>
+              <a href="VVSC_Cusati_Chuang_HW2.pdf">📝 Homework 2 — Project Application Definition</a>
               <p>Euler–Bernoulli beam model for residential structural framing</p>
             </div>
 
