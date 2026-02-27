@@ -1,14 +1,63 @@
 # Progress Tracking
 
-**Last Updated:** 2026-02-03
+**Last Updated:** 2026-02-27
 
-## Project Status: VVUQ Integration In Progress
+## Project Status: CS6444 HW2 Complete, HW3 In Progress
 
-Original proposal complete (11 pages). VVUQ integration Phase 1 complete (12 pages). Remaining VVUQ phases in progress. CI/CD pipeline established with GitHub Pages publishing.
+Original proposal complete (11 pages). VVUQ integration Phase 1 complete (12 pages). CS6444 HW2 (PDE Modeling & Discretization) complete and published. HW3 (Code Verification) is next. CI/CD pipeline established with GitHub Pages publishing.
 
 ---
 
 ## Completed Work
+
+### CS6444 HW2: PDE Modeling & Discretization (2026-02-27)
+
+**What:**
+CS6444 VVSC course assignment covering application description, system model, PDE formulation, numerical discretization, and V&V plan for the Euler-Bernoulli beam solver used in the construction AI system.
+
+**Key Deliverables:**
+
+1. **LaTeX Report (VVSC_Cusati_Chuang_HW2.pdf)** - 2026-02-27
+
+   - Section 1: Application - construction AI context, load estimation problem
+   - Section 2: System Model - Euler-Bernoulli beam, clamped-clamped BCs, parameters
+   - Section 3: PDE Model - strong form EIw'''' = q, dimensional analysis
+   - Section 4: Numerical Discretization - FD stencils, ghost point near-boundary treatment, matrix assembly
+   - Section 5: V&V Plan - MMS verification strategy, IRC span table validation
+   - Mathematical correctness fixes: sign convention (M=-EIw'', V=-EIw'''), unit conversion note, ghost point near-boundary stencil equations
+   - Fluff/boilerplate removed from Sections 1 and 2
+   - Speculative stamped-plans validation claim softened
+
+2. **Partner Content Merge** - 2026-02-27
+
+   - Cheng-Shun Chuang's contributions merged from model-modification branch
+   - PDF renamed to VVSC_Cusati_Chuang_HW2.pdf per assignment convention
+
+3. **FD Beam Solver (beam_solver.py)** - 2026-02-27
+
+   - Path: construction-ai/backend/app/core/structural/beam_solver.py
+   - numpy only (no scipy dependency)
+   - Ghost point method for clamped boundary conditions
+   - Verified: 0.001% error vs analytical solution for uniform load case
+
+4. **CI/CD Update** - 2026-02-27
+
+   - GitHub Actions updated to compile and publish HW2 PDF
+   - Live at: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
+
+**Impact:**
+
+- Beam solver proven correct and ready for HW3 grid convergence study
+- HW2 PDF publicly accessible via GitHub Pages
+- Both repos (construction-ai-proposal, construction-ai) on master, clean
+
+**Verification:**
+
+- Document compiles cleanly
+- Solver error vs analytical: 0.001%
+- PDF live at GitHub Pages URL above
+
+---
 
 ### VVUQ Integration Phase 1: Architecture & V&V Section (2026-01-24)
 
@@ -395,10 +444,32 @@ All files created and populated with Construction AI context.
 
 ## In Progress
 
-### VVUQ Integration Phase 2: Paper Updates (Not Yet Started)
+### CS6444 HW3: Code Verification (Not Yet Started)
 
 **What:**
-Complete remaining paper sections per vvuq-integration-plan.md
+Code verification study for the Euler-Bernoulli beam FD solver (beam_solver.py) using Method of Manufactured Solutions and Grid Convergence Index analysis. Will produce VVSC_Cusati_Chuang_HW3.pdf.
+
+**Tasks:**
+
+- [ ] Create branch: hw3/code-verification
+- [ ] Choose manufactured solution w_mms(x) satisfying clamped-clamped BCs (polynomial or sinusoidal)
+- [ ] Derive forcing term q_mms(x) = EI * w_mms''''(x) analytically
+- [ ] Run beam_solver.py on h-refinement sequence (N=10, 20, 40, 80, 160)
+- [ ] Compute L2 and L-inf errors at each refinement level vs w_mms
+- [ ] Compute observed order of accuracy p (expect p=4 for standard FD scheme)
+- [ ] GCI analysis: safety factor Fs=1.25, GCI for fine/medium grid pair
+- [ ] LaTeX report with convergence tables and log-log plots
+- [ ] CI/CD update to build and publish HW3 PDF
+- [ ] Merge to master when complete
+
+**Status:** Not started - next task
+
+---
+
+### VVUQ Integration Phase 2: Paper Updates (Deferred)
+
+**What:**
+Complete remaining proposal paper sections per vvuq-integration-plan.md. Deferred while HW3 is active.
 
 **Tasks:**
 
@@ -411,14 +482,14 @@ Complete remaining paper sections per vvuq-integration-plan.md
 - [ ] Abstract updates with VVUQ language (~30 words)
 - [ ] Conclusion updates with revised contributions
 
-**Status:** Not started
+**Status:** Deferred (resume after HW3)
 
 ---
 
-### VVUQ Integration Phase 3: Presentation & Bibliography (Not Yet Started)
+### VVUQ Integration Phase 3: Presentation & Bibliography (Deferred)
 
 **What:**
-Update presentation and add structural mechanics citations
+Update presentation and add structural mechanics citations. Deferred while HW3 is active.
 
 **Tasks:**
 
@@ -429,7 +500,7 @@ Update presentation and add structural mechanics citations
   - V&V slide
 - [ ] Add 10-15 structural mechanics citations to references.bib
 
-**Status:** Not started
+**Status:** Deferred (resume after HW3)
 
 ---
 
@@ -500,13 +571,26 @@ None at this time.
 
 - **Target:** TBD
 - **Description:** Physics-based structural mechanics, V&V framework, updated presentation
-- **Status:** Phase 1 Complete, Phases 2-3 In Progress
+- **Status:** Phase 1 Complete, Phases 2-3 Deferred (pending HW3)
 
 ### M6: CI/CD Pipeline
 
 - **Target:** 2026-01-24
 - **Description:** GitHub Actions workflow and GitHub Pages deployment
 - **Status:** Complete
+
+### M7: CS6444 HW2 - PDE Modeling & Discretization
+
+- **Target:** 2026-02-27
+- **Description:** LaTeX report covering application, system model, PDE, discretization, V&V plan; FD beam solver implemented and verified
+- **Status:** Complete (2026-02-27)
+- **Deliverable:** <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
+
+### M8: CS6444 HW3 - Code Verification
+
+- **Target:** TBD
+- **Description:** Grid convergence study, MMS, and GCI analysis of beam_solver.py; LaTeX report VVSC_Cusati_Chuang_HW3.pdf
+- **Status:** Not Started
 
 ---
 
