@@ -74,6 +74,12 @@ CutPiece & Result of cutting operation \\
 CodeRule & Building code requirement \\
 FastenerRule & Fastening specification \\
 Supplier & Material supplier \\
+\midrule
+\multicolumn{2}{l}{\textit{Structural Evaluation (VVUQ Integration)}} \\
+\midrule
+StructuralHypothesis & Candidate load-path config with confidence score \\
+LoadPath & Tributary area assignment through a bearing wall \\
+BeamEvaluation & PDE solver result: stress, deflection, feasibility \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -95,6 +101,12 @@ cutInto & StockItem & CutPiece \\
 constrainedBy & Component & CodeRule \\
 requiresFastener & Component & FastenerRule \\
 suppliedBy & StockItem & Supplier \\
+\midrule
+\multicolumn{3}{l}{\textit{Structural Evaluation (VVUQ Integration)}} \\
+\midrule
+INCLUDES & LoadPath & StructuralHypothesis \\
+EVALUATED\_BY & StructuralHypothesis & BeamEvaluation \\
+BASED\_ON & BeamEvaluation & StructuralHypothesis \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -117,6 +129,44 @@ RETURN bom, cut, stock, comp, asm, fact,
 \end{lstlisting}
 
 This single query traverses the entire chain from BOM output back to plan source, collecting all applicable code rules---a query that would require 6+ JOINs in a relational model.
+
+\subsection{Structural Hypothesis Entities}
+
+The VVUQ integration introduces three entity types that connect physics-based evaluation to the existing provenance chain.
+A \texttt{StructuralHypothesis} captures one candidate load-path configuration---which walls carry gravity loads and how tributary area is distributed.
+Each hypothesis is assembled from one or more \texttt{LoadPath} nodes that record the tributary geometry and applied loads.
+The Structural Hypothesis Agent invokes the Euler-Bernoulli beam solver for each header in the hypothesis and writes the result as a \texttt{BeamEvaluation} node:
+
+\begin{lstlisting}[language=json, basicstyle=\ttfamily\scriptsize]
+// Representative node properties
+(:StructuralHypothesis {
+  hypothesis_id: "hyp_001",  load_path_type: "exterior_only",
+  load_kips: 4.2,            confidence_score: 0.87
+})
+(:LoadPath {
+  path_id: "lp_042",  tributary_area_sqft: 68.0,
+  live_load_psf: 40,  dead_load_psf: 15
+})
+(:BeamEvaluation {
+  eval_id: "ev_042",  solver_n_elements: 160,
+  w_max_in: 0.031,    sigma_max_psi: 1418.5,  feasible: true
+})
+\end{lstlisting}
+
+The following query retrieves all feasible hypotheses for a given opening, ranked by confidence:
+
+\begin{lstlisting}[language=json, basicstyle=\ttfamily\scriptsize]
+MATCH (lp:LoadPath {path_id: $openingId})
+      -[:INCLUDES]->(hyp:StructuralHypothesis)
+      -[:EVALUATED_BY]->(ev:BeamEvaluation)
+WHERE ev.feasible = true
+RETURN hyp.hypothesis_id, hyp.confidence_score,
+       ev.sigma_max_psi, ev.w_max_in
+ORDER BY hyp.confidence_score DESC
+LIMIT 5
+\end{lstlisting}
+
+By persisting beam evaluation results as KG nodes, the agent's structural reasoning becomes traceable with the same provenance guarantees as plan-extracted facts---every stress result links back to the tributary assumptions and material properties that produced it.
 
 \subsection{Versioning and Provenance}
 
