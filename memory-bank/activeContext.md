@@ -4,9 +4,9 @@
 
 ## Current Work Phase
 
-CS6444 VVSC Coursework - HW3 (Code Verification) In Progress
+VVUQ Integration Phase 2 - Paper Updates (Sprint 05, Task 1 In Progress)
 
-HW2 (PDE Modeling & Discretization) is fully complete and published. HW3 focuses on code verification using grid convergence study, Method of Manufactured Solutions (MMS), and Grid Convergence Index (GCI) analysis of the Euler-Bernoulli beam solver written in HW2.
+HW3 (Code Verification) is fully complete and merged to master. Sprint-05 is now active on branch `vvuq/phase2-paper-updates`. Task 1 (Knowledge Graph entity updates in 03-knowledge-graph.tex) has been claimed and is in progress.
 
 ## Current State
 
@@ -42,14 +42,19 @@ HW2 - PDE Modeling & Discretization (COMPLETE - 2026-02-27):
 - [x] CI/CD updated to compile and publish HW2 PDF to GitHub Pages
 - [x] Live at: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
 
-HW3 - Code Verification (NOT STARTED):
+HW3 - Code Verification (COMPLETE - 2026-02-27):
 
-- [ ] Grid convergence study (h-refinement sequence)
-- [ ] Method of Manufactured Solutions (MMS) - exact solution with forcing term
-- [ ] Grid Convergence Index (GCI) analysis
-- [ ] Observed order of accuracy vs theoretical (p=4 for clamped-clamped beam)
-- [ ] LaTeX report: VVSC_Cusati_Chuang_HW3.pdf
-- [ ] Work on new branch before merging to master
+- [x] Grid convergence study on N=10,20,40,80,160 (h-refinement sequence)
+- [x] Exact solution for simply-supported uniform load (Option 2 per HW3 assignment)
+- [x] L2 and Linf error norms computed; p_hat ~= 2.000 for all consecutive grid pairs (2nd-order confirmed)
+- [x] SRQ tracking: w_max, M_max, sigma_max all converge
+- [x] Round-off floor ~1.7e-9 vs truncation error ~2.2e-6 at N=160 (separation of concerns confirmed)
+- [x] 3 figures: fig1_convergence_loglog.png, fig2_local_error_N160.png, fig3_srq_convergence.png
+- [x] LaTeX report: CS6444/HW3/main.tex (7 sections), compiled as VVSC_Cusati_Chuang_HW3.pdf
+- [x] CI/CD updated to compile HW3 and publish PDF to GitHub Pages
+- [x] C++ benchmark: benchmarks/structural/beam_solver.cpp (1.1ms vs Python 4.1ms, ~3.6x faster)
+- [x] Branch cs6444/hw3-code-verification merged to master on 2026-02-27
+- Live at: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW3.pdf>
 
 ### VVUQ Integration Status (Proposal Paper)
 
@@ -62,13 +67,14 @@ Phase 1 - Architecture & V&V (COMPLETE - 2026-01-24):
 - [x] Monte Carlo uncertainty propagation added
 - [x] Document grew from 11 to 12 pages
 
-Phase 2 - Remaining Paper Updates (NOT STARTED):
+Phase 2 - Remaining Paper Updates (IN PROGRESS - Sprint 05, branch: vvuq/phase2-paper-updates):
 
-- [ ] Knowledge Graph entity updates (Section 3.5 in VVUQ plan)
+- [~] Knowledge Graph entity updates (Section 3.5 in VVUQ plan) - TASK 1 IN PROGRESS
   - Add StructuralHypothesis, LoadPath, BeamEvaluation entities
-  - Add new relationships
+  - Add new relationships (INCLUDES, EVALUATED_BY, BASED_ON)
+  - File: proposal/sections/03-knowledge-graph.tex
 - [ ] Agentic Workflow updates (Section 3.6 in VVUQ plan)
-  - Add Structural Hypothesis Agent
+  - Add Structural Hypothesis Agent (6th agent)
   - Update TikZ diagram (pentagon to hexagon)
 - [ ] Abstract updates with VVUQ language
 - [ ] Conclusion updates with revised contributions
@@ -84,6 +90,7 @@ Phase 3 - Presentation & Bibliography (NOT STARTED):
 - [x] GitHub Pages enabled
 - [x] PDFs accessible at: <https://djjay0131.github.io/construction-ai-proposal/>
 - [x] HW2 PDF published: VVSC_Cusati_Chuang_HW2.pdf
+- [x] HW3 PDF published: VVSC_Cusati_Chuang_HW3.pdf (2026-02-27)
 
 ## Major Design Decisions
 
@@ -91,26 +98,36 @@ Phase 3 - Presentation & Bibliography (NOT STARTED):
 
 **Structural Hypothesis Evaluation**: The system generates multiple structural hypotheses representing plausible load paths, evaluates them using Euler-Bernoulli beam theory with uncertainty quantification, and ranks them by cost, robustness, and design flexibility.
 
-**beam_solver.py Implementation**: Finite difference solver for Euler-Bernoulli beam (EIw'''' = q) with clamped-clamped BCs. Uses numpy only. Ghost point method for near-boundary stencils. Verified to 0.001% error vs analytical for uniform load case. Lives in construction-ai backend repo at backend/app/core/structural/beam_solver.py.
+**beam_solver.py Implementation**: Finite difference solver for Euler-Bernoulli beam (EIw'''' = q). Uses numpy only. Ghost point method for near-boundary stencils. HW2 used clamped-clamped BCs (verified 0.001% error). HW3 used simply-supported BCs with exact solution for uniform load, yielding O(h^2) scheme (p ~= 2.000 confirmed). Lives in construction-ai backend repo at backend/app/core/structural/beam_solver.py.
+
+**hw3_verification.py**: Grid convergence script at construction-ai/backend/app/core/structural/hw3_verification.py. Runs N=10,20,40,80,160; computes L2/Linf norms; p_hat ~= 2.000 for all consecutive grid pairs. Round-off floor ~1.7e-9 well below truncation error ~2.2e-6 at N=160.
 
 ## Immediate Next Steps
 
-HW3 Priority Tasks:
+VVUQ Phase 2 - Sprint 05 (branch: vvuq/phase2-paper-updates):
 
-1. **Create HW3 branch** - `git checkout -b hw3/code-verification`
-2. **MMS forcing term** - Derive manufactured solution w_mms(x), compute q_mms(x) = EI * w_mms''''(x)
-3. **Grid convergence study** - Run beam_solver.py on sequence of grids (N=10, 20, 40, 80, 160)
-4. **Error norms** - Compute L2 and L-inf errors at each refinement level
-5. **GCI analysis** - Compute observed order p, safety factor Fs=1.25, GCI for fine/medium grids
-6. **LaTeX report** - Produce VVSC_Cusati_Chuang_HW3.pdf following same conventions as HW2
-7. **CI/CD update** - Add HW3 PDF to GitHub Actions build
-
-Secondary Tasks (VVUQ Proposal - lower priority):
-
-8. **Knowledge Graph Entity Updates** - Add StructuralHypothesis, LoadPath, BeamEvaluation entities
-9. **Agentic Workflow Updates** - Add Structural Hypothesis Agent and update TikZ diagram
+1. **Task 1 (IN PROGRESS): Knowledge Graph Entity Updates** - Add StructuralHypothesis, LoadPath, BeamEvaluation entities to proposal/sections/03-knowledge-graph.tex
+2. **Task 2:** Agentic Workflow updates - Add 6th Structural Hypothesis Agent, update TikZ diagram (pentagon to hexagon) in proposal/sections/05-agentic-workflow.tex
+3. **Task 3:** Abstract updates with VVUQ language (~30 words) in proposal/main.tex
+4. **Task 4:** Conclusion updates with revised contributions in proposal/sections/12-conclusion.tex
+5. **Merge sprint-05** to master when all tasks complete
 
 ## Recent Decisions
+
+### Decision 6: HW3 Verification Approach
+
+- **Date:** 2026-02-27
+- **Decision:** Use simply-supported BCs with exact analytical solution for uniform load (Option 2 per HW3 assignment) rather than Method of Manufactured Solutions with clamped-clamped BCs
+- **Rationale:**
+  - Simply-supported exact solution w(x) = qx(L^3 - 2Lx^2 + x^3)/(24EI) is clean and verifiable
+  - O(h^2) central difference scheme gives p=2, clearly observed in convergence results (p_hat ~= 2.000)
+  - Avoids complexity of deriving MMS forcing term for clamped-clamped case
+  - Round-off floor (~1.7e-9) well separated from truncation error (~2.2e-6 at N=160), confirming correct behavior
+- **Impact:**
+  - Observed order p=2, not p=4 as previously speculated (the p=4 note in activeContext was incorrect and has been removed)
+  - hw3_verification.py script at construction-ai/backend/app/core/structural/hw3_verification.py
+  - C++ benchmark added at construction-ai/benchmarks/structural/beam_solver.cpp (3.6x faster than Python)
+  - Bugs fixed: numpy index wrap in shear (np.gradient), missing M_max in BeamSolveResult, matplotlib venv issue, language=diff LaTeX error
 
 ### Decision 5: HW2 Solver Architecture
 
@@ -218,13 +235,12 @@ Secondary Tasks (VVUQ Proposal - lower priority):
 - Ghost point method: for near-boundary nodes (i=1, i=N-1), the standard 5-point stencil references ghost nodes; substitute BC equations to eliminate them before solving
 - Sign convention critical: positive w = downward deflection; M = -EI*w'', V = -EI*w'''
 - Unit conversion note needed: distributed load q from lb/ft must be converted to lb/in before passing to solver (or keep consistent units throughout)
-- Observed order of accuracy expected: p=4 for clamped-clamped with uniform load and standard FD scheme
+- Observed order of accuracy: p=2 (O(h^2) central difference scheme) for simply-supported BCs — confirmed by HW3 grid convergence study (p_hat ~= 2.000 for all consecutive grid pairs)
 
 ## Open Questions
 
-1. **HW3 Manufactured Solution**: What polynomial or sinusoidal form for w_mms(x) satisfies clamped-clamped BCs exactly and yields a clean q_mms? (Decision needed at start of HW3)
-2. **HW3 Partner Merge**: Will Cheng-Shun Chuang contribute a model-modification branch again, or single-author this time?
-3. **VVUQ Phase 2 Priority**: Given HW3 workload, when should proposal paper updates resume?
+1. **HW3 Partner Merge**: Did Cheng-Shun Chuang contribute content to HW3, or was it single-authored? (Clarify for submission records)
+2. **VVUQ Phase 2 Timeline**: Are there assignment deadlines that constrain sprint-05 completion? (No known deadline at this time)
 
 ## Reference Materials
 
@@ -233,12 +249,15 @@ Secondary Tasks (VVUQ Proposal - lower priority):
 - Proposal Source: `proposal/sections/`
 - Published PDFs: <https://djjay0131.github.io/construction-ai-proposal/>
 - HW2 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
+- HW3 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW3.pdf>
 - Beam solver: `construction-ai/backend/app/core/structural/beam_solver.py`
+- HW3 verification script: `construction-ai/backend/app/core/structural/hw3_verification.py`
+- C++ benchmark: `construction-ai/benchmarks/structural/beam_solver.cpp`
 
 ## Notes for Next Session
 
 - Read ALL memory-bank files on context reset
 - Check phases.md for current phase status
-- HW3 work on new branch: hw3/code-verification
-- MMS: choose manufactured solution first, derive forcing term analytically, then run grid study
-- Reference vvuq-integration-plan.md for VVUQ proposal task details (lower priority than HW3)
+- HW3 is COMPLETE — do not start HW3 tasks again
+- Active sprint: sprint-05 on branch vvuq/phase2-paper-updates; Task 1 (Knowledge Graph entity updates) is in progress
+- Reference vvuq-integration-plan.md for full VVUQ Phase 2 task details
