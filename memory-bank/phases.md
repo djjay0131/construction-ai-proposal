@@ -18,7 +18,7 @@ This file serves as the **coordination hub** for tracking project phases and del
 | 5: VVUQ Integration | In Progress (Phase 1 Done, Phases 2-3 Deferred) | Physics-based structural mechanics, V&V | TBD |
 | 6: CI/CD Pipeline | Complete | GitHub Actions, GitHub Pages | 2026-01-24 |
 | 7: CS6444 HW2 - PDE Modeling & Discretization | Complete | FD beam solver (beam_solver.py), VVSC_Cusati_Chuang_HW2.pdf | 2026-02-27 |
-| 8: CS6444 HW3 - Code Verification | Not Started | Grid convergence study, MMS, GCI analysis, VVSC_Cusati_Chuang_HW3.pdf | TBD |
+| 8: CS6444 HW3 - Code Verification | Complete | Grid convergence study, MMS, GCI analysis, VVSC_Cusati_Chuang_HW3.pdf | 2026-02-27 |
 
 ### Status Legend
 
@@ -167,8 +167,13 @@ This file serves as the **coordination hub** for tracking project phases and del
   - Observed order of accuracy p (expect p=2 — 5-point central difference stencil is O(h^2))
   - GCI analysis with safety factor Fs=1.25
   - LaTeX report: VVSC_Cusati_Chuang_HW3.pdf
-- **Status**: Not Started
-- **Notes**: Work on branch hw3/code-verification before merging to master. Choose manufactured solution w_mms(x) satisfying clamped-clamped BCs exactly.
+- **Status**: Complete
+- **Completion Date**: 2026-02-27
+- **Commits**: e344215, 6d545bc, e959d97, 09d58b5 (all merged to master)
+- **Sprint**: `construction/sprints/sprint-04-hw3-code-verification.md`
+- **Key Results**: p_hat = 2.000 (O(h^2) confirmed); 3 figures; C++ benchmark (~3.6x faster than Python)
+- **PDF**: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW3.pdf>
+- **Notes**: Simply-supported BCs used (not clamped-clamped); sinusoidal MMS satisfies SS BCs exactly. Key fix: removed `language=diff` from lstlisting.
 
 ---
 
