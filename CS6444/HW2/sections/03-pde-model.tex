@@ -22,19 +22,22 @@ For a prismatic member with uniform cross-section and homogeneous material, $EI$
 
 This is a linear, fourth-order ordinary differential equation---a 1D steady BVP in the single spatial coordinate $x$.
 
+Throughout this document, transverse deflection $w(x)$ is taken as \textbf{positive downward}, consistent with the direction of gravity loading, and $q(x)$ is likewise positive downward. This is the standard structural engineering sign convention.
+
 \subsection{Derived Quantities}
 
 From the deflection field $w(x)$, the following quantities of engineering interest are derived:
 
 \textbf{Bending moment:}
 \begin{equation}
-  M(x) = EI\,\frac{d^2 w}{dx^2}
+  M(x) = -EI\,\frac{d^2 w}{dx^2}
   \label{eq:moment}
 \end{equation}
+The negative sign arises from the downward-positive $w$ convention: a sagging beam has $w'' < 0$, so $M = -EI w'' > 0$ gives a positive moment for sagging, consistent with the engineering sign convention.
 
 \textbf{Shear force:}
 \begin{equation}
-  V(x) = EI\,\frac{d^3 w}{dx^3}
+  V(x) = -EI\,\frac{d^3 w}{dx^3}
   \label{eq:shear}
 \end{equation}
 
@@ -79,7 +82,9 @@ For a uniform distributed load $q(x) = q_0$ (constant), the load is computed fro
   q_0 = \bigl(q_{\text{roof}} + q_{\text{floor}}\bigr)\,T_w
   \label{eq:load}
 \end{equation}
-where $q_{\text{roof}}$ and $q_{\text{floor}}$ are area loads [psf] and $T_w$ is the tributary width [ft].
+where $q_{\text{roof}}$ and $q_{\text{floor}}$ are area loads [psf] and $T_w$ is the tributary width [ft], giving $q_0$ in [lb/ft].
+Before numerical solution all quantities must be in a consistent unit system.
+Converting to inch-based units: $q_0\,[\text{lb/in}] = q_0\,[\text{lb/ft}] / 12$, with $L$ in inches, $E$ in psi (lb/in$^2$), $I$ in in$^4$, and $w$ in inches.
 
 \subsection{Analytical Solution (Simply-Supported, Uniform Load)}
 
@@ -111,7 +116,7 @@ The beam is considered \emph{structurally acceptable} if all three criteria are 
 \begin{enumerate}
   \item \textbf{Bending stress:} $\sigma_{\max} \leq F_b$ (allowable bending stress for the lumber species/grade)
   \item \textbf{Shear stress:} $\tau_{\max} \leq F_v$ (allowable shear stress)
-  \item \textbf{Deflection:} $w_{\max} \leq L/240$ (IRC serviceability limit)
+  \item \textbf{Deflection:} $w_{\max} \leq L/240$ (IRC serviceability limit, with $w_{\max}$ and $L$ in the same units)
 \end{enumerate}
 
 These criteria define the \emph{failure surface} in the uncertainty quantification framework.
