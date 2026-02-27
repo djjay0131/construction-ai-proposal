@@ -30,16 +30,14 @@ Creating a comprehensive proposal for AI integration in the construction industr
 ## Session Notes
 
 - Started: 2026-01-14
-- Status: VVUQ Integration In Progress (Phase 1 Complete)
-- Last Updated: 2026-02-03
+- Status: HW3 Planning In Progress
+- Last Updated: 2026-02-27
 
 ## Current Phase
 
-**Phase 5: VVUQ Integration** - Physics-based structural mechanics
+**CS6444 HW3: Code Verification** — due Friday March 6, 2026 at 10pm
 
-- Phase 1 (Architecture & V&V): COMPLETE
-- Phase 2 (Paper Updates): NOT STARTED
-- Phase 3 (Presentation & Bibliography): NOT STARTED
+Active branch: `cs6444/hw3-code-verification` (both repos)
 
 ## Completed Work
 
@@ -50,31 +48,54 @@ Creating a comprehensive proposal for AI integration in the construction industr
 - [x] Phase 4: Final Delivery (2026-01-18)
 - [x] Phase 6: CI/CD Pipeline (2026-01-24)
 - [x] VVUQ Phase 1: Architecture & V&V Section (2026-01-24)
+- [x] CS6444 HW2: Project Application Definition (2026-02-27) — VVSC_Cusati_Chuang_HW2.pdf
 
 ## Current Deliverables
 
 - 12-page IEEE conference paper (proposal/main.pdf)
 - 21-slide Beamer presentation (proposal/presentation.pdf)
-- 38 IEEE-style references
-- Research Questions (RQ1-RQ4)
-- Complete LaTeX source files
-- New V&V section with Euler-Bernoulli beam theory
+- CS6444/HW2: LaTeX submission (VVSC_Cusati_Chuang_HW2.pdf) — live on GitHub Pages
+- FD Euler-Bernoulli beam solver: construction-ai/backend/app/core/structural/beam_solver.py
+  - numpy only, verified 0.001% error vs analytical at N=200
+  - Implements: 5-point stencil, ghost-point simply-supported BCs, MC UQ loop
 
-## Remaining VVUQ Tasks
+## HW3 Plan (Code Verification)
 
-Per `construction/design/vvuq-integration-plan.md`:
+**Approach:** Option 2 — Exact solution (already have it)
+- w_exact(x) = q0/(24EI) * (x^4 - 2*L*x^3 + L^3*x)
 
-- [ ] Knowledge Graph entity updates (Section 3.5)
-- [ ] Agentic Workflow updates - add Structural Hypothesis Agent (Section 3.6)
-- [ ] Abstract updates with VVUQ language
-- [ ] Conclusion updates with revised contributions
-- [ ] Presentation slides (4 new slides)
-- [ ] Bibliography additions (10-15 structural mechanics citations)
+**Required deliverables:**
+- [ ] hw3_verification.py — grid convergence script with figures
+  - Location: construction-ai/backend/app/core/structural/hw3_verification.py
+  - Grid levels: N = 10, 20, 40, 80, 160
+  - Error norms: L2 and Linf vs exact
+  - SRQ errors: w_max, M_max, sigma_max
+  - Observed order p_hat = log(e_h/e_{h/2})/log(2), expect ~2
+  - 3 figures: log-log convergence, local error field, SRQ convergence
+- [ ] CS6444/HW3/main.tex — LaTeX document
+  - Sections: Approach, Grid Convergence, Local Error, Code Coverage, Round-off, Git/VCS
+- [ ] CI/CD update to publish VVSC_Cusati_Chuang_HW3.pdf
+- [ ] C++ port of beam_solver.py for performance benchmarking (user request)
+  - Location: construction-ai/backend/app/core/structural/beam_solver.cpp
+
+**Design docs:** construction/design/hw3-code-verification.md
+**Sprint:** construction/sprints/sprint-04-hw3-code-verification.md
 
 ## CI/CD
 
 - GitHub Actions: Automated PDF compilation on push
 - GitHub Pages: <https://djjay0131.github.io/construction-ai-proposal/>
+- HW2 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
+
+## Key File Locations
+
+| File | Repo | Purpose |
+|------|------|---------|
+| backend/app/core/structural/beam_solver.py | construction-ai | Python FD solver |
+| backend/app/core/structural/beam_solver.cpp | construction-ai | C++ port (planned) |
+| backend/app/core/structural/hw3_verification.py | construction-ai | Grid convergence script |
+| CS6444/HW2/ | construction-ai-proposal | HW2 LaTeX |
+| CS6444/HW3/ | construction-ai-proposal | HW3 LaTeX (planned) |
 
 ## Context
 

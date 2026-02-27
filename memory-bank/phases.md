@@ -1,6 +1,6 @@
 # Phase Lifecycle
 
-**Last Updated:** 2026-02-03
+**Last Updated:** 2026-02-27
 
 This file serves as the **coordination hub** for tracking project phases and deliverables.
 
@@ -15,8 +15,10 @@ This file serves as the **coordination hub** for tracking project phases and del
 | 2: Content Development | Complete | Proposal sections, business case | 2026-01-17 |
 | 3: Review & Refinement | Complete | Sprint 01 & 02 - All sections polished | 2026-01-18 |
 | 4: Final Delivery | Complete | 11-page proposal + 21-slide presentation | 2026-01-18 |
-| 5: VVUQ Integration | In Progress | Physics-based structural mechanics, V&V | TBD |
+| 5: VVUQ Integration | In Progress (Phase 1 Done, Phases 2-3 Deferred) | Physics-based structural mechanics, V&V | TBD |
 | 6: CI/CD Pipeline | Complete | GitHub Actions, GitHub Pages | 2026-01-24 |
+| 7: CS6444 HW2 - PDE Modeling & Discretization | Complete | FD beam solver (beam_solver.py), VVSC_Cusati_Chuang_HW2.pdf | 2026-02-27 |
+| 8: CS6444 HW3 - Code Verification | Not Started | Grid convergence study, MMS, GCI analysis, VVSC_Cusati_Chuang_HW3.pdf | TBD |
 
 ### Status Legend
 
@@ -116,7 +118,7 @@ This file serves as the **coordination hub** for tracking project phases and del
 - [x] Euler-Bernoulli beam theory integrated
 - [x] Monte Carlo uncertainty propagation added
 
-#### VVUQ Phase 2 Tasks (NOT STARTED)
+#### VVUQ Phase 2 Tasks (DEFERRED - resume after HW3)
 
 - [ ] Knowledge Graph entity updates (Section 3.5 in plan)
   - StructuralHypothesis, LoadPath, BeamEvaluation entities
@@ -127,7 +129,7 @@ This file serves as the **coordination hub** for tracking project phases and del
 - [ ] Abstract updates with VVUQ language
 - [ ] Conclusion updates with revised contributions
 
-#### VVUQ Phase 3 Tasks (NOT STARTED)
+#### VVUQ Phase 3 Tasks (DEFERRED - resume after HW3)
 
 - [ ] Add 4 new presentation slides
 - [ ] Add 10-15 structural mechanics citations
@@ -144,6 +146,29 @@ This file serves as the **coordination hub** for tracking project phases and del
 - **Completion Date**: 2026-01-24
 - **Commits**: 7489dd0 (workflow), e95a9cf (Pages deployment)
 - **Notes**: Automated build and publish on push to master
+
+### Phase 7: CS6444 HW2 - PDE Modeling & Discretization
+
+- **Objective**: Produce CS6444 VVSC HW2 LaTeX report and implement the FD beam solver
+- **Key Deliverables**:
+  - LaTeX report covering application, system model, PDE formulation, numerical discretization, and V&V plan
+  - FD beam solver: `construction-ai/backend/app/core/structural/beam_solver.py`
+  - PDF published: VVSC_Cusati_Chuang_HW2.pdf
+- **Status**: Complete
+- **Completion Date**: 2026-02-27
+- **Notes**: Clamped-clamped BCs; ghost point method for near-boundary stencils; numpy only; 0.001% error vs analytical solution. Partner Cheng-Shun Chuang's content merged from model-modification branch. PDF live at GitHub Pages.
+
+### Phase 8: CS6444 HW3 - Code Verification
+
+- **Objective**: Formally verify the HW2 FD beam solver via grid convergence study, MMS, and GCI analysis
+- **Key Deliverables**:
+  - Grid convergence study: h-refinement sequence N = 10, 20, 40, 80, 160
+  - L2 and L-inf error norms vs manufactured solution
+  - Observed order of accuracy p (expect p=2 — 5-point central difference stencil is O(h^2))
+  - GCI analysis with safety factor Fs=1.25
+  - LaTeX report: VVSC_Cusati_Chuang_HW3.pdf
+- **Status**: Not Started
+- **Notes**: Work on branch hw3/code-verification before merging to master. Choose manufactured solution w_mms(x) satisfying clamped-clamped BCs exactly.
 
 ---
 
@@ -229,6 +254,8 @@ construction-ai-proposal/
 | construction/design/proposal-structure.md | Document organization |
 | construction/design/novelty-analysis.md | Research contributions |
 | construction/design/literature-review.md | Bibliography tracking |
+| construction/design/hw3-code-verification.md | HW3 code verification specification (grid convergence, MMS) |
+| construction/sprints/sprint-04-hw3-code-verification.md | HW3 sprint task breakdown |
 
 ---
 

@@ -47,6 +47,13 @@ jobs:
           root_file: main.tex
           latexmk_use_xelatex: false
 
+      - name: Compile CS6444 HW3
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: CS6444/HW3
+          root_file: main.tex
+          latexmk_use_xelatex: false
+
       - name: Rename and prepare PDFs
         run: |
           VERSION=${{ steps.version.outputs.version }}
@@ -60,6 +67,7 @@ jobs:
           cp proposal/main.pdf public/ConstructionAI-Proposal.pdf
           cp proposal/presentation.pdf public/ConstructionAI-Presentation.pdf
           cp CS6444/HW2/main.pdf public/VVSC_Cusati_Chuang_HW2.pdf
+          cp CS6444/HW3/main.pdf public/VVSC_Cusati_Chuang_HW3.pdf
 
           # Create index page
           cat > public/index.html << EOF
@@ -98,6 +106,10 @@ jobs:
             <div class="doc">
               <a href="VVSC_Cusati_Chuang_HW2.pdf">📝 Homework 2 — Project Application Definition</a>
               <p>Euler–Bernoulli beam model for residential structural framing</p>
+            </div>
+            <div class="doc">
+              <a href="VVSC_Cusati_Chuang_HW3.pdf">📝 Homework 3 — Code Verification</a>
+              <p>Grid convergence, observed order of accuracy, and round-off analysis</p>
             </div>
 
             <hr>
