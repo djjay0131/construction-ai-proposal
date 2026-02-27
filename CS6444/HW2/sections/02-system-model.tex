@@ -4,8 +4,6 @@
 
 \section{System, Surroundings, and Environments}
 
-Following the framework of Chapter 3, we define the system boundary, surroundings, and environments of interest.
-
 % ---------------------------------------------------------------------------
 \subsection{System Definition}
 
@@ -66,7 +64,6 @@ Key system parameters:
 % ---------------------------------------------------------------------------
 \subsection{Surroundings}
 
-The surroundings are everything external to the system that acts on it across the system boundary.
 For a residential structural member, the surroundings consist of:
 
 \begin{enumerate}
@@ -83,7 +80,6 @@ For a residential structural member, the surroundings consist of:
 
   \item \textbf{Support reactions} --- the jack studs, posts, or bearing walls at $x = 0$ and $x = L$ provide the boundary conditions (pinned, fixed, or spring supports).
 
-  \item \textbf{Gravity field} --- the gravitational body force is implicitly included in the load model above; no explicit body force term appears in the beam equation for transverse bending.
 \end{enumerate}
 
 Figure~\ref{fig:system-context} shows the system in context of a typical residential wall cross-section.
@@ -143,23 +139,20 @@ Figure~\ref{fig:system-context} shows the system in context of a typical residen
 % ---------------------------------------------------------------------------
 \subsection{Environments}
 
-The \textbf{environment} defines the external conditions that determine parameter values and vary across use cases.
 Three primary environments are relevant:
 
 \begin{enumerate}
   \item \textbf{Geographic/Climatic Environment.}
   Snow and wind loads depend on location.
   A beam designed for a Virginia mountain site ($p_s = 40$~psf ground snow) requires different sizing than one in coastal Florida ($p_s = 0$~psf).
-  The environment sets the load distribution parameters for uncertainty quantification.
 
   \item \textbf{Structural Context Environment.}
   Whether the member carries one-story, two-story, or roof-only loads changes the total tributary load.
-  A header in a single-story garage differs from a girder in a two-story bearing wall.
-  This determines whether $q_{\text{floor}}$ is zero or non-zero.
+  A header in a single-story garage differs from a girder in a two-story bearing wall ($q_{\text{floor}} = 0$ vs.\ non-zero).
 
   \item \textbf{Material/Grade Environment.}
   Wood structural properties ($E$, $F_b$, $F_v$) vary by species and grade (e.g., Douglas Fir-Larch \#2 vs.\ Southern Yellow Pine \#1 vs.\ LVL engineered lumber).
-  This is modeled as a random variable in the uncertainty quantification framework.
+  These are modeled as random variables in the UQ framework.
 \end{enumerate}
 
 Table~\ref{tab:environments} summarizes the key environments and their effect on model parameters.
