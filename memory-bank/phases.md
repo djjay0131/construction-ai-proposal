@@ -164,7 +164,7 @@ This file serves as the **coordination hub** for tracking project phases and del
 - **Key Deliverables**:
   - Grid convergence study: h-refinement sequence N = 10, 20, 40, 80, 160
   - L2 and L-inf error norms vs manufactured solution
-  - Observed order of accuracy p (expect p=4 for standard FD scheme)
+  - Observed order of accuracy p (expect p=2 — 5-point central difference stencil is O(h^2))
   - GCI analysis with safety factor Fs=1.25
   - LaTeX report: VVSC_Cusati_Chuang_HW3.pdf
 - **Status**: Not Started
