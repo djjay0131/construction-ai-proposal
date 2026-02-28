@@ -18,7 +18,7 @@ Reasoning steps query the KG for facts and rules; actions invoke deterministic t
 This enables auditability (decisions trace to KG facts), correctness (optimization uses proven algorithms), and debuggability (failed inferences can be replayed).
 
 \textbf{Specialization over Generalization.}
-Rather than a single general-purpose agent, we deploy five specialized agents, each with domain-specific prompts, KG query templates, and tool access.
+Rather than a single general-purpose agent, we deploy six specialized agents, each with domain-specific prompts, KG query templates, and tool access.
 Specialization improves accuracy by constraining the reasoning space.
 
 \textbf{Shared Memory via KG.}
@@ -27,31 +27,33 @@ Each agent reads from and writes to the KG, creating a persistent, queryable rec
 
 \subsection{Agent Architecture}
 
-Figure~\ref{fig:agents} shows the five agents and their workflow.
+Figure~\ref{fig:agents} shows the six agents and their workflow.
 Agents (blue) perform reasoning; tools (green) perform deterministic computation.
 
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}[
-  node distance=5mm and 12mm,
-  agent/.style={draw, rounded corners, align=center, inner sep=3pt, font=\scriptsize, fill=blue!10, minimum width=22mm},
-  tool/.style={draw, align=center, inner sep=3pt, font=\scriptsize, fill=green!10, minimum width=18mm},
+  node distance=5mm and 10mm,
+  agent/.style={draw, rounded corners, align=center, inner sep=3pt, font=\scriptsize, fill=blue!10, minimum width=20mm},
+  tool/.style={draw, align=center, inner sep=3pt, font=\scriptsize, fill=green!10, minimum width=16mm},
   arrow/.style={-Latex}
 ]
 \node[agent] (qa) {Extraction QA\\Agent};
 \node[agent, right=of qa] (infer) {Component\\Inference Agent};
-\node[agent, right=of infer] (code) {Code \&\\Compliance Agent};
-\node[agent, below=8mm of qa] (procure) {Procurement \&\\Cut Agent};
+\node[agent, right=of infer] (struct) {Structural\\Hypothesis Agent};
+\node[agent, below=8mm of qa] (code) {Code \&\\Compliance Agent};
+\node[agent, right=of code] (procure) {Procurement \&\\Cut Agent};
 \node[agent, right=of procure] (instruct) {Instruction\\Generation Agent};
-\node[tool, right=of instruct] (optimizer) {Cut-Stock\\Optimizer};
+\node[tool, below=5mm of instruct] (optimizer) {Cut-Stock\\Optimizer};
 
 \draw[arrow] (qa) -- (infer);
-\draw[arrow] (infer) -- (code);
-\draw[arrow] (code) |- (procure);
+\draw[arrow] (infer) -- (struct);
+\draw[arrow] (struct) |- (code);
+\draw[arrow] (code) -- (procure);
 \draw[arrow] (procure) -- (instruct);
 \draw[arrow] (instruct) -- (optimizer);
 \end{tikzpicture}
-\caption{Agent workflow: specialized agents (blue) handle reasoning; deterministic tools (green) handle optimization. All agents read/write to the shared KG.}
+\caption{Agent workflow: six specialized agents (blue) handle reasoning; deterministic tools (green) handle optimization. All agents read/write to the shared KG.}
 \label{fig:agents}
 \end{figure}
 
@@ -88,6 +90,18 @@ Maps validated plan facts to assemblies using KG rules:
   \item Opening size $\rightarrow$ header assembly, jack/king studs
   \item Bearing vs. non-bearing $\rightarrow$ header sizing requirements
 \end{itemize}
+
+\subsection{Structural Hypothesis Agent}
+
+Generates and evaluates candidate load-path configurations using physics-based beam analysis:
+\begin{itemize}
+  \item Enumerate 3--5 candidate load paths from inferred bearing-wall geometry in the KG
+  \item Assign tributary area to each header using a geometric centroid heuristic
+  \item Invoke the Euler-Bernoulli beam solver for each header under combined dead and live loads
+  \item Propagate load and material uncertainty via Monte Carlo sampling ($N{=}1000$ realizations)
+  \item Rank hypotheses by a multi-criteria score: structural robustness, material cost, and design flexibility
+\end{itemize}
+Feasible hypotheses (probability of failure ${<}\,0.5\%$) are written as \texttt{StructuralHypothesis} nodes to the KG, enabling the Code~\&~Compliance Agent to verify headers against IRC span tables within a fully characterized load path.
 
 \subsection{Code \& Compliance Agent}
 
