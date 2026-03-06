@@ -260,7 +260,8 @@ verification study and which are not.
 \centering
 \caption{Code coverage assessment for \texttt{beam\_solver.py}.}
 \label{tab:coverage}
-\begin{tabular}{>{\ttfamily}p{3.8cm}p{4.4cm}p{4.4cm}}
+\small  % Use smaller font to fit content better
+\begin{tabular}{>{\ttfamily}p{4.2cm}p{5.0cm}p{4.5cm}}
 \toprule
 \textbf{Component} & \textbf{Verified by this study} & \textbf{Not exercised} \\
 \midrule
@@ -269,11 +270,11 @@ Near-boundary rows (1, N-1) & Primary error source; all 5 grids & Non-uniform me
 Interior 5-pt stencil        & All $N\in\{10,20,40,80,160\}$ & Concentrated point loads \\
 np.linalg.solve              & All 5 grid sizes & $N > 500$ \\
 $M = -EI\,w''$              & SRQ $M_{\max}$ verified & Shear $V$ not verified \\
-exact\_simply\_supported()   & Used as reference benchmark & N/A (it is the reference) \\
+exact\_simply\_ supported()   & Used as reference benchmark & N/A (reference) \\
 BeamGeometry (I, S)          & Used for all SRQs & Non-rectangular sections \\
-monte\_carlo\_assessment()   & \textbf{Not tested in HW3} & Entire MC loop untested \\
-passes\_bending/shear/defl.  & \textbf{Not tested in HW3} & Design check logic \\
-Variable load $q(x)$         & \textbf{Not tested} --- uniform $q_0$ only & Triangular/trapezoidal loads \\
+monte\_carlo\_ assessment()   & \textbf{Not tested in HW3} & Entire MC loop untested \\
+passes\_bending/ shear/defl.  & \textbf{Not tested in HW3} & Design check logic \\
+Variable load $q(x)$         & \textbf{Not tested} --- uniform $q_0$ only & Triangular/ trapezoidal loads \\
 \bottomrule
 \end{tabular}
 \end{table}
