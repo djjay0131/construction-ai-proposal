@@ -2,7 +2,7 @@
 
 **Sprint Goal:** Complete the remaining VVUQ integration in the proposal paper — Knowledge Graph entity updates, Agentic Workflow updates, Abstract/Conclusion revisions.
 **Start Date:** 2026-02-27
-**Status:** In Progress
+**Status:** Complete (pending PR #7 merge)
 
 **Prerequisites:**
 
@@ -48,19 +48,19 @@
 
 **File:** `proposal/sections/05-agentic-workflow.tex`
 
-**Branch:** `vvuq/phase2-task2-agentic-workflow` (IN PROGRESS — DO NOT START IN ANOTHER BRANCH)
+**Branch:** `vvuq/phase2-task2-agentic-workflow` (MERGED to master — PR #6, 2026-02-28)
 
-- [ ] Add Structural Hypothesis Agent as the 6th agent in the workflow
-- [ ] Add agent description:
+- [x] Add Structural Hypothesis Agent as the 6th agent in the workflow
+- [x] Add agent description:
   - Generates 3-5 candidate load path configurations from inferred bearing wall configurations
   - Assigns tributary areas for each candidate header
   - Invokes the Euler-Bernoulli beam solver for each candidate
   - Propagates uncertainty via Monte Carlo simulation
   - Ranks hypotheses by multi-criteria scoring (cost, robustness (1 - P(failure)), design flexibility)
-- [ ] Update TikZ diagram: adjust pentagon layout (5 nodes) to hexagon layout (6 nodes) for Structural Hypothesis Agent
-- [ ] Insert agent between Component Inference Agent and Code & Compliance Agent
+- [x] Update TikZ diagram: adjust pentagon layout (5 nodes) to hexagon layout (6 nodes) for Structural Hypothesis Agent
+- [x] Insert agent between Component Inference Agent and Code & Compliance Agent
 
-**Status:** IN PROGRESS — being worked on in branch `vvuq/phase2-task2-agentic-workflow`
+**Status:** COMPLETE — merged to master via PR #6, 2026-02-28
 
 **Acceptance Criteria:**
 
@@ -75,13 +75,14 @@
 
 **File:** `proposal/main.tex` (abstract block)
 
-- [ ] Add 1-2 sentences covering VVUQ and physics-based structural evaluation:
+- [x] Add 1-2 sentences covering VVUQ and physics-based structural evaluation:
   - Reference structural hypothesis generation and Euler-Bernoulli beam theory
   - Reference uncertainty quantification (Monte Carlo)
-- [ ] Verify word count remains under IEEE 250-word limit
-- [ ] Confirm abstract reads cohesively with existing KG-centered framing
+- [x] Verify word count remains under IEEE 250-word limit
+- [x] Confirm abstract reads cohesively with existing KG-centered framing
 
-**Status:** Pending
+**Status:** COMPLETE — PR #7 open, branch `vvuq/phase2-task3-abstract`, 2026-02-28
+**Notes:** Abstract grew from ~129 to ~164 words; remains within IEEE 250-word limit. VVUQ sentence added referencing Euler-Bernoulli beam theory and Monte Carlo uncertainty quantification.
 
 **Acceptance Criteria:**
 
@@ -95,18 +96,19 @@
 
 **File:** `proposal/sections/12-conclusion.tex`
 
-- [ ] Add VVUQ as a 5th key contribution:
-  - "Uncertainty-Aware Header Sizing via Continuum Mechanics"
-- [ ] Add 1-2 sentences on physics-based structural verification as a contribution
-- [ ] Revise contributions list to match updated framing from design doc Section 3.11:
+- [x] Add VVUQ as a 5th key contribution:
+  - "Uncertainty-Aware Structural Evaluation"
+- [x] Add 1-2 sentences on physics-based structural verification as a contribution
+- [x] Revise contributions list to match updated framing from design doc Section 3.11:
   1. KG-Centered Architecture
   2. Multi-Agent Reasoning with Physics-Based Structural Inference
   3. Uncertainty-Aware Header Sizing via Continuum Mechanics
   4. Integrated Cut Optimization
   5. Code-Aware Build Instructions
-- [ ] Verify links to RQ1-RQ4 remain intact
+- [x] Verify links to RQ1-RQ4 remain intact
 
-**Status:** Pending
+**Status:** COMPLETE — PR #7 open, branch `vvuq/phase2-task3-abstract`, 2026-02-28
+**Notes:** Added 5th contribution "Uncertainty-Aware Structural Evaluation" to conclusion; updated "four" to "five contributions" and "five-agent" to "six-agent workflow". Paper compiles cleanly to 13 pages.
 
 **Acceptance Criteria:**
 
@@ -149,11 +151,11 @@
 | Task | Status | Completed | Commit |
 | ---- | ------ | --------- | ------ |
 | Task 1: Knowledge Graph Entity Updates | COMPLETE | 2026-02-27 | 87e6631 |
-| Task 2: Agentic Workflow Updates | IN PROGRESS | — | — |
-| Task 3: Abstract Updates | Pending | — | — |
-| Task 4: Conclusion Updates | Pending | — | — |
+| Task 2: Agentic Workflow Updates | COMPLETE | 2026-02-28 | PR #6 merged |
+| Task 3: Abstract Updates | COMPLETE | 2026-02-28 | PR #7 open |
+| Task 4: Conclusion Updates | COMPLETE | 2026-02-28 | PR #7 open |
 
-**Progress:** 1 / 4 tasks complete (25%)
+**Progress:** 4 / 4 tasks complete (100%)
 
 ---
 

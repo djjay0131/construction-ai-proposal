@@ -4,7 +4,7 @@
 
 \section{Conclusion}
 
-This proposal presents Construction.AI, a system that addresses the construction industry's material takeoff bottleneck through four key contributions:
+This proposal presents Construction.AI, a system that addresses the construction industry's material takeoff bottleneck through five key contributions:
 
 \begin{enumerate}
   \item \textbf{KG-Centered Architecture}: The first system to use a construction-domain knowledge graph as the central backbone for material takeoff, enabling auditable, versionable decision-making with full provenance from plan facts to BOM line items.
@@ -14,11 +14,13 @@ This proposal presents Construction.AI, a system that addresses the construction
   \item \textbf{Integrated Cut Optimization}: Waste-minimizing cut-stock optimization integrated with provenance tracking, linking each cut piece back to assembly intent, plan facts, and applicable code rules.
 
   \item \textbf{Code-Aware Build Instructions}: Automated generation of step-by-step build instructions with jurisdiction-specific IRC/IBC citations, reducing code compliance errors and supporting continuous learning from field outcomes.
+
+  \item \textbf{Uncertainty-Aware Structural Evaluation}: Physics-based header sizing via Euler-Bernoulli beam theory with Monte Carlo uncertainty propagation, generating and ranking multiple structural hypotheses by cost, robustness, and design flexibility---bridging the gap between prescriptive span tables and full structural engineering.
 \end{enumerate}
 
 These contributions address the research questions posed in Section~2a:
 \textbf{RQ1} (KG effectiveness) is demonstrated through the entity/relationship model and provenance chain;
-\textbf{RQ2} (agent collaboration) through the five-agent workflow with shared KG memory;
+\textbf{RQ2} (agent collaboration) through the six-agent workflow with shared KG memory;
 \textbf{RQ3} (provenance trust) through full traceability from extraction to export;
 \textbf{RQ4} (optimization integration) through deterministic ILP solvers querying KG constraints.
 
