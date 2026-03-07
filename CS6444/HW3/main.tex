@@ -72,21 +72,22 @@
 \section{Introduction}
 % =============================================================================
 
-This homework performs \textbf{code verification} for the finite-difference (FD)
-Euler--Bernoulli beam solver developed for the Construction.AI semester project
-(see Homework~\#2 for the full discretization derivation).
-The solver---implemented in \texttt{beam\_solver.py}---solves the fourth-order BVP:
+In this homework we verify the finite-difference (FD) Euler--Bernoulli beam
+solver we developed for the Construction.AI semester project
+(see Homework~\#2 for the discretization derivation).
+The solver (\texttt{beam\_solver.py}) solves the fourth-order BVP:
 \begin{equation}
   EI\,\frac{d^4w}{dx^4} = q(x), \quad x \in (0,L)
 \end{equation}
 for the transverse deflection $w(x)$ of a simply-supported residential wood header
 under a uniform distributed load $q_0$.
 
-Code verification establishes that the numerical algorithm correctly solves the
-mathematical model by comparing numerical solutions to a known exact answer.
-We use \textbf{Option~2 (Exact Solution)}: the closed-form polynomial
-$\wex(x)$ that satisfies both the governing ODE and all four boundary conditions
-analytically.
+We chose \textbf{Option~2 (Exact Solution)} because the simply-supported
+Euler--Bernoulli BVP under uniform load admits a closed-form polynomial
+solution $\wex(x)$ that satisfies both the ODE and all four boundary conditions
+exactly~\cite{gere2018}.
+Since an exact benchmark is available directly, there is no need to manufacture
+a source term as in Option~1 (MMS).
 
 % =============================================================================
 \section{Verification Approach}
@@ -94,9 +95,9 @@ analytically.
 
 \subsection{Exact Solution}
 
-For a simply-supported beam under uniform load $q_0$ [lb/in], the exact solution
-obtained by integrating $EI\,w'''' = q_0$ four times with
-$w(0)=w''(0)=w(L)=w''(L)=0$ is:
+For a simply-supported beam under uniform load $q_0$ [lb/in], integrating
+$EI\,w'''' = q_0$ four times with $w(0)=w''(0)=w(L)=w''(L)=0$
+gives~\cite{gere2018}:
 \begin{equation}
   \wex(x) = \frac{q_0}{24\,\EI}\Bigl(x^4 - 2L\,x^3 + L^3\,x\Bigr)
   \label{eq:exact}
@@ -115,7 +116,7 @@ $N+1$ nodes:
 \[
   e_i = \wh(x_i) - \wex(x_i), \quad i=0,1,\ldots,N
 \]
-Two norms are evaluated:
+Two norms are evaluated~\cite{oberkampf2010}:
 \begin{align}
   \|e\|_2 &= \sqrt{h\sum_{i=0}^{N} e_i^2}
   \qquad\text{(rectangle-rule approximation to $\|\cdot\|_{L^2}$)} \\
@@ -125,7 +126,7 @@ Two norms are evaluated:
 
 \subsection{Observed Order of Accuracy}
 
-For each consecutive grid pair $(h,\,h/2)$:
+For each consecutive grid pair $(h,\,h/2)$~\cite{roache1998}:
 \begin{equation}
   \phat = \frac{\log\!\bigl(\|e\|^{(h)}/\|e\|^{(h/2)}\bigr)}{\log 2}
   \label{eq:phat}
@@ -241,20 +242,20 @@ $2.17\times10^{-6}$\,in at $x = L/2 = 48$\,in.}
 \label{fig:localerror}
 \end{figure}
 
-The local error field at $N=160$ (Figure~\ref{fig:localerror}) is smooth and
-symmetric about $x = L/2 = 48$\,in, peaking at $2.17\times10^{-6}$\,in.
-The symmetric arch shape confirms that error is driven equally by the ghost-point
-boundary conditions at both ends (rows $i=1$ and $i=N-1$), not by any
-asymmetry in the interior stencil or loading.
-The peak value agrees with $\|e\|_\infty = 2.167\times10^{-6}$\,in from
-Table~\ref{tab:convergence}.
+Figure~\ref{fig:localerror} shows the pointwise error at $N=160$.
+The error is smooth and symmetric about midspan, peaking at
+$2.17\times10^{-6}$\,in.
+This makes sense because the ghost-point BCs introduce the same
+$\mathcal{O}(h^2)$ error at both ends, and the interior stencil is exact for
+the degree-4 solution.
+The peak matches $\|e\|_\infty$ from Table~\ref{tab:convergence}.
 
 % =============================================================================
 \section{Code Coverage}
 % =============================================================================
 
 Table~\ref{tab:coverage} identifies which code components are exercised by this
-verification study and which are not.
+verification study and which are not~\cite{oberkampf2010}.
 
 \begin{table}[ht]
 \centering
@@ -319,13 +320,13 @@ $\varepsilon\,\kappa$ & Round-off floor [in] & Trunc.\ error [in] \\
 \end{tabular}
 \end{table}
 
-At $N=160$ the round-off floor ($1.7\times10^{-9}$\,in) is more than 1000
-times smaller than the truncation error ($2.2\times10^{-6}$\,in), so the solver
-is firmly in the \emph{truncation-error-dominated regime} across all grids tested.
-Round-off would become competitive with truncation error only at approximately
-$N \approx 10{,}000$---well beyond the range used for this application.
-Since the solver is non-iterative (direct dense LU via \texttt{np.linalg.solve}),
-there is no iteration convergence tolerance to set.
+At $N=160$ the round-off floor ($1.7\times10^{-9}$\,in) is about 1000$\times$
+smaller than the truncation error ($2.2\times10^{-6}$\,in), so truncation error
+dominates on all grids tested~\cite{roache1998}.
+Round-off would only matter around $N \approx 10{,}000$, which is far beyond
+what we need for this application.
+Since the solver uses a direct dense solve (\texttt{np.linalg.solve}), there is
+no iteration tolerance to worry about.
 
 % =============================================================================
 \section{Version Control}
@@ -360,11 +361,30 @@ support the SRQ convergence study in this homework:
      tau_max: float          # peak shear stress [psi]
 \end{lstlisting}
 
-Version control provides exact reproducibility: any prior commit can be checked
-out to regenerate the HW2 or HW3 numerical results.
-The GitHub Actions CI/CD pipeline automatically recompiles this document and
-deploys the PDF to GitHub Pages on every push to master, providing a permanent
-audit trail of all submitted versions.
+Any prior commit can be checked out to regenerate the HW2 or HW3 results
+exactly.
+The CI/CD pipeline recompiles this document and deploys the PDF to GitHub Pages
+on every push to master.
+
+% =============================================================================
+\begin{thebibliography}{9}
+
+\bibitem{gere2018}
+B.~J. Goodno and J.~M. Gere,
+\textit{Mechanics of Materials}, 9th ed.
+Cengage Learning, 2018.
+
+\bibitem{roache1998}
+P.~J. Roache,
+\textit{Verification and Validation in Computational Science and Engineering}.
+Hermosa Publishers, 1998.
+
+\bibitem{oberkampf2010}
+W.~L. Oberkampf and C.~J. Roy,
+\textit{Verification and Validation in Scientific Computing}.
+Cambridge University Press, 2010.
+
+\end{thebibliography}
 
 % =============================================================================
 \end{document}
