@@ -54,6 +54,20 @@ jobs:
           root_file: main.tex
           latexmk_use_xelatex: false
 
+      - name: Compile CS6444 HW4
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: CS6444/HW4
+          root_file: VVSC_Chuang_ChengShun_HW4.tex
+          latexmk_use_xelatex: false
+
+      - name: Compile CS6444 HW5
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: CS6444/HW5
+          root_file: main.tex
+          latexmk_use_xelatex: false
+
       - name: Rename and prepare PDFs
         run: |
           VERSION=${{ steps.version.outputs.version }}
@@ -68,6 +82,8 @@ jobs:
           cp proposal/presentation.pdf public/ConstructionAI-Presentation.pdf
           cp CS6444/HW2/main.pdf public/VVSC_Cusati_Chuang_HW2.pdf
           cp CS6444/HW3/main.pdf public/VVSC_Cusati_Chuang_HW3.pdf
+          cp CS6444/HW4/VVSC_Chuang_ChengShun_HW4.pdf public/VVSC_Cusati_Chuang_HW4.pdf
+          cp CS6444/HW5/main.pdf public/VVSC_Cusati_Chuang_HW5.pdf
 
           # Create index page
           cat > public/index.html << EOF
@@ -110,6 +126,14 @@ jobs:
             <div class="doc">
               <a href="VVSC_Cusati_Chuang_HW3.pdf">📝 Homework 3 — Code Verification</a>
               <p>Grid convergence, observed order of accuracy, and round-off analysis</p>
+            </div>
+            <div class="doc">
+              <a href="VVSC_Cusati_Chuang_HW4.pdf">📝 Homework 4 — Solution Verification</a>
+              <p>GCI analysis, observed order of accuracy, and U_NUM uncertainty bounds</p>
+            </div>
+            <div class="doc">
+              <a href="VVSC_Cusati_Chuang_HW5.pdf">📝 Homework 5 — Validation Metric</a>
+              <p>AVM/MAVM via Latin Hypercube Sampling on the LVL beam model</p>
             </div>
 
             <hr>
