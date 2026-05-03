@@ -22,3 +22,6 @@ build/
 # Editor backups
 *~
 *.swp
+
+# Local scratch notes (not tracked)
+notes/

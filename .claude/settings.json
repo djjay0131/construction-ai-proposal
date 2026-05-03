@@ -1,0 +1,19 @@
+{
+  "extraKnownMarketplaces": {
+    "marketplace": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/constellize/marketplace.git"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "constellize-planning@marketplace": true,
+    "constellize-architecture@marketplace": true,
+    "constellize-quality@marketplace": true,
+    "constellize-deployment@marketplace": true,
+    "constellize-ai-workflow@marketplace": true,
+    "constellize-organization@marketplace": true,
+    "constellize-adoption@marketplace": true
+  }
+}
