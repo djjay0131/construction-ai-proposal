@@ -68,6 +68,13 @@ jobs:
           root_file: main.tex
           latexmk_use_xelatex: false
 
+      - name: Compile CS6444 Final Project
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: CS6444/Project
+          root_file: VVSC_Cusati_Chuang_Project.tex
+          latexmk_use_xelatex: false
+
       - name: Rename and prepare PDFs
         run: |
           VERSION=${{ steps.version.outputs.version }}
@@ -84,6 +91,7 @@ jobs:
           cp CS6444/HW3/main.pdf public/VVSC_Cusati_Chuang_HW3.pdf
           cp CS6444/HW4/VVSC_Chuang_ChengShun_HW4.pdf public/VVSC_Cusati_Chuang_HW4.pdf
           cp CS6444/HW5/main.pdf public/VVSC_Cusati_Chuang_HW5.pdf
+          cp CS6444/Project/VVSC_Cusati_Chuang_Project.pdf public/VVSC_Cusati_Chuang_Project.pdf
 
           # Create index page
           cat > public/index.html << EOF
@@ -134,6 +142,10 @@ jobs:
             <div class="doc">
               <a href="VVSC_Cusati_Chuang_HW5.pdf">📝 Homework 5 — Validation Metric</a>
               <p>AVM/MAVM via Latin Hypercube Sampling on the LVL beam model</p>
+            </div>
+            <div class="doc">
+              <a href="VVSC_Cusati_Chuang_Project.pdf">📝 Final Project — Predictive UQ for LVL Header</a>
+              <p>Nested-sampling p-box, model-form extrapolation, total predictive uncertainty</p>
             </div>
 
             <hr>
