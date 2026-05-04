@@ -1,4 +1,5 @@
 %% ============================================================
+%%  Filename: VVSC_Cusati_Chuang_Project.tex
 %%  Final Semester Project — Conference Paper
 %%  Course : AOE/CS/ME 6444  Spring 2026  Dr. Chris Roy
 %%  Title  : Verification, Validation, and Predictive Uncertainty
@@ -257,6 +258,15 @@ $N$ & $h$ [in] & $w_{\rm max}$ [in] & $E_{L_\infty}$ [in]\\
 
 Code verification establishes that the discrete solver correctly
 implements the continuous EB equation.
+Two approaches are admissible (HW3): (i) the Method of Manufactured
+Solutions (MMS) and (ii) comparison against an exact closed-form
+solution.
+Because~\eqref{eq:exact} is the exact, smooth solution of the
+governing PDE for the simply-supported uniform-load case treated
+throughout this study, Option~(ii) is selected; MMS would be
+required if the application domain extended to non-uniform loads
+or non-trivial boundary conditions for which no closed-form solution
+exists.
 Error norms $E_{L_2}$ and $E_{L_\infty}$ are computed against the
 exact solution~\eqref{eq:exact} at five grid levels
 ($N=10,20,40,80,160$, $r=2$).
@@ -484,6 +494,18 @@ boundaries $\alpha=0.0632$~in ($E=\mu_E+\sigma_E$) and
 $\beta=0.0772$~in ($E=\mu_E-\sigma_E$) via
 $w_{\rm exp}=\alpha+\chi(\beta-\alpha)$, where $\chi$ encodes relative
 position within and beyond the $\pm1\sigma$ range.
+The $\chi$-vectors below are course-prescribed templates (HW5
+Option~\#2) chosen by the instructor to expose the validation metric
+to controlled distributional shapes; they are not derived from a
+physical experimental campaign.  This synthetic-data substitution is
+the intended path when laboratory access is unavailable
+(Roy~\cite{roy2011}, §4) and does not alter the AVM/MAVM machinery.
+The aleatory standard deviation $\sigma_E=160{,}000$~psi
+(CoV~=~10\%) is supported by ASTM~D5456 acceptance limits for
+structural composite lumber and the Grade-1 LVL CoV reported in
+the NDS Supplement~\cite{nds2018}, so the $\alpha,\beta$ boundaries
+correspond to physically realistic $\pm1\sigma$ excursions of the
+modulus.
 
 \textbf{Dataset~1} ($n_{\rm exp}=5$, $\chi_1=[0.55,0.95,1.0,1.1,1.5]$):
 All points at or above $\beta$; strongly biased toward high deflection
@@ -703,10 +725,18 @@ which uses a project-specific experimental CDF and differs from the
 standalone HW5 tabulation in Table~\ref{tab:avm_all}.
 $d^+$ is the area where $F_{\rm sim}>F_{\rm exp}$ (model under-predicts);
 $d^-$ is the area where $F_{\rm exp}>F_{\rm sim}$ (model over-predicts).
-Five hypothetical validation points
-at $q_0\in\{350,400,450,500,550\}$~lb/ft are assumed proportional to
-deflection magnitude (linear in $q_0$), and separate linear regressions
-are fitted (Figure~\ref{fig:mf_extrap}):
+
+To extrapolate from the validation point ($q_0=500$~lb/ft) to the prediction
+point ($q_0=600$~lb/ft), we exploit the q$_0$-linearity of the underlying
+physics. The closed-form EB deflection of \eqref{eq:exact} satisfies
+$w_{\rm max}\propto q_0$ for fixed $E$, and the FD solver inherits this
+property (verified to $p_{\rm obs}=2.000$ in Section~\ref{sec:hw3});
+consequently $d^+(q_0)$ and $d^-(q_0)$, which measure CDF-area differences
+in deflection space, scale linearly with $q_0$ as well.
+Five hypothetical validation points at $q_0\in\{350,400,450,500,550\}$~lb/ft
+are placed along the physically-required linear trend through
+$(500, d^{\pm}(500))$, and separate linear regressions are fitted
+(Figure~\ref{fig:mf_extrap}):
 \begin{align}
   d^+(q_0) &= -4.37\times10^{-5} + 3.32\times10^{-6}\,q_0, \nonumber\\
            &\quad R^2=0.998, \\
@@ -719,6 +749,18 @@ asymmetric model form interval:
   U_{\rm MF}^+ &= 2.003\times10^{-3}~\text{in}\quad\text{(upper/right shift)},\\
   U_{\rm MF}^- &= 0.642\times10^{-3}~\text{in}\quad\text{(lower/left shift)}.
 \end{align}
+\paragraph{Conservative-bound interpretation of the prediction interval.}
+Because the five fitted points are constructed to lie on a
+physically-required linear trend, the regression residuals reflect the
+choice of point spacing and not random measurement noise.
+Accordingly the 95\% prediction interval is interpreted as a
+\emph{conservative bound on the extrapolation procedure} rather than as a
+random-error uncertainty band.
+A strict point-estimate scaling under the EB linearity gives
+$U_{\rm MF}^+(600)=1.2\,d^+(500)=1.93\times10^{-3}$~in and
+$U_{\rm MF}^-(600)=1.2\,d^-(500)=0.636\times10^{-3}$~in, which differ from
+the PI values above by 4\% and 1\% respectively; the PI values are adopted
+in Table~\ref{tab:budget} as the conservative side of this small ambiguity.
 
 \begin{figure}[ht]
   \centering
@@ -741,6 +783,15 @@ assembled additively per uncertainty source and side:
     rightward by $U_{\rm MF}^+$; shift lower envelope leftward by $U_{\rm MF}^-$.
   \item \textit{Numerical}: symmetric further expansion by $U_{\rm NUM}^{\rm max}$.
 \end{itemize}
+Adopting the corner-maximum $U_{\rm NUM}^{\rm max}$ as a symmetric
+expansion across the full uncertainty space, rather than propagating
+$U_{\rm NUM}(q_0,E)$ point-wise through the nested loop, follows the
+Roy--Oberkampf~\cite{roy2011} guideline to use the worst-case bound
+when $U_{\rm NUM}\!\ll\!U_{\rm MF}$ (here a factor of $\approx\!8\times$);
+point-wise propagation is unwarranted for the small numerical
+contribution and would not change Table~\ref{tab:budget} at the
+reported precision.
+
 Table~\ref{tab:budget} lists all components; Figure~\ref{fig:total}
 shows the resulting layered CDF bands (matching the course reference figure).
 Note that $U_{\rm NUM}^{\rm max}=2.60\times10^{-4}$~in ($0.31\%$ of $w_{\rm nom}$)
@@ -814,6 +865,68 @@ The budget in Table~\ref{tab:budget} reveals a clear hierarchy:
     more than sufficient; further refinement is unnecessary.
 \end{enumerate}
 
+\subsection{Sensitivity Analysis}
+\label{sec:sensitivity}
+
+The dominance ranking in Section~\ref{sec:dom} is based on additive
+percentages of the uncertainty budget; a complementary, variance-based
+ranking is obtained from a global Sobol sensitivity analysis using the
+Saltelli sample design~\cite{saltelli2010,iooss2015}.
+For the variance decomposition both inputs must be assigned a probability
+measure: $E\sim\mathcal{N}(\mu_E,\sigma_E)$ and---reversibly for this
+analysis only---$q_0\sim U(400,600)$~lb/ft.
+This intentionally departs from the p-box framing of
+Sections~\ref{sec:nested}--\ref{sec:total}, where $q_0$ is held epistemic
+to bound the predictive CDF.
+The two analyses answer different questions and are mutually consistent:
+the p-box bounds the predictive distribution; Sobol ranks input
+contributions to total output variance under a probabilistic re-cast
+(Roy \& Oberkampf~\cite{roy2011}, §2--3).
+The Saltelli design uses $n_{\rm base}=1024$ joint Sobol samples in
+$\mathbb{R}^{2d}$ ($d=2$), yielding $n_{\rm calls}=4096$ FD solves at the
+parametric grid $N=20$.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/fig5_sobol.png}
+  \caption{Sobol first-order ($S_1$) and total-effect ($S_T$) indices
+    for $w_{\rm max}$ at $n_{\rm calls}=4096$ Saltelli samples.
+    Annotation reports $\sum S_1$, $\sum S_T$, and the residual
+    interaction $\sum S_T-\sum S_1$.}
+  \label{fig:sobol}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\caption{Sobol indices for $w_{\rm max}$ (Saltelli, $n_{\rm calls}=4096$).}
+\label{tab:sobol}
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Input & $S_1$ & $S_T$\\
+\midrule
+$E$   & 0.449 & 0.449\\
+$q_0$ & 0.551 & 0.560\\
+\midrule
+$\sum$  & 0.999 & 1.009\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two inputs make comparable variance contributions: $q_0$ is the
+slightly larger driver ($S_T=0.560$) on account of its $\pm20\%$
+uniform range producing a wider input CoV ($\approx11.5\%$) than the
+modulus ($\sigma_E/\mu_E=10\%$), while $E$ contributes $S_T=0.449$.
+The interaction term $\sum S_T-\sum S_1=0.009$ is small, confirming
+that the multiplicative dependence $w_{\rm max}\propto q_0/E$ behaves
+as nearly additive over the sampled ranges.
+This variance-based ranking corroborates the additive-budget dominance
+analysis: epistemic load and aleatory modulus together account for the
+overwhelming majority ($\approx99\%$) of $w_{\rm max}$ variance, and
+either input is a worthwhile target for uncertainty reduction (load
+specification surveys for $q_0$; certified LVL grading for $E$).
+
 \subsection{Conservatism Assessment}
 \label{sec:cons}
 
@@ -830,6 +943,27 @@ floor members is $L/360 = 0.267$~in for live loads, well above the
 predicted upper bound.
 This suggests the 8-ft LVL header is adequate with significant reserve
 capacity even under the most adverse scenario explored here.
+
+\paragraph{Reconciliation with HW2 V\&V plan.}
+The HW2 application proposal committed to a prescriptive comparison
+against IRC~R602.7 header span tables and a serviceability check at the
+$L/240$ limit.  The IRC R602.7 prescriptive comparison was deferred when
+HW5 prescribed Option~\#2 synthetic experimental data
+(Section~\ref{sec:data}); the resulting validation chain measures
+deflection error directly rather than tabulated span adequacy, but the
+predicted upper-95 deflection is checked against both serviceability
+limits below.
+At the predicted-load corner $q_0=600$~lb/ft, the bending moment
+$M_{\max}=q_0L^2/8=57{,}600$~lb$\cdot$in produces a maximum bending
+stress $\sigma_{\max}=M_{\max}/S=780$~psi using $S=bd^2/6=73.83$~in$^3$
+for the $3.5\!\times\!11.25$~in cross-section.  This is well under the
+NDS-2018~\cite{nds2018} Grade-1 LVL allowable bending stress
+$F_b\!\approx\!2{,}400$~psi (a stress-ratio of $0.32$).
+The upper-95 deflection $w_{\rm max}^{\rm hi,95}=0.099$~in satisfies both
+the IBC live-load limit $L/360=0.267$~in and the more stringent HW2-cited
+$L/240=0.400$~in.  Strength and serviceability margins are therefore both
+generous, consistent with the reserve capacity expected of an LVL header
+specified per the NDS Grade-1 envelope.
 
 \subsection{Limitations and Future Work}
 \label{sec:future}
@@ -1225,6 +1359,20 @@ F.~Leichsenring, C.~Jenkel, W.~Graf, and M.~Kaliske,
   in material properties,''
 \textit{International Journal of Reliability and Safety},
 Vol.~12, 2018, pp.~1--23.
+
+\bibitem{saltelli2010}
+A.~Saltelli, P.~Annoni, I.~Azzini, F.~Campolongo, M.~Ratto, and
+S.~Tarantola,
+``Variance based sensitivity analysis of model output: design and
+  estimator for the total sensitivity index,''
+\textit{Computer Physics Communications}, Vol.~181, No.~2, 2010,
+pp.~259--270.
+
+\bibitem{iooss2015}
+B.~Iooss and P.~Lema\^{\i}tre,
+``A review on global sensitivity analysis methods,''
+in \textit{Uncertainty Management in Simulation-Optimization of
+  Complex Systems}, Springer, 2015, pp.~101--122.
 
 \end{thebibliography}
 
