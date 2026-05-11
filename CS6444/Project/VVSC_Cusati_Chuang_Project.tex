@@ -377,11 +377,31 @@ T2: (40,\,20,\,10)  & 2.000 & 0.069420 & $4.33\times10^{-5}$ & 0.0625\%\\
 \end{tabular}
 \end{table}
 
-For $M_{\rm max}$ and $\sigma_{\rm max}$ the FD second-derivative formula
-$M_i=-EI(w_{i-1}-2w_i+w_{i+1})/h^2$ amplifies float rounding by a factor
-$EI/h^2\approx2.9\times10^7$, causing catastrophic cancellation.
-The resulting $\hat{p}<0$ and asymptotic ratios $\ll1$ trigger $F_s=3.00$;
-GCI estimates for those SRQs are unreliable.
+For $M_{\rm max}$ and $\sigma_{\rm max}$, the negative $\hat{p}$ arises
+from two combined effects, \emph{not} from the linear-solve round-off error
+($U_{\rm RO}$).
+
+First, the 5-point FD stencil for $EI\,w^{(4)}=q_0$ is exact when applied
+to the degree-4 polynomial exact solution (all derivatives of order $\ge5$
+vanish), so $w_{\rm FD}\approx w_{\rm exact}$ to near-floating-point
+precision.  The systematic discretization error in $M_{\rm max}$ is
+therefore negligible---all five grids yield $M_{\rm max}$ within
+$10^{-6}$\,lb$\cdot$in of the closed-form value of $48\,000$\,lb$\cdot$in.
+
+Second, computing
+$M_i=-EI(w_{i-1}-2w_i+w_{i+1})/h^2$ in post-processing
+causes catastrophic cancellation: the stencil numerator subtracts
+nearly-equal values, and multiplying by $EI/h^2\propto N^2$ amplifies the
+residual floating-point noise as
+$\delta M_{\rm stencil}\sim (EI/h^2)\,\varepsilon_{\rm f64}\,|w|\propto N^2$
+(\emph{growing} with refinement: $\approx4\times10^{-10}$\,lb$\cdot$in at
+$N=10$, rising to $\approx10^{-6}$\,lb$\cdot$in at $N=160$).
+This stencil noise is independent of, and much larger than, the linear-solve
+$U_{\rm RO}$ measured by the float32/float64 comparison.
+
+Because the systematic DE for $M$ is effectively zero while the stencil
+noise grows as $N^2$, the GCI premise of structured convergence is violated;
+$\hat{p}<0$ and asymptotic ratios $\ll1$ trigger $F_s=3.00$.
 In practice, $M_{\rm max}=q_0L^2/8$ and $\sigma_{\rm max}=M_{\rm max}/S$
 are evaluated from the closed-form expressions and carry zero numerical error.
 
@@ -401,7 +421,10 @@ deflection-limited design.
   \centering
   \includegraphics[width=\linewidth]{figures/fig2_pobs_triplets.png}
   \caption{Observed convergence order $p_{\rm obs}$ for each
-    grid triplet and SRQ. All values $=2.00$ confirm asymptotic convergence.}
+    grid triplet and SRQ. $w_{\rm max}$ achieves $p_{\rm obs}\approx2.00$
+    (asymptotic, $F_s=1.25$); $M_{\rm max}$ and $\sigma_{\rm max}$ show
+    $p_{\rm obs}<0$ due to growing stencil noise in post-processing
+    (not solve round-off), triggering $F_s=3.00$.}
   \label{fig:hw4_gci}
 \end{figure}
 
