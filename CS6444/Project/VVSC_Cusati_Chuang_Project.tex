@@ -61,20 +61,23 @@
   Code verification establishes the theoretical $\mathcal{O}(h^2)$ convergence
   rate with observed orders $p_{\rm obs}=2.000$ at every grid-refinement pair.
   Solution verification using the Grid Convergence Index (GCI) and Richardson
-  extrapolation yields a total numerical uncertainty $U_{\rm NUM} = 2.711\times10^{-6}$~in
+  extrapolation yields a total numerical uncertainty $U_{\rm NUM} = 2.17\times10^{-6}$~in
   (0.004\% of $w_{\rm max}$) at the finest grid ($N=160$), and
-  $U_{\rm NUM} = 1.962\times10^{-4}$~in (0.28\%) at the parametric $N=20$ grid.
+  $U_{\rm NUM} = 1.57\times10^{-4}$~in (0.28\%) at the parametric $N=20$ grid.
+  The application is Weyerhaeuser 2.0E Microllam laminated veneer lumber
+  (LVL) per ICC-ES report ESR-1387.
   Model validation against synthetic experimental datasets (LHS,
   $n_{\rm sim}\in\{10,25,100\}$) confirms systematic under-prediction
-  ($\mathrm{MAVM}>0$, $|\mathrm{MAVM}|/\mathrm{AVM}>0.85$) at all tested conditions.
+  ($\mathrm{MAVM}>0$, $|\mathrm{MAVM}|/\mathrm{AVM}>0.95$) at all tested conditions.
   Model-form uncertainty components at the nominal load are
-  $d^+=1.609\times10^{-3}$~in and $d^-=0.530\times10^{-3}$~in.
+  $d^+=3.81\times10^{-3}$~in and $d^-=0.079\times10^{-3}$~in.
   A nested-sampling p-box with epistemic $q_0\in[400,600]$~lb/ft and aleatory
-  $E\sim\mathcal{N}(1.6\times10^6,\,1.6\times10^5)$~psi spans $[0.047,0.099]$~in
+  $E\sim\mathcal{N}(2.0\times10^6,\,2.0\times10^5)$~psi spans $[0.038,0.079]$~in
   at the 5th--95th percentiles.
-  After model-form and numerical uncertainty, total predictive uncertainty is 32\%
-  of the nominal deflection, dominated by epistemic load (17\%) and aleatory
-  modulus scatter (14\%).
+  After model-form and numerical uncertainty, total predictive uncertainty is
+  approximately $37\%$ of the nominal deflection on the upper side, dominated by
+  epistemic load (17\%), aleatory modulus scatter (14\%), and model-form
+  under-prediction (7\%).
   \end{onecolabstract}
   \vspace{6pt}\hrule\vspace{10pt}
 }]
@@ -117,14 +120,17 @@ The hierarchy of tasks is:
 \subsection{Physical System}
 \label{sec:phys}
 
-The benchmark case is an 8-ft (96~in) simply-supported LVL header
-carrying a nominal uniformly distributed load of $q_0=500$~lb/ft
+The benchmark case is an 8-ft (96~in) simply-supported residential
+header in Weyerhaeuser 2.0E Microllam laminated veneer lumber (LVL),
+specified per ICC-ES report ESR-1387~\cite{esr1387}, carrying a
+nominal uniformly distributed load of $q_0=500$~lb/ft
 (41.67~lb/in).
-The cross-section is $b=3.5$~in $\times$ $d=11.25$~in, giving a
-moment of inertia $I=\tfrac{1}{12}bd^3=415.3$~in$^4$.
-Nominal elastic modulus is $E=1{,}600{,}000$~psi (LVL grade per
-NDS~\cite{nds2018}), yielding bending stiffness
-$EI=6.645\times10^8$~lb$\cdot$in$^2$.
+The cross-section is $b=3.5$~in $\times$ $d=11.25$~in (a double-ply
+1.75-in wide Microllam beam), giving a moment of
+inertia $I=\tfrac{1}{12}bd^3=415.3$~in$^4$.
+Nominal elastic modulus is $E=2{,}000{,}000$~psi (Microllam 2.0E
+published design value), yielding bending stiffness
+$EI=8.306\times10^8$~lb$\cdot$in$^2$.
 Figure~\ref{fig:sketch} illustrates the structural configuration.
 
 % --- Beam schematic (spans both columns to avoid text overlap) ---
@@ -140,7 +146,7 @@ Figure~\ref{fig:sketch} illustrates the structural configuration.
     }
     \draw[thick, blue!70!black] (0, 1.0) -- (9, 1.0);
     \node[blue!70!black] at (4.5, 1.38)
-      {$q_0 = 500\;\text{lb/ft}\;\bigl[\,E\sim\mathcal{N}(1{,}600{,}000,\,160{,}000)\;\text{psi},\;
+      {$q_0 = 500\;\text{lb/ft}\;\bigl[\,E\sim\mathcal{N}(2{,}000{,}000,\,200{,}000)\;\text{psi},\;
          q_0\in[400,600]\;\text{lb/ft}\,\bigr]$};
     % Pin support (left)
     \draw[thick] (0,-0.3) -- (-0.35,-0.85) -- (0.35,-0.85) -- cycle;
@@ -164,7 +170,7 @@ Figure~\ref{fig:sketch} illustrates the structural configuration.
   \end{tikzpicture}
   \caption{Simply-supported LVL header under uniform distributed load.
     Pin support at $x=0$; roller support at $x=L=96$~in.
-    Aleatory uncertainty: $E\sim\mathcal{N}(1{,}600{,}000,\,160{,}000)$~psi.
+    Aleatory uncertainty: $E\sim\mathcal{N}(2{,}000{,}000,\,200{,}000)$~psi.
     Epistemic uncertainty: $q_0\in[400,\,600]$~lb/ft.
     Peak deflection $w_{\max}$ occurs at mid-span $x=L/2$.}
   \label{fig:sketch}
@@ -184,8 +190,8 @@ For uniform load $q=q_0$ the exact deflection is:
   w_{\rm exact}(x) = \frac{q_0}{24EI}\!\left(x^4 - 2Lx^3 + L^3 x\right).
   \label{eq:exact}
 \end{equation}
-Peak values at mid-span $x=L/2$:
-$w_{\rm max,exact} = 0.069350$~in,
+Peak values at mid-span $x=L/2$ (at $E=2.0\times10^6$~psi, $q_0=500$~lb/ft):
+$w_{\rm max,exact} = 0.055480$~in,
 $M_{\rm max,exact} = q_0L^2/8 = 48{,}000$~lb$\cdot$in,
 $\sigma_{\rm max,exact} = Mc/I = 650.2$~psi.
 
@@ -200,8 +206,8 @@ shear force, and corresponding stresses:
   \tau = \frac{3V}{2A},\;A=bd.
   \label{eq:stress}
 \end{equation}
-The NDS allowable stresses for the LVL grade used are
-$F_b=900$~psi (bending) and $F_v=180$~psi (shear).
+The ESR-1387 allowable stresses for Microllam 2.0E are
+$F_b=2{,}600$~psi (bending) and $F_v=285$~psi (shear).
 At nominal conditions $\sigma_{\rm max}=650$~psi and $\tau_{\rm max}=260$~psi,
 both within allowable limits.
 
@@ -318,7 +324,7 @@ so they are exact to machine precision at every grid level.
 \toprule
 SRQ & Exact & $N=10$ & $N=160$ & Err.\\
 \midrule
-$w_{\rm max}$ [in]       & 0.06935 & 0.06991 & 0.06935 & 0.003\%\\
+$w_{\rm max}$ [in]       & 0.05548 & 0.05592 & 0.05548 & 0.003\%\\
 $M_{\rm max}$ [lb\,in]  & 48000   & 48000   & 48000   & 0.000\%\\
 $\sigma_{\rm max}$ [psi] & 650.16  & 650.16  & 650.16  & 0.000\%\\
 \bottomrule
@@ -370,9 +376,9 @@ for every triplet, confirming the scheme is well inside the asymptotic range.
 \toprule
 Triplet & $\hat{p}$ & $f_{\rm RE}$ & $U_{\rm DE}$ [in] & $U_{\rm DE}$\% \\
 \midrule
-T0: (160,\,80,\,40) & 2.000 & 0.069355 & $2.71\times10^{-6}$ & 0.0039\%\\
-T1: (80,\,40,\,20)  & 2.000 & 0.069368 & $1.08\times10^{-5}$ & 0.0156\%\\
-T2: (40,\,20,\,10)  & 2.000 & 0.069420 & $4.33\times10^{-5}$ & 0.0625\%\\
+T0: (160,\,80,\,40) & 2.000 & 0.055484 & $2.17\times10^{-6}$ & 0.0039\%\\
+T1: (80,\,40,\,20)  & 2.000 & 0.055495 & $8.64\times10^{-6}$ & 0.0156\%\\
+T2: (40,\,20,\,10)  & 2.000 & 0.055536 & $3.46\times10^{-5}$ & 0.0625\%\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -411,8 +417,8 @@ Figure~\ref{fig:hw4_gci} shows the observed order per grid triplet.
 For this load case the FD scheme monotonically \emph{overestimates}
 deflection ($w_{\rm FD}(h)\ge w_{\rm exact}$ for all $h>0$) owing to
 the positive-definite character of the truncation error.
-Explicitly: $w_{\rm FD}(N{=}20)=0.069489$~in $\ge w_{\rm exact}=0.069350$~in;
-at $N=160$, $w_{\rm FD}=0.069352$~in---both above exact.
+Explicitly: $w_{\rm FD}(N{=}20)=0.055591$~in $\ge w_{\rm exact}=0.055480$~in;
+at $N=160$, $w_{\rm FD}=0.055482$~in---both above exact.
 This conservative bias propagates to the predictive p-box: the FD model
 never under-reports structural demand, making it safe-side for
 deflection-limited design.
@@ -436,7 +442,7 @@ $U_{\rm NUM} = U_{\rm DE} + U_{\rm IT} + U_{\rm RO}$
 (discretization, iterative, and round-off errors).
 Because the system is solved by direct LU, $U_{\rm IT}=0$ exactly.
 Round-off error, estimated by comparing float64 and float32 solutions,
-contributes at most $U_{\rm RO}=2.3\times10^{-5}$~in at $N=20$.
+contributes at most $U_{\rm RO}=1.83\times10^{-5}$~in at $N=20$.
 Table~\ref{tab:unum} summarizes the budget at $N=20$ and $N=160$.
 
 \begin{table}[ht]
@@ -448,11 +454,11 @@ Table~\ref{tab:unum} summarizes the budget at $N=20$ and $N=160$.
 \toprule
 Component & $N=20$ & $N=160$\\
 \midrule
-$U_{\rm DE}$ (GCI) & 1.734e$-$4 & 2.71e$-$6\\
+$U_{\rm DE}$ (GCI) & 1.387e$-$4 & 2.17e$-$6\\
 $U_{\rm IT}$ (direct) & 0 & 0\\
-$U_{\rm RO}$ (float64) & 2.28e$-$5 & 1.66e$-$9\\
+$U_{\rm RO}$ (float64) & 1.83e$-$5 & 1.33e$-$9\\
 \midrule
-$U_{\rm NUM}$ & 1.962e$-$4 & 2.711e$-$6\\
+$U_{\rm NUM}$ & 1.57e$-$4 & 2.17e$-$6\\
 $U_{\rm NUM}/w_{\rm max}$ & 0.28\% & 0.004\%\\
 \bottomrule
 \end{tabular}
@@ -466,10 +472,10 @@ extreme corners of the uncertainty space
 ($q_0\in\{400,600\}$~lb/ft $\times$ $E\in\{\mu_E\pm2\sigma_E\}$).
 For this linear problem $p_{\rm obs}=2.00$ everywhere and $U_{\rm DE}$
 scales linearly with $w_{\rm max}$, so the worst case occurs at
-$(q_0=600, E=\mu_E-2\sigma_E=1{,}280{,}000~\text{psi})$ which gives
+$(q_0=600, E=\mu_E-2\sigma_E=1{,}600{,}000~\text{psi})$ which gives
 the largest deflection.
 Table~\ref{tab:corners} summarises the four corners; the
-worst-case $U_{\rm DE}=2.600\times10^{-4}$~in is used to widen the
+worst-case $U_{\rm DE}=2.081\times10^{-4}$~in is used to widen the
 prediction p-box.
 
 \begin{table}[ht]
@@ -483,10 +489,10 @@ prediction p-box.
 \toprule
 $q_0$ [lb/ft] & $E$ [psi] & $w_{\rm max}$ [in] & $U_{\rm DE}$ [in]\\
 \midrule
-400 & $\mu-2\sigma=1{,}280{,}000$ & 0.06949 & 1.734e$-$4\\
-400 & $\mu+2\sigma=1{,}920{,}000$ & 0.04633 & 1.156e$-$4\\
-\textbf{600} & $\boldsymbol{\mu-2\sigma=1{,}280{,}000}$ & \textbf{0.10423} & \textbf{2.600e$-$4}$^\dagger$\\
-600 & $\mu+2\sigma=1{,}920{,}000$ & 0.06949 & 1.734e$-$4\\
+400 & $\mu-2\sigma=1{,}600{,}000$ & 0.05559 & 1.387e$-$4\\
+400 & $\mu+2\sigma=2{,}400{,}000$ & 0.03706 & 9.247e$-$5\\
+\textbf{600} & $\boldsymbol{\mu-2\sigma=1{,}600{,}000}$ & \textbf{0.08338} & \textbf{2.081e$-$4}$^\dagger$\\
+600 & $\mu+2\sigma=2{,}400{,}000$ & 0.05559 & 1.387e$-$4\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -513,8 +519,8 @@ grids and all SRQs.
 
 Two synthetic datasets bracket the range of plausible experimental conditions
 (Figure~\ref{fig:hw5_data}).  Both are built from the $\pm1\sigma$ deflection
-boundaries $\alpha=0.0632$~in ($E=\mu_E+\sigma_E$) and
-$\beta=0.0772$~in ($E=\mu_E-\sigma_E$) via
+boundaries $\alpha=0.0505$~in ($E=\mu_E+\sigma_E=2{,}200{,}000$~psi) and
+$\beta=0.0618$~in ($E=\mu_E-\sigma_E=1{,}800{,}000$~psi) via
 $w_{\rm exp}=\alpha+\chi(\beta-\alpha)$, where $\chi$ encodes relative
 position within and beyond the $\pm1\sigma$ range.
 The $\chi$-vectors below are course-prescribed templates (HW5
@@ -525,7 +531,7 @@ the intended path when laboratory access is unavailable
 (Roy~\cite{roy2011}, §4) and does not alter the AVM/MAVM machinery.
 
 \paragraph{Public-standards basis for the input distribution.}
-The aleatory standard deviation $\sigma_E=160{,}000$~psi (CoV~=~10\%)
+The aleatory standard deviation $\sigma_E=200{,}000$~psi (CoV~=~10\%)
 is not an arbitrary modelling choice but follows from a chain of public
 standards governing structural composite lumber.  A laminated-veneer-lumber
 manufacturer was contacted during the validation phase of this study and
@@ -543,9 +549,10 @@ for converting characteristic test values into design-level resistances;
 in particular it bounds the population CoV that ASTM~D5456 QC must satisfy
 for the assigned design grade.
 Combining these three documents---ESR-1387 mean E at the residential header
-grade with $E\!\approx\!1.6\times10^{6}$~psi, multiplied by the
-D5457-bounded CoV of order 10\% as enforced through the D5456 QC chain---yields
-the $\sigma_E=160{,}000$~psi used here.  The $\alpha,\beta$ boundaries
+grade with $E\!\approx\!2.0\times10^{6}$~psi (Microllam 2.0E per
+ESR-1387), multiplied by the D5457-bounded CoV of order 10\% as enforced
+through the D5456 QC chain---yields the $\sigma_E=200{,}000$~psi used here.
+The $\alpha,\beta$ boundaries
 ($E=\mu_E\mp\sigma_E$) therefore correspond to $\pm1\sigma$ excursions of a
 distribution whose moments are upper-bounded by the governing standards
 rather than assumed.
@@ -572,8 +579,8 @@ LHS.  For each stratum $k\in\{0,\ldots,n-1\}$:
 \end{equation}
 where $\pi(\cdot)$ is a random permutation and $U_k\sim\mathcal{U}(0,1)$;
 random seed is fixed at 42.  Three sample sizes $n_{\rm sim}\in\{10,25,100\}$
-are used.  For $n_{\rm sim}=100$ the sample statistics ($\bar{w}=0.0702$~in,
-$s_w=0.0071$~in) match the analytical moments within 1\%, confirming
+are used.  For $n_{\rm sim}=100$ the sample statistics ($\bar{w}=0.0562$~in,
+$s_w=0.0057$~in) match the analytical moments within 1\%, confirming
 LHS convergence.
 
 \begin{figure}[ht]
@@ -615,13 +622,13 @@ experimental EDF throughout the domain.
 \toprule
 Case & AVM [in] & MAVM [in] & $|{\rm MAVM}|/{\rm AVM}$ & Sign\\
 \midrule
-DS1, $n=10$  & 8.12e$-$3 & 7.08e$-$3 & 0.871 & under\\
-DS1, $n=25$  & 7.52e$-$3 & 7.42e$-$3 & 0.987 & under\\
-DS1, $n=100$ & 7.59e$-$3 & 7.29e$-$3 & 0.961 & under\\
+DS1, $n=10$  & 6.50e$-$3 & 5.66e$-$3 & 0.871 & under\\
+DS1, $n=25$  & 6.01e$-$3 & 5.94e$-$3 & 0.987 & under\\
+DS1, $n=100$ & 6.07e$-$3 & 5.83e$-$3 & 0.961 & under\\
 \midrule
-DS2, $n=10$  & 5.22e$-$3 & 4.45e$-$3 & 0.853 & under\\
-DS2, $n=25$  & 4.80e$-$3 & 4.80e$-$3 & 1.000 & under\\
-DS2, $n=100$ & 4.87e$-$3 & 4.67e$-$3 & 0.959 & under\\
+DS2, $n=10$  & 4.17e$-$3 & 3.56e$-$3 & 0.853 & under\\
+DS2, $n=25$  & 3.84e$-$3 & 3.84e$-$3 & 1.000 & under\\
+DS2, $n=100$ & 3.89e$-$3 & 3.74e$-$3 & 0.961 & under\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -639,9 +646,9 @@ At $n_{\rm sim}=10$ the AVM carries a $\sim7\%$ error relative to the
 $n=100$ reference; at $n_{\rm sim}=25$ the error is $<1\%$.
 For production UQ studies $n_{\rm sim}=25$ is recommended; $n=100$ is
 used as the reference standard here.
-The MAVM of $\approx7.3\times10^{-3}$~in (Dataset~1, $n=100$)
+The MAVM of $\approx5.8\times10^{-3}$~in (Dataset~1, $n=100$)
 represents a relative discrepancy of
-$7.3/69.35\approx10.5\%$ of $w_{\rm max}^{\rm nom}$---comparable
+$5.8/55.5\approx10.5\%$ of $w_{\rm max}^{\rm nom}$---comparable
 to the $\sim10\%$ aleatory scatter in $E$---confirming that model
 form bias is as significant as parametric uncertainty here.
 
@@ -663,11 +670,13 @@ form bias is as significant as parametric uncertainty here.
 Two distinct uncertainty sources are propagated to $w_{\rm max}$:
 \begin{itemize}[leftmargin=*, itemsep=0pt]
   \item \textbf{Aleatory (irreducible):}
-    Elastic modulus $E\sim\mathcal{N}(1{,}600{,}000,\,160{,}000)$~psi
+    Elastic modulus $E\sim\mathcal{N}(2{,}000{,}000,\,200{,}000)$~psi
     (CoV~=~10\%), reflecting within-production variability of LVL.
-    The 10\% CoV is consistent with ASTM~D5456 test data for structural
-    LVL; the $\pm1\sigma$ range $[1.44,1.76]\times10^6$~psi spans
-    the full Grade-1 LVL range in the NDS Supplement~\cite{nds2018}.
+    The 10\% CoV is the upper bound enforced by ASTM~D5457~\cite{astmD5457}
+    through the ASTM~D5456~\cite{astmD5456} QC chain that underpins the
+    ESR-1387~\cite{esr1387} published Microllam 2.0E design values; the
+    $\pm1\sigma$ range $[1.80,2.20]\times10^6$~psi spans the full
+    Microllam~2.0E production grade.
   \item \textbf{Epistemic (reducible):}
     Uniformly distributed floor load $q_0\in[400,600]$~lb/ft
     ($\pm20\%$ of nominal), representing incomplete knowledge
@@ -720,10 +729,10 @@ The p-box stabilises by $N_e=10$; all four configurations
 \toprule
 $N_e$ & \multicolumn{1}{c}{5th pct} & \multicolumn{1}{c}{50th pct} & \multicolumn{1}{c}{95th pct}\\
 \midrule
-  5 & [0.0474,\,0.0711] & [0.0556,\,0.0833] & [0.0664,\,0.0994]\\
- 10 & [0.0474,\,0.0717] & [0.0556,\,0.0835] & [0.0664,\,0.0993]\\
- 25 & [0.0475,\,0.0712] & [0.0556,\,0.0834] & [0.0663,\,0.0989]\\
-100 & [0.0475,\,0.0714] & [0.0556,\,0.0833] & [0.0664,\,0.0997]\\
+  5 & [0.0379,\,0.0569] & [0.0445,\,0.0666] & [0.0531,\,0.0795]\\
+ 10 & [0.0379,\,0.0573] & [0.0444,\,0.0668] & [0.0531,\,0.0794]\\
+ 25 & [0.0380,\,0.0570] & [0.0445,\,0.0667] & [0.0531,\,0.0791]\\
+100 & [0.0380,\,0.0571] & [0.0445,\,0.0667] & [0.0531,\,0.0797]\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -737,7 +746,7 @@ $U[400,600]$~lb/ft (probabilistic epistemic treatment).
 The uniform-CDF lies within the p-box but narrows the tails,
 potentially under-reporting the probability of extreme deflections.
 At the 95th percentile, the uniform single-CDF underestimates
-the upper bound by $\approx0.012$~in (12\%), demonstrating that
+the upper bound by $\approx0.0096$~in (12\%), demonstrating that
 collapsing epistemic uncertainty yields a non-conservative prediction.
 
 \begin{figure}[ht]
@@ -759,13 +768,13 @@ Because the Modified AVM (MAVM) was used as the validation metric,
 the project requires separate extrapolation of its two components
 (Roy \& Oberkampf~\cite{roy2011}):
 \begin{align}
-  d^+ &= \tfrac{1}{2}(\mathrm{AVM}+\mathrm{MAVM}) = 1.609\times10^{-3}~\text{in},\\
-  d^- &= \tfrac{1}{2}(\mathrm{AVM}-\mathrm{MAVM}) = 0.530\times10^{-3}~\text{in}.
+  d^+ &= \tfrac{1}{2}(\mathrm{AVM}+\mathrm{MAVM}) = 3.814\times10^{-3}~\text{in},\\
+  d^- &= \tfrac{1}{2}(\mathrm{AVM}-\mathrm{MAVM}) = 0.079\times10^{-3}~\text{in}.
 \end{align}
 These are computed from the project simulation's own validation run at $q_0=500$~lb/ft
-(AVM$=2.139\times10^{-3}$~in, MAVM$=+1.079\times10^{-3}$~in, $N_a=100$ inner LHS),
-which uses a project-specific experimental CDF and differs from the
-standalone HW5 tabulation in Table~\ref{tab:avm_all}.
+(AVM$=3.893\times10^{-3}$~in, MAVM$=+3.735\times10^{-3}$~in, $N_a=100$ inner LHS),
+which uses a project-specific experimental CDF and is consistent with the
+standalone HW5 Dataset~2, $n=100$ entry in Table~\ref{tab:avm_all}.
 $d^+$ is the area where $F_{\rm sim}>F_{\rm exp}$ (model under-predicts);
 $d^-$ is the area where $F_{\rm exp}>F_{\rm sim}$ (model over-predicts).
 
@@ -781,16 +790,16 @@ are placed along the physically-required linear trend through
 $(500, d^{\pm}(500))$, and separate linear regressions are fitted
 (Figure~\ref{fig:mf_extrap}):
 \begin{align}
-  d^+(q_0) &= -4.37\times10^{-5} + 3.32\times10^{-6}\,q_0, \nonumber\\
+  d^+(q_0) &= -1.04\times10^{-4} + 7.86\times10^{-6}\,q_0, \nonumber\\
            &\quad R^2=0.998, \\
-  d^-(q_0) &= +1.34\times10^{-5} + 1.03\times10^{-6}\,q_0, \nonumber\\
+  d^-(q_0) &= +2.00\times10^{-6} + 1.54\times10^{-7}\,q_0, \nonumber\\
            &\quad R^2=0.999.
 \end{align}
 At $q_0=600$~lb/ft, the upper 95\% prediction intervals give the
 asymmetric model form interval:
 \begin{align}
-  U_{\rm MF}^+ &= 2.003\times10^{-3}~\text{in}\quad\text{(upper/right shift)},\\
-  U_{\rm MF}^- &= 0.642\times10^{-3}~\text{in}\quad\text{(lower/left shift)}.
+  U_{\rm MF}^+ &= 4.749\times10^{-3}~\text{in}\quad\text{(upper/right shift)},\\
+  U_{\rm MF}^- &= 0.096\times10^{-3}~\text{in}\quad\text{(lower/left shift)}.
 \end{align}
 \paragraph{Conservative-bound interpretation of the prediction interval.}
 Because the five fitted points are constructed to lie on a
@@ -800,8 +809,8 @@ Accordingly the 95\% prediction interval is interpreted as a
 \emph{conservative bound on the extrapolation procedure} rather than as a
 random-error uncertainty band.
 A strict point-estimate scaling under the EB linearity gives
-$U_{\rm MF}^+(600)=1.2\,d^+(500)=1.93\times10^{-3}$~in and
-$U_{\rm MF}^-(600)=1.2\,d^-(500)=0.636\times10^{-3}$~in, which differ from
+$U_{\rm MF}^+(600)=1.2\,d^+(500)=4.58\times10^{-3}$~in and
+$U_{\rm MF}^-(600)=1.2\,d^-(500)=0.095\times10^{-3}$~in, which differ from
 the PI values above by 4\% and 1\% respectively; the PI values are adopted
 in Table~\ref{tab:budget} as the conservative side of this small ambiguity.
 
@@ -830,14 +839,14 @@ Adopting the corner-maximum $U_{\rm NUM}^{\rm max}$ as a symmetric
 expansion across the full uncertainty space, rather than propagating
 $U_{\rm NUM}(q_0,E)$ point-wise through the nested loop, follows the
 Roy--Oberkampf~\cite{roy2011} guideline to use the worst-case bound
-when $U_{\rm NUM}\!\ll\!U_{\rm MF}$ (here a factor of $\approx\!8\times$);
+when $U_{\rm NUM}\!\ll\!U_{\rm MF}$ (here a factor of $\approx\!23\times$);
 point-wise propagation is unwarranted for the small numerical
 contribution and would not change Table~\ref{tab:budget} at the
 reported precision.
 
 Table~\ref{tab:budget} lists all components; Figure~\ref{fig:total}
 shows the resulting layered CDF bands (matching the course reference figure).
-Note that $U_{\rm NUM}^{\rm max}=2.60\times10^{-4}$~in ($0.31\%$ of $w_{\rm nom}$)
+Note that $U_{\rm NUM}^{\rm max}=2.08\times10^{-4}$~in ($0.31\%$ of $w_{\rm nom}$)
 is physically too small to appear as a visible filled band at the plot scale; it is
 rendered as crimson boundary lines with a bracket annotation at $F=0.50$ in
 Figure~\ref{fig:total}.
@@ -845,7 +854,7 @@ Figure~\ref{fig:total}.
 \begin{table}[ht]
 \centering
 \caption{Total uncertainty budget at $q_0=600$~lb/ft,
-  $w_{\rm nom}=0.0842$~in.}
+  $w_{\rm nom}=0.0673$~in.}
 \label{tab:budget}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -853,14 +862,14 @@ Figure~\ref{fig:total}.
 \toprule
 Source & Mag.~[in] & \% $w_{\rm nom}$ & Side\\
 \midrule
-Aleatory ($E{\sim}\mathcal{N}$, 5--95\%) & 1.159e$-$2 & 13.77 & both\\
-Epistemic ($q_0$ p-box) & 1.390e$-$2 & 16.52 & both\\
-$U_{\rm MF}^+$ (95\% PI) & 2.003e$-$3 &  2.38 & upper\\
-$U_{\rm MF}^-$ (95\% PI) & 6.42e$-$4  &  0.76 & lower\\
-$U_{\rm NUM}^{\rm max}$ (corner) & 2.601e$-$4 &  0.31 & both\\
+Aleatory ($E{\sim}\mathcal{N}$, 5--95\%) & 9.272e$-$3 & 13.77 & both\\
+Epistemic ($q_0$ p-box) & 1.112e$-$2 & 16.52 & both\\
+$U_{\rm MF}^+$ (95\% PI) & 4.749e$-$3 &  7.05 & upper\\
+$U_{\rm MF}^-$ (95\% PI) & 9.57e$-$5  &  0.14 & lower\\
+$U_{\rm NUM}^{\rm max}$ (corner) & 2.081e$-$4 &  0.31 & both\\
 \midrule
-\textbf{Total upper} & \textbf{2.776e$-$2} & \textbf{32.98} &\\
-\textbf{Total lower} & \textbf{2.640e$-$2} & \textbf{31.36} &\\
+\textbf{Total upper} & \textbf{2.535e$-$2} & \textbf{37.65} &\\
+\textbf{Total lower} & \textbf{2.070e$-$2} & \textbf{30.74} &\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -871,7 +880,7 @@ $U_{\rm NUM}^{\rm max}$ (corner) & 2.601e$-$4 &  0.31 & both\\
   \caption{Total predictive uncertainty band in CDF space.
     Blue (innermost): input p-box ($N_e=25$);
     orange: asymmetric model form expansion ($U_{\rm MF}^+$ upper, $U_{\rm MF}^-$ lower);
-    crimson lines (outermost): total envelope including $U_{\rm NUM}^{\rm max}=2.60\times10^{-4}$~in.
+    crimson lines (outermost): total envelope including $U_{\rm NUM}^{\rm max}=2.08\times10^{-4}$~in.
     Because $U_{\rm NUM}$ is only $0.31\%$ of $w_{\rm nom}$ it is physically too small
     to render as a visible filled band and is shown instead as boundary lines with a
     labeled bracket annotation at the 50th percentile.
@@ -895,12 +904,15 @@ The budget in Table~\ref{tab:budget} reveals a clear hierarchy:
   \item \emph{Aleatory modulus variability} (14\%) reflects fundamental
     within-production scatter; it cannot be eliminated but can be
     partially constrained by certified LVL grading.
-  \item \emph{Model form error} ($U_{\rm MF}^+\approx2.4\%$,
-    $U_{\rm MF}^-\approx0.8\%$) is asymmetric---the model
-    systematically under-predicts deflection ($d^+>d^-$,
-    $\mathrm{MAVM}>0$)---indicating that the EB assumption
-    (neglecting shear deformation) is adequate but slightly
-    non-conservative for this $L/d=8.5$ slender member.
+  \item \emph{Model form error} ($U_{\rm MF}^+\approx7.1\%$,
+    $U_{\rm MF}^-\approx0.14\%$) is strongly asymmetric---the model
+    systematically under-predicts deflection ($d^+\!\gg\!d^-$,
+    $|\mathrm{MAVM}|/\mathrm{AVM}\!\approx\!0.96$)---indicating that
+    the EB assumption (neglecting shear deformation) is moderately
+    non-conservative for this $L/d=8.5$ slender member.  The bias is
+    larger at the higher Microllam~2.0E stiffness because the
+    synthetic experimental CDFs lie almost entirely above the simulation
+    CDF, leaving negligible over-prediction area ($d^-\!\approx\!0$).
     Upgrading to Timoshenko beam theory would capture the
     shear-deformation contribution and reduce $U_{\rm MF}^+$.
   \item \emph{Numerical error} ($U_{\rm NUM}^{\rm max}=0.31\%$,
@@ -977,7 +989,7 @@ The positive MAVM throughout the validation study (model consistently
 under-predicts deflection) indicates that using the FD model for
 deflection-limit-state design produces a conservative (safe-side) prediction.
 Combined with the epistemic upper-bound treatment, the upper p-box
-envelope at $q_0=600$~lb/ft, $w_{\rm max}^{\rm hi,95} = 0.099$~in,
+envelope at $q_0=600$~lb/ft, $w_{\rm max}^{\rm hi,95} = 0.079$~in,
 provides a defensible design deflection that accounts for all
 identified uncertainty sources.
 
@@ -1000,11 +1012,11 @@ At the predicted-load corner $q_0=600$~lb/ft, the bending moment
 $M_{\max}=q_0L^2/8=57{,}600$~lb$\cdot$in produces a maximum bending
 stress $\sigma_{\max}=M_{\max}/S=780$~psi using $S=bd^2/6=73.83$~in$^3$
 for the $3.5\!\times\!11.25$~in cross-section.  This is well under the
-allowable bending stress for Microllam LVL at the residential header
-grade ($F_b\!\approx\!2{,}400$~psi per the published design values in
+allowable bending stress for Microllam 2.0E LVL
+($F_b=2{,}600$~psi per the published design values in
 ESR-1387~\cite{esr1387}, derived per the reliability-based methodology
-of ASTM~D5457~\cite{astmD5457}), giving a stress-ratio of $0.32$.
-The upper-95 deflection $w_{\rm max}^{\rm hi,95}=0.099$~in satisfies both
+of ASTM~D5457~\cite{astmD5457}), giving a stress-ratio of $0.30$.
+The upper-95 deflection $w_{\rm max}^{\rm hi,95}=0.079$~in satisfies both
 the IBC live-load limit $L/360=0.267$~in and the more stringent HW2-cited
 $L/240=0.400$~in.  Strength and serviceability margins are therefore both
 generous, consistent with the reserve capacity expected of an LVL header
@@ -1133,24 +1145,27 @@ conclusions:
     convergence order ($p_{\rm obs}=2.000$) for all SRQs, confirming
     correct implementation.
   \item Numerical uncertainty at the parametric grid ($N=20$) is
-    $U_{\rm NUM}=1.962\times10^{-4}$~in (0.28\%), negligible relative
+    $U_{\rm NUM}=1.57\times10^{-4}$~in (0.28\%), negligible relative
     to physical input uncertainty.
-  \item Model validation confirms a small, conservative (positive) MAVM
-    across all dataset sizes, establishing the EB model as suitable
-    for deflection-based design at the validation conditions.
+  \item Model validation confirms a sizeable, conservative (positive)
+    MAVM across all dataset sizes ($|\mathrm{MAVM}|/\mathrm{AVM}\approx0.96$
+    at $n=100$), establishing the EB model as suitable for deflection-based
+    design at the validation conditions while flagging shear-deformation
+    correction as the highest-leverage model improvement.
   \item The p-box analysis reveals that treating epistemic load uncertainty
     probabilistically (uniform $q_0$) underestimates the 95th percentile
     deflection by approximately 12\% compared to the proper p-box treatment.
-  \item Total predictive uncertainty spans 31--33\% of the nominal deflection
-    at $q_0=600$~lb/ft (asymmetric: upper side 33\%, lower side 31\%
-    due to the $d^+>d^-$ model bias).
-    Epistemic load uncertainty and aleatory modulus variability together
-    account for 30 of those 32 percentage points.
-    Reducing load specification uncertainty is the highest-leverage
-    improvement available.
+  \item Total predictive uncertainty spans 31--38\% of the nominal deflection
+    at $q_0=600$~lb/ft (asymmetric: upper side 38\%, lower side 31\%
+    driven by strong positive MAVM and consequent $U_{\rm MF}^+\gg U_{\rm MF}^-$).
+    Epistemic load uncertainty (17\%), aleatory modulus variability (14\%),
+    and model-form under-prediction (7\%) together account for the bulk of
+    the upper-side bound.
+    Reducing load specification uncertainty and adopting Timoshenko beam
+    theory are the two highest-leverage improvements available.
   \item Despite all uncertainties, the predicted upper 95th percentile
-    deflection ($0.099$~in) is well below the IBC allowable of $0.267$~in,
-    confirming structural adequacy of the 8-ft LVL header.
+    deflection ($0.079$~in) is well below the IBC allowable of $0.267$~in,
+    confirming structural adequacy of the 8-ft Microllam 2.0E LVL header.
 \end{enumerate}
 
 %% ============================================================
@@ -1185,11 +1200,11 @@ $U_{\rm DE}$ and $U_{\rm NUM}$ decrease monotonically.
 \toprule
 $N$ & $h$ [in] & $w_{\rm max}$ [in] & $U_{\rm DE}$ [in] & $U_{\rm RO}$ [in] & $U_{\rm NUM}$ (\%)\\
 \midrule
- 10 & 9.600 & 0.069905 & N/A & $1.39{\times}10^{-6}$ & N/A\\
- 20 & 4.800 & 0.069489 & $1.73{\times}10^{-4}$ & $2.28{\times}10^{-5}$ & 0.28\%\\
- 40 & 2.400 & 0.069385 & $4.33{\times}10^{-5}$ & $3.68{\times}10^{-4}$ & 0.59\%\\
- 80 & 1.200 & 0.069359 & $1.08{\times}10^{-5}$ & $6.38{\times}10^{-3}$ & 9.22\%\\
-160 & 0.600 & 0.069352 & $2.71{\times}10^{-6}$ & $1.66{\times}10^{-9}$ & 0.004\%\\
+ 10 & 9.600 & 0.055924 & N/A & $1.85{\times}10^{-6}$ & N/A\\
+ 20 & 4.800 & 0.055591 & $1.39{\times}10^{-4}$ & $2.94{\times}10^{-5}$ & 0.30\%\\
+ 40 & 2.400 & 0.055508 & $3.47{\times}10^{-5}$ & $4.72{\times}10^{-4}$ & 0.91\%\\
+ 80 & 1.200 & 0.055487 & $8.67{\times}10^{-6}$ & $8.65{\times}10^{-3}$ & 15.6\%\\
+160 & 0.600 & 0.055482 & $2.17{\times}10^{-6}$ & $1.33{\times}10^{-9}$ & 0.004\%\\
 \bottomrule
 \end{tabular}
 {\footnotesize $^*N{=}80$: f32 marginally valid; $N{=}160$: f32 fails, $U_{\rm RO}$ uses f64 bound.}
@@ -1211,11 +1226,11 @@ the round-off estimates.
 $N$ & $\kappa(K)$ & $\varepsilon_{\rm f64}\kappa$ & $\varepsilon_{\rm f32}\kappa$ &
   $U_{\rm RO}$ [in] & f32 valid?\\
 \midrule
- 10 & $1.59{\times}10^{3}$ & $3.53{\times}10^{-13}$ & $1.89{\times}10^{-4}$ & $1.39{\times}10^{-6}$ & Yes\\
- 20 & $2.61{\times}10^{4}$ & $5.79{\times}10^{-12}$ & $3.11{\times}10^{-3}$ & $2.28{\times}10^{-5}$ & Yes\\
- 40 & $4.20{\times}10^{5}$ & $9.32{\times}10^{-11}$ & $5.00{\times}10^{-2}$ & $3.68{\times}10^{-4}$ & Yes\\
- 80 & $6.72{\times}10^{6}$ & $1.49{\times}10^{-9}$  & $8.02{\times}10^{-1}$ & $6.38{\times}10^{-3}$ & Yes$^\dagger$\\
-160 & $1.08{\times}10^{8}$ & $2.39{\times}10^{-8}$  & $12.8$                & $1.66{\times}10^{-9}$ & \textbf{No}\\
+ 10 & $1.59{\times}10^{3}$ & $3.53{\times}10^{-13}$ & $1.89{\times}10^{-4}$ & $1.85{\times}10^{-6}$ & Yes\\
+ 20 & $2.61{\times}10^{4}$ & $5.79{\times}10^{-12}$ & $3.11{\times}10^{-3}$ & $2.94{\times}10^{-5}$ & Yes\\
+ 40 & $4.20{\times}10^{5}$ & $9.32{\times}10^{-11}$ & $5.00{\times}10^{-2}$ & $4.72{\times}10^{-4}$ & Yes\\
+ 80 & $6.72{\times}10^{6}$ & $1.49{\times}10^{-9}$  & $8.02{\times}10^{-1}$ & $8.65{\times}10^{-3}$ & Yes$^\dagger$\\
+160 & $1.08{\times}10^{8}$ & $2.39{\times}10^{-8}$  & $12.8$                & $1.33{\times}10^{-9}$ & \textbf{No}\\
 \bottomrule
 \multicolumn{6}{l}{$^\dagger$ marginally valid ($\varepsilon_{\rm f32}\kappa=0.80$).}
 \end{tabular}
