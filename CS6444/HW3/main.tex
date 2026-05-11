@@ -142,7 +142,7 @@ Three scalar SRQs are tracked across grid levels, with exact values:
 \toprule
 \textbf{SRQ} & \textbf{Formula} & \textbf{Exact value} & \textbf{Units}\\
 \midrule
-$w_{\max}$ & $\displaystyle\frac{5\,q_0 L^4}{384\,\EI}$ & 0.06935026 & in \\[6pt]
+$w_{\max}$ & $\displaystyle\frac{5\,q_0 L^4}{384\,\EI}$ & 0.05548021 & in \\[6pt]
 $M_{\max}$ & $\displaystyle\frac{q_0 L^2}{8}$ & 48\,000.00 & lb\,in \\[6pt]
 $\sigma_{\max}$ & $M_{\max}/S$ & 650.1587 & psi \\
 \bottomrule
@@ -150,9 +150,10 @@ $\sigma_{\max}$ & $M_{\max}/S$ & 650.1587 & psi \\
 \end{center}
 
 \noindent
-Test case: $L=96$\,in, $b=3.5$\,in, $d=11.25$\,in (nominal 4$\times$12 LVL),
-$E=1{,}600{,}000$\,psi, $q_0=500$\,lb/ft\,$=41.67$\,lb/in.
-Derived: $I=415.28$\,in$^4$, $S=73.83$\,in$^3$, $EI=6.645\times10^8$\,lb\,in$^2$.
+Test case: $L=96$\,in, $b=3.5$\,in, $d=11.25$\,in (double-ply 1.75-in wide LVL),
+$E=2{,}000{,}000$\,psi (Weyerhaeuser 2.0E Microllam, ESR-1387),
+$q_0=500$\,lb/ft\,$=41.67$\,lb/in.
+Derived: $I=415.28$\,in$^4$, $S=73.83$\,in$^3$, $EI=8.306\times10^8$\,lb\,in$^2$.
 
 % =============================================================================
 \section{Grid Convergence Results}
@@ -171,11 +172,11 @@ mesh halving ($N = 10,20,40,80,160$ intervals):
 \toprule
 $N$ & $h$ [in] & $\|e\|_2$ [in] & $\|e\|_\infty$ [in] & $\phat_{L_2}$ & $\phat_{L_\infty}$ \\
 \midrule
- 10 & 9.6000 & $3.970\times10^{-3}$ & $5.548\times10^{-4}$ & --- & --- \\
- 20 & 4.8000 & $9.925\times10^{-4}$ & $1.387\times10^{-4}$ & 2.000 & 2.000 \\
- 40 & 2.4000 & $2.481\times10^{-4}$ & $3.468\times10^{-5}$ & 2.000 & 2.000 \\
- 80 & 1.2000 & $6.203\times10^{-5}$ & $8.669\times10^{-6}$ & 2.000 & 2.000 \\
-160 & 0.6000 & $1.551\times10^{-5}$ & $2.167\times10^{-6}$ & 2.000 & 2.000 \\
+ 10 & 9.6000 & $3.176\times10^{-3}$ & $4.438\times10^{-4}$ & --- & --- \\
+ 20 & 4.8000 & $7.940\times10^{-4}$ & $1.110\times10^{-4}$ & 2.000 & 2.000 \\
+ 40 & 2.4000 & $1.985\times10^{-4}$ & $2.774\times10^{-5}$ & 2.000 & 2.000 \\
+ 80 & 1.2000 & $4.962\times10^{-5}$ & $6.935\times10^{-6}$ & 2.000 & 2.000 \\
+160 & 0.6000 & $1.241\times10^{-5}$ & $1.734\times10^{-6}$ & 2.000 & 2.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -205,7 +206,7 @@ refinement pairs ($\phat = 2.000$).}
 \toprule
 \textbf{SRQ} & \textbf{Exact} & \textbf{$N=10$} & \textbf{$N=160$} & \textbf{Rel.\ error @ $N=160$} \\
 \midrule
-$w_{\max}$ [in]      & 0.069350 & 0.069905 & 0.069350 & 0.0031\% \\
+$w_{\max}$ [in]      & 0.055480 & 0.055924 & 0.055482 & 0.0031\% \\
 $M_{\max}$ [lb\,in]  & 48\,000.0  & 48\,000.0  & 48\,000.0  & $<10^{-8}$\% \\
 $\sigma_{\max}$ [psi]& 650.159    & 650.159    & 650.159    & $<10^{-8}$\% \\
 \bottomrule

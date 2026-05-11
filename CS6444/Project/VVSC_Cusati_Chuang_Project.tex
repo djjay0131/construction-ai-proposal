@@ -244,13 +244,13 @@ are summarized in Table~\ref{tab:grids}.
 \toprule
 $N$ & $h$ [in] & $w_{\rm max}$ [in] & $E_{L_\infty}$ [in]\\
 \midrule
- 10 & 9.600 & 0.069905 & 5.548e$-$4\\
- 20 & 4.800 & 0.069489 & 1.387e$-$4\\
- 40 & 2.400 & 0.069385 & 3.468e$-$5\\
- 80 & 1.200 & 0.069359 & 8.669e$-$6\\
-160 & 0.600 & 0.069352 & 2.167e$-$6\\
+ 10 & 9.600 & 0.055924 & 4.438e$-$4\\
+ 20 & 4.800 & 0.055591 & 1.110e$-$4\\
+ 40 & 2.400 & 0.055508 & 2.774e$-$5\\
+ 80 & 1.200 & 0.055487 & 6.935e$-$6\\
+160 & 0.600 & 0.055482 & 1.734e$-$6\\
 \midrule
-\multicolumn{2}{@{}l}{Exact} & 0.069350 & ---\\
+\multicolumn{2}{@{}l}{Exact} & 0.055480 & ---\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1280,12 +1280,12 @@ even at $n_{\rm sim}=10$.
 
 Table~\ref{tab:conv_full} reproduces the complete HW3 convergence results
 for both $L_2$ and $L_\infty$ error norms, including observed order
-per refinement pair (exact solution: $w_{\rm max}=0.069350$~in).
+per refinement pair (exact solution: $w_{\rm max}=0.055480$~in).
 
 \begin{table}[h!]
 \centering
 \caption{Grid convergence in deflection error norms.
-  $r=2$; exact $w_{{\rm max}}=0.0693503$~in.}
+  $r=2$; exact $w_{{\rm max}}=0.0554802$~in.}
 \label{tab:conv_full}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -1293,11 +1293,11 @@ per refinement pair (exact solution: $w_{\rm max}=0.069350$~in).
 \toprule
 $N$ & $h$ [in] & $e_{L_2}$ [in] & $p_{{\rm obs},L_2}$ & $e_{L_\infty}$ [in] & $p_{{\rm obs},L_\infty}$\\
 \midrule
- 10 & 9.600 & $3.970{\times}10^{-3}$ & ---   & $5.548{\times}10^{-4}$ & ---  \\
- 20 & 4.800 & $9.925{\times}10^{-4}$ & 2.000 & $1.387{\times}10^{-4}$ & 2.000\\
- 40 & 2.400 & $2.481{\times}10^{-4}$ & 2.000 & $3.468{\times}10^{-5}$ & 2.000\\
- 80 & 1.200 & $6.203{\times}10^{-5}$ & 2.000 & $8.669{\times}10^{-6}$ & 2.000\\
-160 & 0.600 & $1.551{\times}10^{-5}$ & 2.000 & $2.167{\times}10^{-6}$ & 2.000\\
+ 10 & 9.600 & $3.176{\times}10^{-3}$ & ---   & $4.438{\times}10^{-4}$ & ---  \\
+ 20 & 4.800 & $7.940{\times}10^{-4}$ & 2.000 & $1.110{\times}10^{-4}$ & 2.000\\
+ 40 & 2.400 & $1.985{\times}10^{-4}$ & 2.000 & $2.774{\times}10^{-5}$ & 2.000\\
+ 80 & 1.200 & $4.962{\times}10^{-5}$ & 2.000 & $6.935{\times}10^{-6}$ & 2.000\\
+160 & 0.600 & $1.241{\times}10^{-5}$ & 2.000 & $1.734{\times}10^{-6}$ & 2.000\\
 \bottomrule
 \end{tabular}
 \end{table}
