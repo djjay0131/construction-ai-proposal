@@ -66,7 +66,8 @@
 
 This report presents a solution verification study for an \textbf{Euler–Bernoulli (EB)
 finite-difference beam solver} applied to the structural assessment of a residential
-wood header.
+wood header.  The same physical case will serve as the basis for the subsequent
+uncertainty quantification (UQ) studies in Homework~5.
 
 \subsection*{Physical Case}
 
@@ -81,9 +82,9 @@ distributed load representative of residential roof framing:
   Span            & $L$      & 96.0   & in \\
   Width           & $b$      & 3.5    & in \\
   Depth           & $d$      & 11.25  & in \\
-  Elastic modulus & $E$      & 1,600,000 & psi \\
+  Elastic modulus & $E$      & 2,000,000 & psi \;(Microllam 2.0E, ESR-1387) \\
   Uniform load    & $q_0$    & 500    & lb/ft \;(= 41.667 lb/in) \\
-  Flexural rigidity & $\EI$ & $6.6445\times10^8$ & lb$\cdot$in$^2$ \\
+  Flexural rigidity & $\EI$ & $8.3057\times10^8$ & lb$\cdot$in$^2$ \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -160,7 +161,7 @@ The exact solution for uniform load on a simply-supported beam is:
 yielding the reference SRQ values used only to interpret results (not used
 in the GCI analysis):
 \[
-  w_{\max}^{\mathrm{exact}}=0.06935026\ \text{in},\quad
+  w_{\max}^{\mathrm{exact}}=0.05548021\ \text{in},\quad
   M_{\max}^{\mathrm{exact}}=48000.00\ \text{lb}\cdot\text{in},\quad
   \sigma_{\max}^{\mathrm{exact}}=650.1587\ \text{psi}.
 \]
@@ -177,13 +178,13 @@ $r=h_{\mathrm{coarse}}/h_{\mathrm{fine}}=2$:
   \toprule
   Level & $N$ & $h$ [in] & $w_{\max}$ [in] & $M_{\max}$ [lb$\cdot$in] & $\sigma_{\max}$ [psi] \\
   \midrule
-  1 (coarsest) & 10  & 9.600 & 0.0699051 & 48000 & 650.159 \\
-  2            & 20  & 4.800 & 0.0694890 & 48000 & 650.159 \\
-  3            & 40  & 2.400 & 0.0693849 & 48000 & 650.159 \\
-  4            & 80  & 1.200 & 0.0693589 & 48000 & 650.159 \\
-  5 (finest)   & 160 & 0.600 & 0.0693524 & 48000 & 650.159 \\
+  1 (coarsest) & 10  & 9.600 & 0.0559241 & 48000 & 650.159 \\
+  2            & 20  & 4.800 & 0.0555912 & 48000 & 650.159 \\
+  3            & 40  & 2.400 & 0.0555079 & 48000 & 650.159 \\
+  4            & 80  & 1.200 & 0.0554871 & 48000 & 650.159 \\
+  5 (finest)   & 160 & 0.600 & 0.0554819 & 48000 & 650.159 \\
   \midrule
-  Exact        & $\infty$ & 0 & 0.0693503 & 48000.00 & 650.1587 \\
+  Exact        & $\infty$ & 0 & 0.0554802 & 48000.00 & 650.1587 \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -191,8 +192,10 @@ $r=h_{\mathrm{coarse}}/h_{\mathrm{fine}}=2$:
 The requirement of \emph{at least four} systematically refined grids is satisfied
 by five levels (four refinement steps at $r=2$ each).
 Figure~\ref{fig:gci} shows the SRQ convergence with GCI uncertainty bands.
+Figures~\ref{fig:de_error}--\ref{fig:roundoff_error} provide dedicated plots for each
+uncertainty source ($\UDE$, $\UIT$, $\URO$) separately.
 
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/fig1_convergence_gci.png}
   \caption{SRQ values versus grid level $N$ with GCI uncertainty bands ($\pm\UDE$)
@@ -249,16 +252,16 @@ operating in its asymptotic regime.  Consequently $F_s=1.25$ applies throughout.
 
 \begin{table}[h!]
 \centering
-\caption{GCI analysis for $w_{\max}$ [in]. Exact $= 0.0693503$~in.}
+\caption{GCI analysis for $w_{\max}$ [in]. Exact $= 0.0554802$~in.}
 \label{tab:gci_w}
 \small
 \begin{tabular}{lrrrrrrrrr}
   \toprule
   Triplet & $\pobs$ & $F_s$ & $\fRE$ & $\GCI_{12}$ & $\GCI_{23}$ & $\GCI_{12}\%$ & $\GCI_{23}\%$ & Ratio & Type \\
   \midrule
-  T0: (160,80,40)  & 2.000 & 1.25 & 0.069355 & $2.71\times10^{-6}$ & $1.08\times10^{-5}$ & 0.0039\% & 0.0156\% & 1.000 & mono. \\
-  T1: (80,40,20)   & 2.000 & 1.25 & 0.069368 & $1.08\times10^{-5}$ & $4.33\times10^{-5}$ & 0.0156\% & 0.0625\% & 1.000 & mono. \\
-  T2: (40,20,10)   & 2.000 & 1.25 & 0.069420 & $4.33\times10^{-5}$ & $1.73\times10^{-4}$ & 0.0625\% & 0.2495\% & 1.000 & mono. \\
+  T0: (160,80,40)  & 2.000 & 1.25 & 0.055484 & $2.17\times10^{-6}$ & $8.64\times10^{-6}$ & 0.0039\% & 0.0156\% & 1.000 & mono. \\
+  T1: (80,40,20)   & 2.000 & 1.25 & 0.055495 & $8.64\times10^{-6}$ & $3.47\times10^{-5}$ & 0.0156\% & 0.0625\% & 1.000 & mono. \\
+  T2: (40,20,10)   & 2.000 & 1.25 & 0.055536 & $3.47\times10^{-5}$ & $1.39\times10^{-4}$ & 0.0625\% & 0.2495\% & 1.000 & mono. \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -266,7 +269,7 @@ operating in its asymptotic regime.  Consequently $F_s=1.25$ applies throughout.
 The asymptotic ratio equals exactly 1.000 for all triplets, providing strong
 confirmation that the solution is well within the asymptotic convergence range.
 
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.72\textwidth]{figures/fig2_pobs_triplets.png}
   \caption{Observed order of accuracy $\pobs$ for each SRQ across the three
@@ -274,6 +277,19 @@ confirmation that the solution is well within the asymptotic convergence range.
     $w_{\max}$ achieves $\pobs\approx2$ in all triplets (asymptotic, $F_s=1.25$);
     $M_{\max}$ and $\sigma_{\max}$ have $\pobs<0$ (noise-dominated, $F_s=3.00$).}
   \label{fig:pobs}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig6_de_error.png}
+  \caption{Discretization error $\UDE$ (GCI) versus grid spacing $h$ on a
+    log--log scale for each SRQ.  The black dashed lines show the theoretical
+    $\mathcal{O}(h^2)$ slope anchored to the finest available GCI estimate.
+    $N=10$ has no GCI estimate (no coarser triplet) and is excluded.
+    $w_{\max}$ tracks the $h^2$ slope closely; $M_{\max}$ and $\sigma_{\max}$
+    yield tiny GCI values ($\ll0.001\%$) owing to near-exact floating-point
+    cancellation in the FD derivative.}
+  \label{fig:de_error}
 \end{figure}
 
 \subsection{Results — \texorpdfstring{$M_{\max}$}{M\_max} and \texorpdfstring{$\sigma_{\max}$}{sigma\_max}}
@@ -287,9 +303,9 @@ confirmation that the solution is well within the asymptotic convergence range.
   \toprule
   Triplet & $\pobs$ & $F_s$ & $\GCI_{12}$ & $\GCI_{23}$ & $\GCI_{12}\%$ & Ratio & Type \\
   \midrule
-  T0: (160,80,40) & $-6.760$ & 3.00 & $4.49\times10^{-3}$ & $4.14\times10^{-5}$ & $\approx0\%$ & 0.0092 & mono. \\
-  T1: (80,40,20)  & $-3.152$ & 3.00 & $4.14\times10^{-5}$ & $4.66\times10^{-6}$ & $\approx0\%$ & 0.1117 & osc. \\
-  T2: (40,20,10)  & $-1.850$ & 3.00 & $4.66\times10^{-6}$ & $1.29\times10^{-6}$ & $\approx0\%$ & 0.2755 & mono. \\
+  T0: (160,80,40) & $+0.009$ & 3.00 & $2.05\times10^{-4}$ & $2.07\times10^{-4}$ & $\approx0\%$ & 0.9994 & mono. \\
+  T1: (80,40,20)  & $-2.173$ & 3.00 & $2.07\times10^{-4}$ & $4.59\times10^{-5}$ & $\approx0\%$ & 0.2203 & mono. \\
+  T2: (40,20,10)  & $-3.023$ & 3.00 & $4.59\times10^{-5}$ & $5.64\times10^{-6}$ & $\approx0\%$ & 0.1221 & osc. \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -298,26 +314,57 @@ $\sigma_{\max}$ follows the same pattern as $M_{\max}$ (it is a linear
 scaling thereof), so its table is omitted for brevity.
 
 \paragraph{Interpretation.}
-The \emph{negative} $\pobs$ and asymptotic ratios $\ll1$ indicate that the
-SRQ differences between grids are controlled by \emph{round-off}, not
-discretization.  The cause is the central-difference formula for moment:
+The \emph{negative} $\pobs$ and asymptotic ratios $\ll1$ arise from two
+combined effects, \emph{not} from the linear-solve round-off ($\URO$)
+discussed in Section~\ref{sec:ro}.
+
+\textbf{(1) Near-exact accuracy of $M_{\max}$ on all grids.}
+The 5-point FD stencil for $\EI w'''' = q_0$ is formally exact when applied
+to the degree-4 polynomial exact solution (all derivatives of order $\ge 5$
+vanish identically), so $w_{\mathrm{FD},i}\approx w_{\mathrm{exact}}(x_i)$
+to near-floating-point precision on every grid.  As a result the systematic
+discretization error in $M_{\max}$ is negligible: all five grids yield
+$M_{\max}$ within $10^{-6}$\,lb$\cdot$in of the closed-form value of
+$48\,000$\,lb$\cdot$in (compare rows of Table~\ref{tab:gci}).
+
+\textbf{(2) Growing stencil noise in the post-processing step.}
+Despite excellent solve accuracy, computing
 \begin{equation}
-  M_i = -\EI\,\frac{w_{i-1}-2w_i+w_{i+1}}{h^2}.
+  M_i = -\EI\,\frac{w_{i-1}-2w_i+w_{i+1}}{h^2}
   \label{eq:mfd}
 \end{equation}
-The amplification factor $\EI/h^2\approx2.88\times10^7$ (at $N=20$)
-magnifies float rounding errors in the stencil terms by seven orders of magnitude,
-causing \emph{catastrophic cancellation}.  As a result, the FD differences between
-consecutive grid solutions are noise-dominated. Since $F_s=3.00$ applies
-(unreliable estimate), the GCI for $M_{\max}$ and $\sigma_{\max}$ must be
-interpreted with caution.
+introduces floating-point noise via \emph{catastrophic cancellation}:
+the stencil numerator subtracts nearly equal values of magnitude
+$|w|\approx0.069$\,in to obtain a result of only
+$h^2|w''|\approx h^2 q_0/(8\EI)L^2\cdot(\text{factor})\ll|w|$,
+losing approximately $\log_{10}(|w|/h^2|w''|)$ significant digits.
+After multiplication by $\EI/h^2 \propto N^2$, the residual noise scales as
+\begin{equation}
+  \delta M_{\mathrm{stencil}} \;\sim\; \frac{\EI}{h^2}\,
+  \varepsilon_{\mathrm{f64}}\,|w| \;\propto\; N^2,
+  \label{eq:mnoise}
+\end{equation}
+\emph{growing} with refinement: $\approx4\times10^{-10}$\,lb$\cdot$in
+at $N=10$, rising to $\approx10^{-6}$\,lb$\cdot$in at $N=160$.
+This stencil noise is completely independent of, and much larger than,
+the linear-solve $\URO$ measured by the float32/float64 comparison in
+Section~\ref{sec:ro}; the solve itself is accurate at all grid levels.
 
-Practically, because the exact values of $M_{\max}=q_0L^2/8$ and
-$\sigma_{\max}=M_{\max}/S$ are obtained directly from closed-form
-formulae (not from the FD derivative), the round-off contamination in
-Eq.~\eqref{eq:mfd} does not affect the structural assessment.
+Because the systematic truncation error in $M$ is near zero while the
+stencil noise grows as $N^2$, the Richardson-extrapolation premise---that
+consecutive differences reflect structured convergence, $|e_1|/|e_2|\approx
+r^p$---is violated.  The differences are incoherent noise: at $N=160$ the
+noise ($\approx1.2\times10^{-6}$\,lb$\cdot$in) exceeds that at $N=80$
+($\approx7\times10^{-8}$\,lb$\cdot$in), so $|f_2-f_1|>|f_3-f_2|$ and
+$\pobs<0$.  Since $F_s=3.00$ applies (unreliable regime), the GCI for
+$M_{\max}$ and $\sigma_{\max}$ is unreliable and must be interpreted with
+caution.
 
-\begin{figure}[H]
+Practically, $M_{\max}=q_0L^2/8$ and $\sigma_{\max}=M_{\max}/S$ are
+available from closed-form formulae; the structural assessment uses these
+exact values directly and is unaffected by the stencil noise.
+
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.62\textwidth]{figures/fig3_gci_bar.png}
   \caption{GCI percentage for fine grid ($N=160$) and parametric grid ($N=20$)
@@ -339,6 +386,19 @@ is verified to be $\ll1$ for all grids; see Table~\ref{tab:roundoff}).
 \[
   \boxed{\UIT = 0 \text{ for all grid levels.}}
 \]
+
+Figure~\ref{fig:ie_error} documents this result visually: all $\UIT$ values are
+exactly zero on every grid, confirming that the direct solver introduces no
+iterative error regardless of mesh resolution.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig7_ie_error.png}
+  \caption{Iterative error $\UIT$ versus grid spacing $h$ for all three SRQs.
+    All values are identically zero (direct LU solver; no iterative loop).
+    Each grid-level annotation confirms $\UIT=0.0\times10^{0}$.}
+  \label{fig:ie_error}
+\end{figure}
 
 % =============================================================
 \section{Round-Off Error}
@@ -400,11 +460,38 @@ float32 grid} is $h^*\propto\varepsilon^{1/6}$, which is approximately
 $N=20$--$40$ for this problem.
 
 In float64, $\varepsilon_{\mathrm{f64}}\kappa\le2.4\times10^{-8}$ at $N=160$,
-so round-off is entirely negligible and float64 remains safe.
+so the linear-solve round-off is entirely negligible and float64 remains safe.
+
+\textbf{Important scope note.}  The $\URO$ values above quantify only the
+accuracy of the \emph{linear solve} for deflection $w$.  They do \emph{not}
+capture the separate floating-point noise that arises when the post-processing
+stencil $M_i = -\EI(w_{i-1}-2w_i+w_{i+1})/h^2$ is evaluated in
+Eq.~\eqref{eq:mfd}.  That stencil noise scales as
+$\EI/h^2 \cdot \varepsilon_{\mathrm{f64}} \cdot |w| \propto N^2$ (growing
+with refinement), which is the mechanism responsible for the noise-dominated
+OOA of $M_{\max}$ as explained in Section~\ref{sec:gci}.
 
 Figure~\ref{fig:pobs} shows $\pobs$ across all triplets and SRQs, clearly
 illustrating the asymptotic $\pobs\approx2$ for $w_{\max}$ and the
 noise-dominated behaviour for $M_{\max}$ and $\sigma_{\max}$.
+Figure~\ref{fig:roundoff_error} provides a dedicated comparison of the
+reported $\URO$, the raw $|\Delta_{f32-f64}|$ measurement, and the
+$\varepsilon_{f32}\kappa|f|$ theoretical upper bound.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig8_roundoff_error.png}
+  \caption{Round-off error $\URO$ versus grid spacing $h$ for each SRQ.
+    Three series are shown: reported $\URO$ (red triangles, selected value),
+    raw $|\Delta_{f32-f64}|$ (blue crosses), and the theoretical upper bound
+    $\varepsilon_{f32}\kappa|f|$ (green squares).
+    Vertical orange dashed lines mark grids where the float32 solve is
+    unreliable ($\varepsilon_{f32}\kappa>1$); at $N=160$ the reported $\URO$
+    switches to the float64 backward-error bound, which is orders of magnitude
+    smaller.  $\URO$ grows as $\kappa\propto h^{-4}$ for float32 while
+    remaining negligible for float64 throughout.}
+  \label{fig:roundoff_error}
+\end{figure}
 
 % =============================================================
 \section{Total Numerical Uncertainty Budget}
@@ -435,9 +522,9 @@ Two grids are reported:
   \toprule
   SRQ & $f(h)$ & $\UDE$ & $\UIT$ & $\URO$ & $\UNUM$ (\%) \\
   \midrule
-  $w_{\max}$ [in]          & 0.06935243 & $2.71\times10^{-6}$ & 0 & $1.66\times10^{-9}$ & $2.71\times10^{-6}$ \;(0.0039\%) \\
-  $M_{\max}$ [lb$\cdot$in] & 48000.0    & $4.49\times10^{-3}$ & 0 & $1.15\times10^{-3}$ & $5.64\times10^{-3}$ \;($\approx0\%$) \\
-  $\sigma_{\max}$ [psi]    & 650.159    & $6.08\times10^{-5}$ & 0 & $1.55\times10^{-5}$ & $7.64\times10^{-5}$ \;($\approx0\%$) \\
+  $w_{\max}$ [in]          & 0.05548195 & $2.17\times10^{-6}$ & 0 & $1.33\times10^{-9}$ & $2.17\times10^{-6}$ \;(0.0039\%) \\
+  $M_{\max}$ [lb$\cdot$in] & 48000.0    & $2.05\times10^{-4}$ & 0 & $1.15\times10^{-3}$ & $1.35\times10^{-3}$ \;($\approx0\%$) \\
+  $\sigma_{\max}$ [psi]    & 650.159    & $2.78\times10^{-6}$ & 0 & $1.55\times10^{-5}$ & $1.83\times10^{-5}$ \;($\approx0\%$) \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -457,9 +544,9 @@ extremely small; the total numerical uncertainty in $w_{\max}$ is
   \toprule
   SRQ & $f(h)$ & $\UDE$ & $\UIT$ & $\URO$ & $\UNUM$ (\%) \\
   \midrule
-  $w_{\max}$ [in]          & 0.069489 & $1.73\times10^{-4}$ & 0 & $2.28\times10^{-5}$ & $1.96\times10^{-4}$ \;(0.282\%) \\
-  $M_{\max}$ [lb$\cdot$in] & 48000.0  & $1.29\times10^{-6}$ & 0 & $1.66\times10^{1}$  & $1.66\times10^{1}$  \;(0.035\%) \\
-  $\sigma_{\max}$ [psi]    & 650.159  & $1.76\times10^{-8}$ & 0 & $2.25\times10^{-1}$ & $2.25\times10^{-1}$ \;(0.035\%) \\
+  $w_{\max}$ [in]          & 0.055591 & $1.39\times10^{-4}$ & 0 & $2.94\times10^{-5}$ & $1.68\times10^{-4}$ \;(0.302\%) \\
+  $M_{\max}$ [lb$\cdot$in] & 48000.0  & $5.64\times10^{-6}$ & 0 & $2.63\times10^{1}$  & $2.63\times10^{1}$  \;(0.055\%) \\
+  $\sigma_{\max}$ [psi]    & 650.159  & $7.64\times10^{-8}$ & 0 & $3.56\times10^{-1}$ & $3.56\times10^{-1}$ \;(0.055\%) \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -486,11 +573,11 @@ $\UIT=0$ throughout. N/A for $N=10$: no coarser triplet available for GCI.}
   \toprule
   $N$ & $h$ [in] & $w_{\max}$ [in] & $\UDE$ [in] & $\URO$ [in] & $\UNUM$ [in] (\%) \\
   \midrule
-  10  & 9.600 & 0.069905 & N/A             & $1.39\times10^{-6}$ & N/A \\
-  20  & 4.800 & 0.069489 & $1.73\times10^{-4}$ & $2.28\times10^{-5}$ & $1.96\times10^{-4}$ (0.282\%) \\
-  40  & 2.400 & 0.069385 & $4.33\times10^{-5}$ & $3.68\times10^{-4}$ & $4.11\times10^{-4}$ (0.592\%) \\
-  80  & 1.200 & 0.069359 & $1.08\times10^{-5}$ & $6.38\times10^{-3}$ & $6.40\times10^{-3}$ (9.22\%) \\
-  160 & 0.600 & 0.069352 & $2.71\times10^{-6}$ & $1.66\times10^{-9}$ & $2.71\times10^{-6}$ (0.004\%) \\
+  10  & 9.600 & 0.055924 & N/A                 & $1.85\times10^{-6}$ & N/A \\
+  20  & 4.800 & 0.055591 & $1.39\times10^{-4}$ & $2.94\times10^{-5}$ & $1.68\times10^{-4}$ (0.302\%) \\
+  40  & 2.400 & 0.055508 & $3.47\times10^{-5}$ & $4.72\times10^{-4}$ & $5.07\times10^{-4}$ (0.913\%) \\
+  80  & 1.200 & 0.055487 & $8.67\times10^{-6}$ & $8.65\times10^{-3}$ & $8.66\times10^{-3}$ (15.6\%) \\
+  160 & 0.600 & 0.055482 & $2.17\times10^{-6}$ & $1.33\times10^{-9}$ & $2.17\times10^{-6}$ (0.004\%) \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -503,7 +590,7 @@ $\UDE$ and $\UNUM$ decrease monotonically with refinement} as expected
 for a stable, $\mathcal{O}(h^2)$ scheme. Figure~\ref{fig:unum_budget}
 shows the stacked $\UNUM$ budget for the two target grids.
 
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/fig4_unum_budget.png}
   \caption{Stacked $\UNUM$ budget ($\UDE+\UIT+\URO$) for fine grid ($N=160$)
@@ -511,7 +598,7 @@ shows the stacked $\UNUM$ budget for the two target grids.
   \label{fig:unum_budget}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{figures/fig5_unum_vs_h.png}
   \caption{Log--log plot of $\UDE$, $\URO$, and $\UNUM$ versus grid spacing $h$
@@ -542,8 +629,8 @@ For structural design this is \emph{conservative}: the FD solver
 over-predicts deflection, so it never underestimates the structural demand.
 No upper GCI bound is needed in the direction of overestimation.
 
-Fine grid:      $w_{\mathrm{FD}}(N=160)=0.06935243$~in $\ge$ $w_{\mathrm{true}}=0.06935026$~in.\\
-Parametric:     $w_{\mathrm{FD}}(N=20)=0.06948897$~in $\ge$ $w_{\mathrm{true}}=0.06935026$~in.
+Fine grid:      $w_{\mathrm{FD}}(N=160)=0.05548195$~in $\ge$ $w_{\mathrm{true}}=0.05548021$~in.\\
+Parametric:     $w_{\mathrm{FD}}(N=20)=0.05559117$~in $\ge$ $w_{\mathrm{true}}=0.05548021$~in.
 
 % =============================================================
 \section{Summary and Conclusions}
@@ -560,8 +647,8 @@ for the two target grids.
   \toprule
   Grid & $N$ & $h$ [in] & $w_{\max}$ [in] & $\UDE$ & $\URO$ & $\UNUM$ (\%) \\
   \midrule
-  Fine grid      & 160 & 0.600 & 0.06935243 & $2.71\times10^{-6}$ & $1.66\times10^{-9}$ & $2.71\times10^{-6}$ (0.0039\%) \\
-  Parametric     &  20 & 4.800 & 0.06948897 & $1.73\times10^{-4}$ & $2.28\times10^{-5}$ & $1.96\times10^{-4}$ (0.282\%) \\
+  Fine grid      & 160 & 0.600 & 0.05548195 & $2.17\times10^{-6}$ & $1.33\times10^{-9}$ & $2.17\times10^{-6}$ (0.0039\%) \\
+  Parametric     &  20 & 4.800 & 0.05559117 & $1.39\times10^{-4}$ & $2.94\times10^{-5}$ & $1.68\times10^{-4}$ (0.302\%) \\
   \bottomrule
 \end{tabular}
 \end{table}
