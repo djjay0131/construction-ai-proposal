@@ -500,12 +500,32 @@ to controlled distributional shapes; they are not derived from a
 physical experimental campaign.  This synthetic-data substitution is
 the intended path when laboratory access is unavailable
 (Roy~\cite{roy2011}, §4) and does not alter the AVM/MAVM machinery.
-The aleatory standard deviation $\sigma_E=160{,}000$~psi
-(CoV~=~10\%) is supported by ASTM~D5456 acceptance limits for
-structural composite lumber and the Grade-1 LVL CoV reported in
-the NDS Supplement~\cite{nds2018}, so the $\alpha,\beta$ boundaries
-correspond to physically realistic $\pm1\sigma$ excursions of the
-modulus.
+
+\paragraph{Public-standards basis for the input distribution.}
+The aleatory standard deviation $\sigma_E=160{,}000$~psi (CoV~=~10\%)
+is not an arbitrary modelling choice but follows from a chain of public
+standards governing structural composite lumber.  A laminated-veneer-lumber
+manufacturer was contacted during the validation phase of this study and
+declined to release proprietary test results; the producer instead
+identified three publicly accessible documents that together specify the
+allowable distributional bounds for residential header design.
+ASTM~D5456~\cite{astmD5456} prescribes the qualification and quality-control
+test procedures (4-point bending per ASTM~D198, span-to-depth ratios, sample
+sizes) that an LVL producer must demonstrate at acceptance.
+ESR-1387~\cite{esr1387} is the ICC-Evaluation-Service report for Trus~Joist
+Microllam LVL and publishes the mean elastic modulus for each commercial
+grade, together with cross-section tolerances and grading factors.
+ASTM~D5457~\cite{astmD5457} establishes the reliability-based methodology
+for converting characteristic test values into design-level resistances;
+in particular it bounds the population CoV that ASTM~D5456 QC must satisfy
+for the assigned design grade.
+Combining these three documents---ESR-1387 mean E at the residential header
+grade with $E\!\approx\!1.6\times10^{6}$~psi, multiplied by the
+D5457-bounded CoV of order 10\% as enforced through the D5456 QC chain---yields
+the $\sigma_E=160{,}000$~psi used here.  The $\alpha,\beta$ boundaries
+($E=\mu_E\mp\sigma_E$) therefore correspond to $\pm1\sigma$ excursions of a
+distribution whose moments are upper-bounded by the governing standards
+rather than assumed.
 
 \textbf{Dataset~1} ($n_{\rm exp}=5$, $\chi_1=[0.55,0.95,1.0,1.1,1.5]$):
 All points at or above $\beta$; strongly biased toward high deflection
@@ -957,8 +977,10 @@ At the predicted-load corner $q_0=600$~lb/ft, the bending moment
 $M_{\max}=q_0L^2/8=57{,}600$~lb$\cdot$in produces a maximum bending
 stress $\sigma_{\max}=M_{\max}/S=780$~psi using $S=bd^2/6=73.83$~in$^3$
 for the $3.5\!\times\!11.25$~in cross-section.  This is well under the
-NDS-2018~\cite{nds2018} Grade-1 LVL allowable bending stress
-$F_b\!\approx\!2{,}400$~psi (a stress-ratio of $0.32$).
+allowable bending stress for Microllam LVL at the residential header
+grade ($F_b\!\approx\!2{,}400$~psi per the published design values in
+ESR-1387~\cite{esr1387}, derived per the reliability-based methodology
+of ASTM~D5457~\cite{astmD5457}), giving a stress-ratio of $0.32$.
 The upper-95 deflection $w_{\rm max}^{\rm hi,95}=0.099$~in satisfies both
 the IBC live-load limit $L/360=0.267$~in and the more stringent HW2-cited
 $L/240=0.400$~in.  Strength and serviceability margins are therefore both
@@ -1052,11 +1074,18 @@ The current output is a deflection p-box; formal structural reliability
 targets (e.g.\ $\beta \ge 2.5$ per ASCE~7) require translating the
 p-box into bounds on the exceedance probability
 $P[w_{\rm max} > w_{\rm allow}]$.
+ASTM~D5457~\cite{astmD5457}, which already underpins the published
+ESR-1387 design values cited in Section~\ref{sec:cons}, provides the
+explicit reliability-based framework against which such an extension
+must be benchmarked: the standard prescribes the $\beta$-target,
+the resistance-format conversion factor $K_F$, and the implied
+characteristic-to-design ratios for LVL bending and shear.
 Applying first-order reliability method (FORM) or the AK-MCS
 active-learning approach~\cite{du2023} within the p-box framework
 would yield a reliability-index interval $[\beta_{\rm lo},\beta_{\rm hi}]$
 and a companion fragility curve, enabling direct comparison with
-ASCE~7 and NDS~\cite{nds2018} probability-based design targets.
+ASCE~7, ASTM~D5457, and NDS~\cite{nds2018} probability-based design
+targets.
 
 \paragraph{Spatially varying elastic modulus.}
 The current model treats $E$ as a lumped scalar random variable.
@@ -1373,6 +1402,22 @@ B.~Iooss and P.~Lema\^{\i}tre,
 ``A review on global sensitivity analysis methods,''
 in \textit{Uncertainty Management in Simulation-Optimization of
   Complex Systems}, Springer, 2015, pp.~101--122.
+
+\bibitem{astmD5456}
+ASTM International, \textit{ASTM~D5456 -- Standard Specification for
+Evaluation of Structural Composite Lumber Products}, West Conshohocken,
+PA, 2021.
+
+\bibitem{astmD5457}
+ASTM International, \textit{ASTM~D5457 -- Standard Specification for
+Computing Reference Resistance of Wood-Based Materials and Structural
+Connections for Load and Resistance Factor Design}, West Conshohocken,
+PA, 2019.
+
+\bibitem{esr1387}
+ICC Evaluation Service, \textit{ESR-1387: Trus~Joist Microllam LVL
+(Laminated Veneer Lumber) Beams, Headers, and Columns}, Country Club Hills,
+IL, latest revision.
 
 \end{thebibliography}
 
