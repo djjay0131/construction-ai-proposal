@@ -1,16 +1,69 @@
 # Progress Tracking
 
-**Last Updated:** 2026-02-28
+**Last Updated:** 2026-06-06
 
-## Project Status: VVUQ Phase 2 Complete (All 4 Sprint-05 Tasks Done, PR #7 Pending Merge)
+## Project Status: CS6444 SUBMITTED — Pivoting to 2026 Product Roadmap (Sprint 0)
 
-Original proposal complete (11 pages). VVUQ integration Phase 1 complete (12 pages). VVUQ Phase 2 all 4 tasks complete — document now 13 pages. Tasks 1+2 merged to master (PR #5, PR #6). Tasks 3+4 complete on branch vvuq/phase2-task3-abstract, PR #7 open pending user merge. CS6444 HW2 and HW3 both complete and published. CI/CD pipeline established with GitHub Pages publishing.
+CS6444 V&V semester project SUBMITTED 2026-05-11 at construction-ai tag
+`final-project-submitted-2026-05-11`. HW2 → HW3 → HW3-final-review (PR #9) →
+HW4 → HW5 → Final Project, all complete, all live on GitHub Pages. VVUQ Phase 2
+(PRs #5, #6, #7) all merged 2026-02-28. IEEE proposal paper stable at 13 pages.
+
+Now executing the 6-sprint product roadmap at
+`construction/design/2026-product-roadmap.md` (committed 2026-06-06).
+Sprint 0 (memory-bank refresh) in-progress. Next: Sprint 1 (VVUQ Phase 3 closeout).
 
 ---
 
 ## Completed Work
 
-### CS6444 HW3: Code Verification (2026-02-27)
+### CS6444 Final Project — V&V VVSC (2026-05-11)
+
+**What:** Final project for AOE/CS/ME 6444 (Roy, Spring 2026). 8-ft Microllam
+2.0E LVL header under uniform load; nested-sampling p-box UQ; AVM/MAVM
+validation; Sobol sensitivity.
+
+**Key Deliverables:**
+- `VVSC_Cusati_Chuang_Project.pdf` — 13-page final report, Microllam 2.0E baseline
+- 25 web-verified bibliography entries (zero hallucinations; 3 metadata typos fixed)
+- Sobol §7.2 with Saltelli design (n_calls=4096)
+- ESR-1387 / ASTM D5456 / D5457 public-standards basis (§5.1)
+- IRC R602.7 reconciliation (§7.4, σ_max=780 psi vs F_b=2,600 psi → 0.30 ratio)
+- 7-direction Future Work section
+
+**Tag:** `construction-ai @ final-project-submitted-2026-05-11`
+**Live:** <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_Project.pdf>
+
+---
+
+### CS6444 HW5 — Solution Verification + Validation Metric (2026-04-19)
+
+**What:** MAVM validation metric (signed area between CDF and EDF) at n=10, 25,
+100 LHS samples. All MAVM positive → simulation under-predicts deflection.
+
+**Key Results:** AVM (n=100) = 6.07×10⁻³ in / 3.89×10⁻³ in; MAVM (n=100) =
+5.83×10⁻³ in / 3.74×10⁻³ in; n=25 LHS sufficient (within 1% of n=100).
+
+**Live:** <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW5.pdf>
+
+---
+
+### CS6444 HW4 — Solution Verification (GCI + U_NUM Budget) (2026-04-01)
+
+**What:** Solution verification per Celik/Roy GCI framework on the FD beam
+solver. U_NUM = U_DE + U_IT + U_RO budget. p_obs ≈ 2.000 for w_max (asymptotic,
+reliable GCI). U_NUM%(w_max) = 0.28% at N=20, 0.004% at N=160 (float64).
+
+**Live:** <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW4.pdf>
+
+---
+
+### CS6444 HW3 Final Review (PR #9, 2026-03-07)
+
+**What:** Final-review pass on HW3 PDF: added citations, justified Option 2
+(exact solution) over MMS, improved tone. Merged via PR #9.
+
+---
 
 **What:**
 CS6444 VVSC course assignment performing grid convergence verification of the Euler-Bernoulli beam FD solver using exact analytical solution for simply-supported uniform load (O(h^2) scheme). Confirms 2nd-order accuracy and separation of round-off from truncation error.

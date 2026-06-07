@@ -1,12 +1,31 @@
 # Active Context
 
-**Last Updated:** 2026-02-28
+**Last Updated:** 2026-06-06
 
 ## Current Work Phase
 
-VVUQ Integration Phase 2 Complete — PR #7 pending merge
+**Pivot from CS6444 (DONE) to 2026 product roadmap execution**
 
-All 4 Sprint-05 tasks are complete. Tasks 1 and 2 are merged to master (PR #5 commit 87e6631, PR #6). Tasks 3 (Abstract VVUQ language) and 4 (Conclusion 5th contribution) are complete on branch vvuq/phase2-task3-abstract and captured in open PR #7. VVUQ Phase 2 is fully done pending the PR #7 merge. Next phase is Phase 3 (Presentation & Bibliography).
+CS6444 V&V semester project SUBMITTED at construction-ai tag
+`final-project-submitted-2026-05-11` (construction-ai master @ 63f3d7a).
+HW3-final-review (PR #9), VVUQ Phase 2 (PRs #5, #6, #7) all merged. The IEEE
+proposal paper and Pages mirror are stable at proposal-repo master @ 2dc762e.
+
+**Next:** Execute the 6-sprint product roadmap at
+`construction/design/2026-product-roadmap.md` (committed 2026-06-06, commit
+ae095ae). Sprint 0 (memory-bank refresh, this work) is the active sprint.
+
+**Sprint sequence:**
+- Sprint 0 — Memory-bank refresh (both repos) — in-progress
+- Sprint 1 — VVUQ Phase 3 closeout: 4 slides + 10–15 citations + final review
+- Sprint 2 — Neo4j Setup on GCP + CI/CD bootstrap (implements
+  `construction-ai/llm/features/neo4j-setup.md`)
+- Sprint 3 — Raster/Scanned Drawing Support
+- Sprint 4 — OCR Dimension Extraction
+- Sprint 5 — Phase 1 integration smoke test against 2–3 plan sets
+
+Burst/opportunistic cadence; each sprint is self-contained. GCP-first deploy
+(Cloud Run + AuraDB Free). No local docker stack — memory-constrained dev.
 
 ## Current State
 
@@ -67,7 +86,7 @@ Phase 1 - Architecture & V&V (COMPLETE - 2026-01-24):
 - [x] Monte Carlo uncertainty propagation added
 - [x] Document grew from 11 to 12 pages
 
-Phase 2 - Remaining Paper Updates (COMPLETE - Sprint 05, PR #7 pending merge):
+Phase 2 - Remaining Paper Updates (COMPLETE - Sprint 05, all PRs merged 2026-02-28):
 
 - [x] Knowledge Graph entity updates (Section 3.5 in VVUQ plan) - TASK 1 COMPLETE (PR #5, commit 87e6631)
   - Added StructuralHypothesis, LoadPath, BeamEvaluation entities
@@ -114,17 +133,21 @@ Phase 3 - Presentation & Bibliography (NOT STARTED):
 
 ## Immediate Next Steps
 
-VVUQ Phase 2 - Sprint 05 (ALL TASKS COMPLETE, PR #7 pending merge):
+Sprint 0 (this work) is in-progress. After it completes:
 
-1. **Task 1 (DONE):** Knowledge Graph Entity Updates - merged to master via PR #5 (commit 87e6631); document now 13 pages
-2. **Task 2 (DONE):** Agentic Workflow updates - 6th Structural Hypothesis Agent added, TikZ diagram updated (pentagon to hexagon); merged via PR #6
-3. **Task 3 (DONE):** Abstract updates with VVUQ language (~35 words added) in proposal/main.tex; abstract grew ~129 -> ~164 words; on branch vvuq/phase2-task3-abstract, PR #7 open
-4. **Task 4 (DONE):** Conclusion updated - five key contributions, 5th item "Uncertainty-Aware Structural Evaluation", six-agent workflow in RQ2 line; in proposal/sections/12-conclusion.tex; on branch vvuq/phase2-task3-abstract, PR #7 open
+1. **Sprint 1 — VVUQ Phase 3 closeout** (proposal repo):
+   - Add 4 presentation slides (Structural Challenge, Hypothesis Generation, PDE Evaluation, V&V)
+   - Add 10–15 structural-mechanics citations to `proposal/references.bib`
+     (Timoshenko, Reddy, ASME V&V 10/20, Roy-Oberkampf, Bathe, Oden, Roache, ...)
+   - Phase 4 final review: page count check, xref check
+   - PR → master → GitHub Pages
+2. **Sprint 2 — Neo4j Setup on GCP** (code repo): see
+   `construction-ai/llm/features/neo4j-setup.md` (SPECIFIED, 10 ACs ready)
+3. **Sprint 3 — Raster/Scanned Drawing Support** (code repo)
+4. **Sprint 4 — OCR Dimension Extraction** (code repo)
+5. **Sprint 5 — Phase 1 integration smoke test** (code repo)
 
-Next: **VVUQ Phase 3 - Presentation & Bibliography** (after PR #7 is merged):
-
-1. Add 4 new presentation slides (structural challenge, hypothesis generation, PDE evaluation, V&V)
-2. Add 10-15 structural mechanics citations to references.bib
+Source of truth: `construction/design/2026-product-roadmap.md`.
 
 ## Recent Decisions
 
@@ -253,17 +276,21 @@ Next: **VVUQ Phase 3 - Presentation & Bibliography** (after PR #7 is merged):
 
 ## Open Questions
 
-1. **HW3 Partner Merge**: Did Cheng-Shun Chuang contribute content to HW3, or was it single-authored? (Clarify for submission records)
-2. **VVUQ Phase 2 Timeline**: Are there assignment deadlines that constrain sprint-05 completion? (No known deadline at this time)
+1. **Validation plan sets for Sprint 5**: Do we have 2–3 real plan sets (DXF, vector PDF, scanned PDF) for the Phase 1 integration smoke test? If not, source before Sprint 5 starts.
+2. **Aura free-tier idle pause**: Decide during Sprint 2 whether prod Aura instance needs a keep-alive ping (30-day idle policy).
 
 ## Reference Materials
 
 - Memory Bank: `memory-bank/`
+- **Product roadmap (CURRENT):** `construction/design/2026-product-roadmap.md`
 - VVUQ Integration Plan: `construction/design/vvuq-integration-plan.md`
 - Proposal Source: `proposal/sections/`
 - Published PDFs: <https://djjay0131.github.io/construction-ai-proposal/>
 - HW2 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW2.pdf>
 - HW3 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW3.pdf>
+- HW4 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW4.pdf>
+- HW5 PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_HW5.pdf>
+- Final Project PDF: <https://djjay0131.github.io/construction-ai-proposal/VVSC_Cusati_Chuang_Project.pdf>
 - Beam solver: `construction-ai/backend/app/core/structural/beam_solver.py`
 - HW3 verification script: `construction-ai/backend/app/core/structural/hw3_verification.py`
 - C++ benchmark: `construction-ai/benchmarks/structural/beam_solver.cpp`
@@ -272,8 +299,6 @@ Next: **VVUQ Phase 3 - Presentation & Bibliography** (after PR #7 is merged):
 
 - Read ALL memory-bank files on context reset
 - Check phases.md for current phase status
-- HW3 is COMPLETE — do not start HW3 tasks again
-- VVUQ Phase 2 is COMPLETE (all 4 sprint-05 tasks done); PR #7 (Tasks 3+4) is open on branch vvuq/phase2-task3-abstract, pending user merge
-- After PR #7 merges, begin VVUQ Phase 3: 4 new presentation slides + 10-15 structural mechanics citations
-- Reference vvuq-integration-plan.md for full VVUQ Phase 3 task details
-- Paper compiles cleanly to 13 pages
+- **CS6444 is COMPLETE** (submitted 2026-05-11 at tag `final-project-submitted-2026-05-11`)
+- Current active sprint: see "Current Work Phase" section above
+- Source of truth for next work: `construction/design/2026-product-roadmap.md`
