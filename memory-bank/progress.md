@@ -611,24 +611,24 @@ Update presentation and add structural mechanics citations. Deferred until Phase
 
 ### VVUQ Integration (Per vvuq-integration-plan.md)
 
-**Phase 2 - Paper Updates (ALL DONE - PR #7 pending merge):**
+**Phase 2 - Paper Updates (ALL DONE - merged 2026-02-28):**
 
 - [x] Knowledge Graph entity updates (03-knowledge-graph.tex) - DONE (PR #5, commit 87e6631)
 - [x] Agentic Workflow updates (05-agentic-workflow.tex) - DONE (PR #6, merged)
-- [x] Abstract updates (main.tex) - DONE (PR #7, branch vvuq/phase2-task3-abstract)
-- [x] Conclusion updates (12-conclusion.tex) - DONE (PR #7, branch vvuq/phase2-task3-abstract)
+- [x] Abstract updates (main.tex) - DONE (PR #7, merged 2026-02-28)
+- [x] Conclusion updates (12-conclusion.tex) - DONE (PR #7, merged 2026-02-28)
 
-**Phase 3 - Presentation & Bibliography:**
+**Phase 3 - Presentation & Bibliography (subsumed into 2026 Product Roadmap Sprint 1):**
 
-- [ ] 4 new presentation slides
-- [ ] 10-15 structural mechanics citations
+- [ ] 4 new presentation slides — Sprint 1 of `construction/design/2026-product-roadmap.md`
+- [ ] 10-15 structural mechanics citations — Sprint 1
 
-**Phase 4 - Final Review:**
+**Phase 4 - Final Review (subsumed into 2026 Product Roadmap Sprint 1):**
 
-- [ ] Full document compilation and review
-- [ ] Verify no broken references
-- [ ] Check page count (target: 13-14 pages)
-- [ ] Memory-bank synchronization
+- [ ] Full document compilation and review — Sprint 1
+- [ ] Verify no broken references — Sprint 1
+- [ ] Check page count (target: 13-14 pages) — Sprint 1
+- [ ] Memory-bank synchronization — DONE in Sprint 0 (this work)
 
 ---
 
@@ -674,7 +674,7 @@ None at this time.
 
 - **Target:** TBD
 - **Description:** Physics-based structural mechanics, V&V framework, updated presentation
-- **Status:** Phase 1 Complete; Phase 2 Complete (all 4 sprint-05 tasks done, PR #7 pending merge); Phase 3 Not Started
+- **Status:** Phase 1 Complete; Phase 2 Complete (PRs #5/#6/#7 merged 2026-02-28); Phase 3 subsumed into 2026 Product Roadmap Sprint 1
 
 ### M6: CI/CD Pipeline
 
