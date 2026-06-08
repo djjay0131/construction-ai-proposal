@@ -5,20 +5,20 @@
 \section{Verification, Validation, and Uncertainty Quantification}
 \label{sec:vvuq}
 
-The structural mechanics layer introduces continuum-based models and probabilistic reasoning that require rigorous verification and validation to ensure correctness and physical fidelity.
+The structural mechanics layer introduces continuum-based models and probabilistic reasoning that require rigorous verification and validation to ensure correctness and physical fidelity~\cite{oberkampf_roy_2010,roache1998_vv,asme_vv10_2006}.
 
 \subsection{Verification: Numerical Correctness}
 
-Verification ensures that the implemented algorithms correctly solve the mathematical models.
+Verification ensures that the implemented algorithms correctly solve the mathematical models~\cite{oberkampf_roy_2010,asme_vv10_2006}.
 
 \textbf{Beam Solver Convergence.}
-The Euler--Bernoulli beam solver is verified against closed-form analytical solutions for canonical loading cases.
-For a simply-supported beam with uniform load $w$, the maximum deflection is:
+The Euler--Bernoulli beam solver is verified against closed-form analytical solutions for canonical loading cases~\cite{timoshenko_goodier_1970}.
+For a simply-supported beam with uniform load $w$, beam theory gives the maximum deflection as:
 \[
 \delta_{\max} = \frac{5wL^4}{384EI}
 \]
-The numerical solver (finite-difference or finite-element discretization) must achieve relative error $< 0.1\%$ compared to this closed form.
-Convergence tests with mesh refinement ensure spatial discretization errors decay at expected rates.
+The numerical solver (finite-difference or finite-element discretization~\cite{reddy_fem_2005,bathe_fem_1996}) must achieve relative error $< 0.1\%$ compared to this closed form.
+Convergence tests with mesh refinement ensure spatial discretization errors decay at expected rates, with uncertainty quantified via the Grid Convergence Index framework~\cite{celik2008_gci,asme_vv20_2009}.
 
 \textbf{Load Conservation.}
 Tributary area assignments must conserve total roof and floor area:
@@ -29,7 +29,7 @@ where $A_{\text{trib},i}$ is the tributary area assigned to header/beam $i$.
 This conservation law is verified programmatically for every generated hypothesis.
 
 \textbf{Uncertainty Propagation Convergence.}
-Monte Carlo sampling converges as $N \to \infty$.
+Monte Carlo sampling converges as $N \to \infty$~\cite{robert_casella_2004}, with variance-reduction techniques such as Latin Hypercube Sampling~\cite{mckay1979_lhs} accelerating convergence for engineering applications.
 For probability-of-failure estimates, convergence is tested by comparing $N = 1000$ vs.\ $N = 10000$ samples.
 Relative error in $P(\text{failure})$ must be $< 5\%$ to ensure statistical stability.
 
@@ -56,7 +56,7 @@ These annotations serve as oracle data for evaluating inference accuracy.
 
 \subsection{Uncertainty Quantification Framework}
 
-Structural loads and material properties are inherently uncertain. The system models these uncertainties explicitly.
+Structural loads and material properties are inherently uncertain. The system models these uncertainties explicitly, following established probabilistic and uncertainty-quantification frameworks~\cite{ang_tang_2007,ghanem_uq_handbook_2017}.
 
 \textbf{Random Variable Specification.}
 \begin{itemize}
@@ -79,12 +79,12 @@ For each structural hypothesis $h$ and candidate header assembly $a$:
 \end{enumerate}
 
 \textbf{Robust Feasibility.}
-Assemblies are accepted only if $P_{\text{fail}} < 0.01$ (1\% failure probability threshold).
+Assemblies are accepted only if $P_{\text{fail}} < 0.01$ (1\% failure probability threshold), a target consistent with established structural reliability practice~\cite{melchers_beck_2018}.
 This ensures that structural decisions remain feasible under realistic load and material variability.
 
 \subsection{Hypothesis Scoring and Selection}
 
-Multiple structural hypotheses are ranked using a multi-criteria score:
+Multiple structural hypotheses are ranked using a multi-criteria score, drawing on multi-objective optimization principles~\cite{deb_moo_2001}:
 \[
 S(h) = w_1 \cdot (1 - C_{\text{norm}}(h)) + w_2 \cdot (1 - P_{\text{fail,max}}(h)) + w_3 \cdot F(h)
 \]
