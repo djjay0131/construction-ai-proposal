@@ -68,10 +68,18 @@ GitHub Actions re-publishes both PDFs on every push to
 `curl -sI` against each Pages URL with a cache-bust query string after
 the Sprint 1c push completes. Results recorded inline below once gathered:
 
+Note: the CI workflow renames the PDFs on publish, so the live URLs use
+`ConstructionAI-Proposal.pdf` and `ConstructionAI-Presentation.pdf` rather
+than `main.pdf` / `presentation.pdf`. The original spec listed the source
+filenames; the table below uses the actual published URLs.
+
 | Artifact | Pages URL | Last-Modified after Sprint 1c push |
 |---|---|---|
-| main.pdf | <https://djjay0131.github.io/construction-ai-proposal/main.pdf> | (recorded during constellize:feature:verify) |
-| presentation.pdf | <https://djjay0131.github.io/construction-ai-proposal/presentation.pdf> | (recorded during constellize:feature:verify) |
+| Paper | <https://djjay0131.github.io/construction-ai-proposal/ConstructionAI-Proposal.pdf> | Tue, 09 Jun 2026 03:58:09 GMT |
+| Presentation | <https://djjay0131.github.io/construction-ai-proposal/ConstructionAI-Presentation.pdf> | Tue, 09 Jun 2026 03:58:10 GMT |
+
+Push that triggered the CI re-publication: commit `258b4fc` pushed at
+~2026-06-09 03:55 UTC; CI completed at ~2026-06-09 03:58 UTC.
 
 ## Known out-of-scope items deferred
 
