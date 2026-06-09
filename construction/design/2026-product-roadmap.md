@@ -327,11 +327,15 @@ bank (at `~/.claude/projects/...`) also gets touched if the sprint surprises us.
 
 | Sprint | Status | Started | Done | Commit / PR |
 |---|---|---|---|---|
-| 0 | PENDING | — | — | — |
-| 1 | PENDING | — | — | — |
+| 0 | DONE | 2026-06-06 | 2026-06-07 | proposal `0f58f50`, code `aa1f761` |
+| 1 | DONE | 2026-06-08 | 2026-06-08 | 1a proposal `77961e6` code `375847c`; 1b proposal `dbbb24f` code `b314006`; 1c follows |
 | 2 | PENDING | — | — | — |
 | 3 | PENDING | — | — | — |
 | 4 | PENDING | — | — | — |
 | 5 | PENDING | — | — | — |
+
+Sprint 1 detail: split into 1a (citations), 1b (presentation slides), 1c
+(final review + 5→6 fix). All three VERIFIED. Final review record at
+`construction/design/vvuq-phase3-final-review.md`.
 
 Update this table at the end of each sprint.

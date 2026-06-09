@@ -179,13 +179,15 @@
 ]
 \node[agent] (qa) {Extraction QA\\Agent};
 \node[agent, right=of qa] (infer) {Component\\Inference Agent};
-\node[agent, right=of infer] (code) {Code \&\\Compliance Agent};
+\node[agent, right=of infer] (structural) {Structural\\Hypothesis Agent};
+\node[agent, right=of structural] (code) {Code \&\\Compliance Agent};
 \node[agent, below=10mm of qa] (procure) {Procurement \&\\Cut Agent};
 \node[agent, right=of procure] (instruct) {Instruction\\Generation Agent};
 \node[tool, right=of instruct] (optimizer) {Cut-Stock\\Optimizer};
 
 \draw[arrow] (qa) -- (infer);
-\draw[arrow] (infer) -- (code);
+\draw[arrow] (infer) -- (structural);
+\draw[arrow] (structural) -- (code);
 \draw[arrow] (code.south) -- ++(0,-5mm) -| (procure.north);
 \draw[arrow] (procure) -- (instruct);
 \draw[arrow] (procure) -- (optimizer);
@@ -198,16 +200,16 @@
 \begin{frame}{}
 \centering
 \vspace{1em}
-{\Large \textbf{5 Specialized Agents}}
+{\Large \textbf{6 Specialized Agents}}
 
 \vspace{2em}
 \begin{tikzpicture}[scale=0.8]
-\foreach \i/\name/\color in {0/QA/vtmaroon, 72/Inference/vtorange, 144/Code/vtmaroon, 216/Procure/vtorange, 288/Instruct/vtmaroon} {
-  \node[circle, draw=\color, thick, minimum size=1.8cm, fill=\color!10, font=\small] at (\i:3cm) {\name};
+\foreach \i/\name/\color in {0/QA/vtmaroon, 60/Inference/vtorange, 120/Structural/vtmaroon, 180/Code/vtorange, 240/Procure/vtmaroon, 300/Instruct/vtorange} {
+  \node[circle, draw=\color, thick, minimum size=1.5cm, fill=\color!10, font=\small] at (\i:3cm) {\name};
 }
 \node[circle, draw=vtgray, thick, minimum size=1.5cm, fill=vtgray!10, font=\small\bfseries] at (0,0) {KG};
-\foreach \i in {0,72,144,216,288} {
-  \draw[thick, vtgray, ->] (\i:1cm) -- (\i:2.1cm);
+\foreach \i in {0,60,120,180,240,300} {
+  \draw[thick, vtgray, ->] (\i:1.1cm) -- (\i:2.2cm);
 }
 \end{tikzpicture}
 
