@@ -216,6 +216,51 @@
 \end{frame}
 
 % =============================================================================
+% SECTION 3.5: STRUCTURAL HYPOTHESIS EVALUATION (VVUQ)
+% =============================================================================
+\section{Structural Hypothesis Evaluation}
+
+\begin{frame}{Structural Challenge}
+\begin{itemize}
+  \item Architectural plans show \textbf{geometry}, not structural intent
+  \item Builders manually infer load paths --- error-prone, time-consuming
+  \item Field studies report \textbf{10--15\% header sizing errors}
+  \item No commercial takeoff tool validates structural plausibility
+  \item \textbf{Goal:} physics-based reasoning over inferred structural hypotheses
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hypothesis Generation}
+\begin{itemize}
+  \item Each \textbf{hypothesis} $=$ a candidate (load-bearing-wall set, tributary partition)
+  \item Generated from architectural geometry $+$ IRC framing heuristics
+  \item Stored in KG: \texttt{StructuralHypothesis}, \texttt{LoadPath}, \texttt{BeamEvaluation}
+  \item Top 2--3 ranked by \textbf{cost}, \textbf{robustness}, \textbf{design flexibility}
+  \item Tradeoff narrative auto-generated for the user
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PDE Evaluation}
+\begin{itemize}
+  \item Per hypothesis: solve $EI\,w''''(x) = q(x)$ on each candidate beam
+  \item Finite-difference solver, ghost-point near-boundary stencils
+  \item Verified 2\textsuperscript{nd}-order accurate ($p_{\text{obs}} \approx 2.00$)
+  \item Computes $w_{\max}$, $M_{\max}$, $\sigma_{\max}$, $\tau_{\max}$
+  \item Pareto-filters against $F_b$, $F_v$, deflection limits
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Verification, Validation, and Uncertainty Quantification}
+\begin{itemize}
+  \item \textbf{Verification:} grid convergence, observed $p \approx 2$, GCI framework
+  \item \textbf{Validation:} IRC span tables $+$ 20--30 stamped-design dataset
+  \item \textbf{UQ:} Monte Carlo $+$ Latin Hypercube over $(W,\,q_{\text{roof}},\,q_{\text{floor}},\,E)$
+  \item \textbf{Robust feasibility:} accept only if $P_{\text{fail}} < 0.01$
+  \item Full V\&V framework detailed in IEEE paper §5a
+\end{itemize}
+\end{frame}
+
+% =============================================================================
 % SECTION 4: TECHNOLOGY
 % =============================================================================
 \section{Technology Stack}
