@@ -335,7 +335,7 @@ bank (at `~/.claude/projects/...`) also gets touched if the sprint surprises us.
 |---|---|---|---|---|
 | 0 | DONE | 2026-06-06 | 2026-06-07 | proposal `0f58f50`, code `aa1f761` |
 | 1 | DONE | 2026-06-08 | 2026-06-08 | 1a proposal `77961e6` code `375847c`; 1b proposal `dbbb24f` code `b314006`; 1c follows |
-| 2 | PENDING | — | — | — |
+| 2 | DONE | 2026-06-09 | 2026-06-14 | 2a code 9d9ac60+929330f; 2b infra 2db7a63+9614030; 2c smoke-test 012e748+7258e3d; self-host pivot 4ea076c; CD green at 27512255933; live https://construction-ai-backend-542888988741.us-east4.run.app |
 | 3 | PENDING | — | — | — |
 | 4 | PENDING | — | — | — |
 | 5 | PENDING | — | — | — |
