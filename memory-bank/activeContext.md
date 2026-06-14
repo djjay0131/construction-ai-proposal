@@ -1,31 +1,34 @@
 # Active Context
 
-**Last Updated:** 2026-06-06
+**Last Updated:** 2026-06-14
 
 ## Current Work Phase
 
-**Pivot from CS6444 (DONE) to 2026 product roadmap execution**
+**Sprints 0–2 of the 2026 Product Roadmap COMPLETE. Sprint 3 spec ready to implement.**
 
-CS6444 V&V semester project SUBMITTED at construction-ai tag
-`final-project-submitted-2026-05-11` (construction-ai master @ 63f3d7a).
-HW3-final-review (PR #9), VVUQ Phase 2 (PRs #5, #6, #7) all merged. The IEEE
-proposal paper and Pages mirror are stable at proposal-repo master @ 2dc762e.
+VVUQ Phase 3 CLOSED 2026-06-08 (Sprint 1c). Sprint 2 fully deployed
+end-to-end 2026-06-14 — backend live on Cloud Run at
+<https://construction-ai-backend-542888988741.us-east4.run.app> serving
+`kg_status=ready, lumber_specs_loaded=6` from a self-hosted Neo4j Community
+Edition VM. Mid-deploy pivot: Neo4j hosting AuraDB Free → self-host on GCE
+(eliminates third-party SaaS dependency; cost ≈ $28/mo all in `vt-gcp-00042`).
 
-**Next:** Execute the 6-sprint product roadmap at
-`construction/design/2026-product-roadmap.md` (committed 2026-06-06, commit
-ae095ae). Sprint 0 (memory-bank refresh, this work) is the active sprint.
+**Sprint sequence + status:**
+- Sprint 0 — Memory-bank refresh (both repos) — VERIFIED 2026-06-07
+- Sprint 1a — 14 structural-mechanics V&V citations — VERIFIED 2026-06-08
+- Sprint 1b — 4 VVUQ presentation slides — VERIFIED 2026-06-08
+- Sprint 1c — Paper final review + 5→6 agents fix — VERIFIED 2026-06-08
+  (**VVUQ Phase 3 CLOSED**)
+- Sprint 2a — Neo4j KG foundation (construction-ai backend) — VERIFIED 2026-06-09
+- Sprint 2b — CI/CD + Terraform GCP — VERIFIED 2026-06-10
+- Sprint 2c — Live deploy + smoke test — VERIFIED 2026-06-14
+- **Sprint 3 — Raster/Scanned Drawing Support — SPECIFIED, ready to implement**
+- Sprint 4 — OCR Dimension Extraction — backlog
+- Sprint 5 — Phase 1 integration smoke test against 2–3 plan sets — backlog
 
-**Sprint sequence:**
-- Sprint 0 — Memory-bank refresh (both repos) — in-progress
-- Sprint 1 — VVUQ Phase 3 closeout: 4 slides + 10–15 citations + final review
-- Sprint 2 — Neo4j Setup on GCP + CI/CD bootstrap (implements
-  `construction-ai/llm/features/neo4j-setup.md`)
-- Sprint 3 — Raster/Scanned Drawing Support
-- Sprint 4 — OCR Dimension Extraction
-- Sprint 5 — Phase 1 integration smoke test against 2–3 plan sets
-
-Burst/opportunistic cadence; each sprint is self-contained. GCP-first deploy
-(Cloud Run + AuraDB Free). No local docker stack — memory-constrained dev.
+The Sprint 2 work touched the implementation repo (`construction-ai`); this
+proposal repo's deltas were limited to Sprint 1 paper/slide changes and
+roadmap doc updates (Section 2 hosting pivot, Appendix B sprint tracker).
 
 ## Current State
 
@@ -133,21 +136,23 @@ Phase 3 - Presentation & Bibliography (NOT STARTED):
 
 ## Immediate Next Steps
 
-Sprint 0 (this work) is in-progress. After it completes:
+Sprints 0–2 are DONE. Next constellize cycle:
 
-1. **Sprint 1 — VVUQ Phase 3 closeout** (proposal repo):
-   - Add 4 presentation slides (Structural Challenge, Hypothesis Generation, PDE Evaluation, V&V)
-   - Add 10–15 structural-mechanics citations to `proposal/references.bib`
-     (Timoshenko, Reddy, ASME V&V 10/20, Roy-Oberkampf, Bathe, Oden, Roache, ...)
-   - Phase 4 final review: page count check, xref check
-   - PR → master → GitHub Pages
-2. **Sprint 2 — Neo4j Setup on GCP** (code repo): see
-   `construction-ai/llm/features/neo4j-setup.md` (SPECIFIED, 10 ACs ready)
-3. **Sprint 3 — Raster/Scanned Drawing Support** (code repo)
-4. **Sprint 4 — OCR Dimension Extraction** (code repo)
-5. **Sprint 5 — Phase 1 integration smoke test** (code repo)
+**Sprint 3 — Raster/Scanned Drawing Support** (construction-ai repo).
+Spec already drafted 2026-06-10 at
+`construction-ai/llm/features/sprint-3-raster-scanned-drawing-support.md`
+(SPECIFIED, 10 ACs, supersedes 2026-04-01 spec for the post-Sprint-2
+execution path). Adds `RasterParser` + `ImagePreprocessor` +
+`WallLineExtractor` + `ScaleDetector` + `CoordinateConverter`; slots into
+existing `app/api/takeoff.py` routing; the KG-backed `LumberCalculator`
+from Sprint 2a consumes its output unchanged.
 
-Source of truth: `construction/design/2026-product-roadmap.md`.
+After Sprint 3 finishes: Sprint 4 (OCR Dimension Extraction — spec already
+SPECIFIED at `ocr-dimension-extraction.md` from 2026-04-01), then Sprint 5
+(Phase 1 integration smoke test against 2–3 plan sets).
+
+Source of truth: `construction/design/2026-product-roadmap.md`. Appendix B
+sprint tracker is current as of 2026-06-14.
 
 ## Recent Decisions
 

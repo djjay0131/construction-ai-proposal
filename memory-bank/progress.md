@@ -1,17 +1,40 @@
 # Progress Tracking
 
-**Last Updated:** 2026-06-06
+**Last Updated:** 2026-06-14
 
-## Project Status: CS6444 SUBMITTED — Pivoting to 2026 Product Roadmap (Sprint 0)
+## Project Status: Sprints 0–2 of 2026 Product Roadmap COMPLETE
 
-CS6444 V&V semester project SUBMITTED 2026-05-11 at construction-ai tag
-`final-project-submitted-2026-05-11`. HW2 → HW3 → HW3-final-review (PR #9) →
-HW4 → HW5 → Final Project, all complete, all live on GitHub Pages. VVUQ Phase 2
-(PRs #5, #6, #7) all merged 2026-02-28. IEEE proposal paper stable at 13 pages.
+CS6444 V&V semester project SUBMITTED 2026-05-11. VVUQ Phase 3 CLOSED
+2026-06-08 (Sprint 1c). Construction.AI backend live on Cloud Run as of
+2026-06-14 (Sprint 2c) at
+<https://construction-ai-backend-542888988741.us-east4.run.app>, serving
+takeoffs from a KG-backed lumber dict sourced from a self-hosted Neo4j
+Community Edition VM in `vt-gcp-00042`. Next: Sprint 3 (Raster/Scanned
+Drawing Support — spec ready).
 
-Now executing the 6-sprint product roadmap at
-`construction/design/2026-product-roadmap.md` (committed 2026-06-06).
-Sprint 0 (memory-bank refresh) in-progress. Next: Sprint 1 (VVUQ Phase 3 closeout).
+### Recent sprints (2026-06-06 → 2026-06-14)
+
+- **2026-06-07** Sprint 0 (memory-bank refresh, both repos) — VERIFIED.
+- **2026-06-08** Sprint 1a (14 V&V citations), 1b (4 presentation slides),
+  1c (final review + 5→6 agents fix). VVUQ Phase 3 CLOSED.
+- **2026-06-09** Sprint 2a (Neo4j KG foundation, construction-ai backend;
+  30 tests, 100% kg/ coverage).
+- **2026-06-10** Sprint 2b (CI/CD + Terraform GCP; Cloud Run, Artifact
+  Registry, Secret Manager, Workload Identity Federation).
+- **2026-06-10** Sprint 2c (live deploy + smoke test infrastructure).
+- **2026-06-14** Sprint 2c live deploy COMPLETE. Pivoted Neo4j hosting from
+  AuraDB Free → self-host on GCE during the live deploy (no third-party
+  signup; everything in `vt-gcp-00042`). CD run #27512255933 succeeded
+  end-to-end with smoke test `PASS: kg_status=ready, lumber_specs_loaded=6`.
+
+### Sprint 3 (next) — Raster/Scanned Drawing Support
+
+Spec drafted 2026-06-10 at
+`construction-ai/llm/features/sprint-3-raster-scanned-drawing-support.md`
+(SPECIFIED, 10 ACs). Supersedes the 2026-04-01 spec for the post-Sprint-2
+execution path. Adds `RasterParser` + `ImagePreprocessor` +
+`WallLineExtractor` + `ScaleDetector` + `CoordinateConverter`. Pipeline
+output flows into the unchanged KG-backed `LumberCalculator`.
 
 ---
 
