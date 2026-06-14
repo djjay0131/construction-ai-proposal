@@ -35,9 +35,15 @@ match the construction-ai memory bank's existing "Immediate Next Steps".
 
 These hold across every sprint. Locked 2026-06-06.
 
-**Neo4j hosting:** AuraDB Free tier. Two instances — one for prod, one for CI tests.
-Connect via `bolt+s://`. Cost $0. Falls back to Compute Engine VM if Aura turns out to
-be constraining at Phase 2+ scale; that's a future decision, not a planning blocker.
+**Neo4j hosting:** ~~AuraDB Free tier~~ **Self-hosted Neo4j Community Edition on
+Compute Engine** (pivot 2026-06-14 — see `construction-ai/infra/README.md`).
+Originally specified as AuraDB Free; switched to GCE so the entire stack
+lives in `vt-gcp-00042` with no third-party SaaS dependency, no manual Aura
+signup, and no 30-day idle pause. Cost ≈ $25/mo (was estimated <$10/mo with
+Aura Free; VPC connector + always-on VM are the deltas). `e2-small` VM in
+`us-east4`, reserved internal IP, Cloud Run reaches it via a Serverless VPC
+Access connector. For CI tests, the existing testcontainers approach still
+works locally; the deployed CD smoke-test exercises the live VM.
 
 **Backend hosting:** Cloud Run. Container built in GitHub Actions, pushed to Artifact
 Registry, deployed via Terraform. Scales to zero.
