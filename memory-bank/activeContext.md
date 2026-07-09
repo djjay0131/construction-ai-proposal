@@ -1,17 +1,16 @@
 # Active Context
 
-**Last Updated:** 2026-06-14
+**Last Updated:** 2026-07-04
 
 ## Current Work Phase
 
-**Sprints 0–2 of the 2026 Product Roadmap COMPLETE. Sprint 3 spec ready to implement.**
+**Sprints 0–5 + interstitial 4f of the 2026 Product Roadmap DONE.
+Phase 1 §8 criteria (1) and (2) satisfied; (3) queued as Sprint 6.**
 
-VVUQ Phase 3 CLOSED 2026-06-08 (Sprint 1c). Sprint 2 fully deployed
-end-to-end 2026-06-14 — backend live on Cloud Run at
-<https://construction-ai-backend-542888988741.us-east4.run.app> serving
-`kg_status=ready, lumber_specs_loaded=6` from a self-hosted Neo4j Community
-Edition VM. Mid-deploy pivot: Neo4j hosting AuraDB Free → self-host on GCE
-(eliminates third-party SaaS dependency; cost ≈ $28/mo all in `vt-gcp-00042`).
+VVUQ Phase 3 CLOSED 2026-06-08 (Sprint 1c). Sprint 2 deployed live 2026-06-14
+at <https://construction-ai-backend-542888988741.us-east4.run.app>. Sprints 3-5
++ 4f all landed 2026-06-14 → 2026-07-02 in the `construction-ai` implementation
+repo; this proposal repo has not needed further deltas since Sprint 1c.
 
 **Sprint sequence + status:**
 - Sprint 0 — Memory-bank refresh (both repos) — VERIFIED 2026-06-07
@@ -19,16 +18,35 @@ Edition VM. Mid-deploy pivot: Neo4j hosting AuraDB Free → self-host on GCE
 - Sprint 1b — 4 VVUQ presentation slides — VERIFIED 2026-06-08
 - Sprint 1c — Paper final review + 5→6 agents fix — VERIFIED 2026-06-08
   (**VVUQ Phase 3 CLOSED**)
-- Sprint 2a — Neo4j KG foundation (construction-ai backend) — VERIFIED 2026-06-09
+- Sprint 2a — Neo4j KG foundation — VERIFIED 2026-06-09
 - Sprint 2b — CI/CD + Terraform GCP — VERIFIED 2026-06-10
 - Sprint 2c — Live deploy + smoke test — VERIFIED 2026-06-14
-- **Sprint 3 — Raster/Scanned Drawing Support — SPECIFIED, ready to implement**
-- Sprint 4 — OCR Dimension Extraction — backlog
-- Sprint 5 — Phase 1 integration smoke test against 2–3 plan sets — backlog
+- Sprint 3a — CV pipeline foundation — VERIFIED 2026-06-14
+- Sprint 3b — Raster wall extraction + parser + API routing — VERIFIED 2026-06-14
+- Sprint 4a — OCR dimension parser + extractor — VERIFIED 2026-06-14
+- Sprint 4b — Object catalog foundation — VERIFIED 2026-06-14
+- Sprint 4c — Catalog integration (EasyOCR + API) — VERIFIED 2026-06-14
+- Sprint 4d — Takeoff wiring (raster + OCR + catalog e2e) — VERIFIED 2026-06-14
+- Sprint 4e — Scanned-PDF dispatch (multi-page, page-tagged) — VERIFIED 2026-06-20
+- Sprint 5 — Phase 1 integration smoke test — VERIFIED 2026-06-25
+- Sprint 4f (interstitial) — PDF vector-parser unit + path-walking fix — **IMPLEMENTED 2026-07-02, awaiting verify**
+- Sprint 6 — KG-latency benchmark (<100ms) — Not started
 
-The Sprint 2 work touched the implementation repo (`construction-ai`); this
-proposal repo's deltas were limited to Sprint 1 paper/slide changes and
-roadmap doc updates (Section 2 hosting pivot, Appendix B sprint tracker).
+**Phase 1 §8 criteria progress:**
+- (1) BOM accuracy >90% — method proved on the 4-wall DXF fixture (100% match); gate lights up when user provides hand-counted plans.
+- (2) Provenance complete — DONE. Every BOM line carries `rule_citations` (IRC references) + `source_walls` (page-tagged wall IDs).
+- (3) KG query latency <100ms — queued as Sprint 6 (needs Neo4j-in-CI decision).
+
+**Test suite (construction-ai):** 355 passing + 8 testcontainer-gated skips. 100% line coverage across every Sprint 2/3/4/5 module.
+
+**Immediate next steps (in the implementation repo):**
+1. Verify Sprint 4f (`/constellize:feature:verify sprint-4f-pdf-vector-parser-unit-fix`).
+2. Spec + implement Sprint 6 KG-latency benchmark.
+3. User provides hand-counted plans → activate gated fixtures in `references.json`.
+
+The Sprint 3-5 + 4f work all lives in `construction-ai`; this proposal repo's
+deltas since Sprint 1c are limited to roadmap doc updates. See
+`../construction-ai/llm/memory_bank/activeContext.md` for the full record.
 
 ## Current State
 
