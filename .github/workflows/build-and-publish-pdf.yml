@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set version info
         id: version
@@ -32,7 +32,7 @@ jobs:
           echo "date=$BUILD_DATE" >> $GITHUB_OUTPUT
 
       - name: Compile proposal documents
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: proposal
           root_file: |
@@ -41,35 +41,35 @@ jobs:
           latexmk_use_xelatex: false
 
       - name: Compile CS6444 HW2
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: CS6444/HW2
           root_file: main.tex
           latexmk_use_xelatex: false
 
       - name: Compile CS6444 HW3
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: CS6444/HW3
           root_file: main.tex
           latexmk_use_xelatex: false
 
       - name: Compile CS6444 HW4
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: CS6444/HW4
           root_file: VVSC_Chuang_ChengShun_HW4.tex
           latexmk_use_xelatex: false
 
       - name: Compile CS6444 HW5
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: CS6444/HW5
           root_file: main.tex
           latexmk_use_xelatex: false
 
       - name: Compile CS6444 Final Project
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098 # v3
         with:
           working_directory: CS6444/Project
           root_file: VVSC_Cusati_Chuang_Project.tex
@@ -155,12 +155,12 @@ jobs:
           EOF
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: public
 
       - name: Update latest release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: Construction.AI Proposal v${{ steps.version.outputs.version }}
@@ -193,4 +193,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
