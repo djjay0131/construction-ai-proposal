@@ -1,0 +1,94 @@
+name: Publish — build, validate, and publish (private)
+
+# Builds a small hub dist from this repository — the committed main.pdf, a
+# self-contained index.html generated from README.md, and manifest.json —
+# validates it against the hub contract, and publishes it to the research hub's
+# content bucket through the keyless `contract/publish` action (WIF, no key).
+#
+# PRIVATE. Both manifest items are `visibility: private`, so the hub renders them
+# only in the private build, behind the sign-in gate. They never reach
+# dist-public; the hub's leak check fails its build if they do.
+#
+# It runs on a push to master and on manual dispatch, NOT on a pull request: the
+# hub's WIF binding admits refs/heads/master only, so a PR cannot authenticate.
+# A pull request still builds and validates.
+#
+# Every third-party action is pinned by commit SHA (the Wave 0 supply-chain
+# rule), except the hub's own publish action, called at the moving `v1` tag the
+# hub advances deliberately (ADR-0014). The two contract files fetched over HTTP
+# carry the same `v1` ref (ADR-0014 decision 4).
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "README.md"
+      - "main.pdf"
+      - "manifest.json"
+      - "tools/build-site.mjs"
+      - ".github/workflows/publish-hub.yml"
+  pull_request:
+    paths:
+      - "README.md"
+      - "main.pdf"
+      - "manifest.json"
+      - "tools/build-site.mjs"
+      - ".github/workflows/publish-hub.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write          # required by the publish action (WIF); harmless otherwise
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node (for the dist build and the contract validator)
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+
+      # The dist root holds exactly what the manifest describes: main.pdf copied
+      # from the repo root, a self-contained index.html generated from README.md,
+      # and manifest.json.
+      - name: Build dist/
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp main.pdf dist/main.pdf
+          node tools/build-site.mjs dist
+          cp manifest.json dist/manifest.json
+          find dist -type f | sort
+
+      - name: Validate the manifest against the hub contract
+        run: |
+          curl -fsSL \
+            https://raw.githubusercontent.com/djjay0131/website/v1/contract/validate-manifest.mjs \
+            -o /tmp/validate-manifest.mjs
+          curl -fsSL \
+            https://raw.githubusercontent.com/djjay0131/website/v1/contract/manifest.schema.json \
+            -o /tmp/manifest.schema.json
+          node /tmp/validate-manifest.mjs --dist dist --source construction-ai
+
+      # ---------------------------------------------------------------------
+      # PUBLISH. Runs on a push to master and on manual dispatch, never on a
+      # pull request. The satellite is provisioned in website/infra (the
+      # github-construction-ai WIF provider and the prefix-conditioned bucket
+      # binding) and the GCP_* repo variables are set.
+      # ---------------------------------------------------------------------
+      - name: Publish to the research hub
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: djjay0131/website/contract/publish@v1
+        with:
+          dist: dist
+          source: construction-ai
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_PUBLISH_SA }}
+          bucket: ${{ vars.GCP_CONTENT_BUCKET }}
