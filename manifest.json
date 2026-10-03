@@ -1,0 +1,29 @@
+{
+  "source": "construction-ai",
+  "manifest_version": "1",
+  "published": "2026-10-03T00:00:00Z",
+  "items": [
+    {
+      "slug": "construction-ai-proposal",
+      "title": "Construction.AI Proposal — Material Takeoff, Cut Optimization, and Build Instructions",
+      "section": "projects",
+      "format": "pdf",
+      "path": "main.pdf",
+      "visibility": "private",
+      "date": "2026-10-03",
+      "summary": "Proposal for Construction.AI: material takeoff from architectural plans using a construction knowledge graph and LLM agents, with optimized cut lists and code-cited build instructions.",
+      "tags": ["construction", "material-takeoff", "knowledge-graph", "computer-vision"]
+    },
+    {
+      "slug": "construction-ai-site",
+      "title": "Construction.AI — Project Overview",
+      "section": "projects",
+      "format": "html",
+      "path": "index.html",
+      "visibility": "private",
+      "date": "2026-10-03",
+      "summary": "Self-contained overview page for the Construction.AI material takeoff project, generated from the repository README, with a link to the full proposal PDF.",
+      "tags": ["construction", "material-takeoff", "project-overview"]
+    }
+  ]
+}
